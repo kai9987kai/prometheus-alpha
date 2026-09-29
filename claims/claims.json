@@ -270,6 +270,72 @@
    }
   },
   {
+   "id": "v4-H24",
+   "claim": "v0.4: one cell can hold a whole memory. A pattern designed for site 14 alone writes a memory into untrained headless bodies",
+   "status": "replicated",
+   "headline": true,
+   "evidence_text": "written memory (R(A) - R(B)) / 2 on 128 held-out worms: S0 {S0}, S1 {S1}; E0 {E0}, E1 {E1}",
+   "evidence": {
+    "E0": {
+     "file": "results/v4_E0.json",
+     "pointer": "/H24/test/mean",
+     "value": 0.03926022604719037,
+     "decimals": 2
+    },
+    "E1": {
+     "file": "results/v4_E1.json",
+     "pointer": "/H24/test/mean",
+     "value": 0.44114624918438494,
+     "decimals": 2
+    },
+    "S0": {
+     "file": "results/v4_S0.json",
+     "pointer": "/H24/test/mean",
+     "value": 0.9897223091684282,
+     "decimals": 2
+    },
+    "S1": {
+     "file": "results/v4_S1.json",
+     "pointer": "/H24/test/mean",
+     "value": 0.9724581148475409,
+     "decimals": 2
+    }
+   }
+  },
+  {
+   "id": "v4-H23",
+   "claim": "v0.4: a universal memory code. One selected rule's compiled memory, written into the other rule's body, writes the intended odour",
+   "status": "not supported",
+   "headline": true,
+   "evidence_text": "as predicted, no, and worse than no: S1's code in S0 bodies writes the opposite odour ({S0}), S0's in S1 bodies {S1}. Exploratory: the two rules' memory directions at the wound edge correlate {al}, their decoders {dec}. Each rule invented its own code",
+   "evidence": {
+    "S0": {
+     "file": "results/v4_S0.json",
+     "pointer": "/H23/test/mean",
+     "value": -0.5701150624081492,
+     "decimals": 2
+    },
+    "S1": {
+     "file": "results/v4_S1.json",
+     "pointer": "/H23/test/mean",
+     "value": -0.3624254793394357,
+     "decimals": 2
+    },
+    "al": {
+     "file": "results/exploratory_code_alignment.json",
+     "pointer": "/memory_direction_edge_12_15",
+     "value": -0.3909766114560817,
+     "decimals": 2
+    },
+    "dec": {
+     "file": "results/exploratory_code_alignment.json",
+     "pointer": "/decoder_weights",
+     "value": -0.07035477424032428,
+     "decimals": 2
+    }
+   }
+  },
+  {
    "id": "v3-H14",
    "claim": "v0.3: memory surgery. Writing the compiled pattern for the other odour into a trained worm's headless body overwrites its real memory",
    "status": "replicated",

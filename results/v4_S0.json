@@ -1,0 +1,164 @@
+{
+ "rule": "S0",
+ "weights_sha256": "5e08d46642f30818a28d7b06bf4ea2e87bd0400f7d9b19e3a04a59de43816647",
+ "prereg_sha256": "2282226b0a477e88fe0bf2a31010717b20906ba6ad507a7a2fa3b92130e07e97",
+ "provenance": {
+  "git": "92af1d7dec6068bd0c9172909e73691bdbda84cc",
+  "python": "3.11.15",
+  "numpy": "2.4.6",
+  "torch": "2.14.0+cpu",
+  "sources": {
+   "__init__.py": "161e1ff52b98f02cfade5f71957ff4905008d647aaa98e5c096fa34a62f7adaa",
+   "__main__.py": "13a1a5b340cdcfc1902b62be90e508c7c71886000d5bf087e7854aadf09fb35e",
+   "body.py": "38e1ab56ef6edb442351a36fc9b2393c68717f617c9cf0b7e4f062f055b97083",
+   "claims.py": "c92b97f4ba15b00f5390eb6d8e828b74de216486fe078300f9fcc84924743bb8",
+   "cli.py": "702be9877ba36d9624a8b5a8aefc0102ebbe54953a99cff76be5f6c7e3882909",
+   "experiments.py": "0d2ac4b1b7aba1d30a72440e3d94c0773e989d1e231df02e050931c743acab67",
+   "export.py": "15b5505ae98b6c649b97b111dcaaa68d49f63e5c0ba88f6b7a9f7640ae6ce5c3",
+   "life.py": "79f72d508a2bac26a555077ea26d09c44e2432b35812958f2bad26c2fa4ee78f",
+   "posthoc.py": "2849c93eb67693000486cfe6e4ec7dcb8bf2df413e01031df72acd8dc642abf2",
+   "prereg.py": "07b96c52b10c2df293a864edebf009a19d0fd0e1408c22be8abee6650fad36b6",
+   "provenance.py": "96a8024a2a3b2421d51b072e525fc90a366b7e4cb84ff5101d24f952449fe1a1",
+   "stats.py": "159e58ef2cdaffea9efb5f07ce86d54902dd4a3e01b483a1e06330d31c9be86e",
+   "tissue.py": "a9801dbbc342d3c6d731a1f45489f35ab3ff470846ec3d548e3739fad4be5fe9",
+   "train.py": "f8f34b83bcba916b649e0bf7886ec2df001bca371d7a6e2c55e3636522e58436",
+   "train_v3.py": "c8f385c657554ccec706c4172b7dab02435d85fee481d88936a24c43f2fb8f35",
+   "train_v4.py": "df76c3c149a1eb21d2eaeb8da1d0a398a50c3bbf75de29a0889291d48c32c3d6",
+   "v2.py": "2a4f58a762a30568ef1276e00e1b868d16fceb79c6e08853d4e38b68faa1df9d",
+   "v3.py": "03c1ee8caf32b52f6d3f0094e9aecaa6e90f88af39a9cc5c39a4a09915d1da30",
+   "v4.py": "a1f854a6941751cdcd4acb134019a4f7767c01df7496519c914072ffc93aa652"
+  }
+ },
+ "n": 128,
+ "alpha": 0.05,
+ "sesoi": 0.1,
+ "H19": {
+  "test": {
+   "n": 128,
+   "mean": 0.004224466276355088,
+   "ci95": [
+    -0.004802112351171672,
+    0.017460007569752627
+   ],
+   "d_z": 0.06271108284567649,
+   "frac_positive": 0.453125,
+   "p": 0.34556544345565443,
+   "alternative": "greater"
+  },
+  "anatomy": {
+   "iou": 0.77392578125,
+   "region_acc": 0.554931640625,
+   "head_cells": 7.7734375
+  }
+ },
+ "H20": {
+  "test": {
+   "n": 128,
+   "mean": -0.015594135038554668,
+   "ci95": [
+    -0.029933123057708143,
+    -0.00419642532942817
+   ],
+   "d_z": -0.21087834710869033,
+   "frac_positive": 0.484375,
+   "p": 0.9944005599440056,
+   "alternative": "greater"
+  },
+  "anatomy": {
+   "iou": 0.6207903623580933,
+   "region_acc": 0.3955078125,
+   "head_cells": 6.8984375
+  }
+ },
+ "H23": {
+  "test": {
+   "n": 128,
+   "mean": -0.5701150624081492,
+   "ci95": [
+    -0.6005287574080285,
+    -0.5404092470358591
+   ],
+   "d_z": -3.294096236729062,
+   "frac_positive": 0.0078125,
+   "p": 1.0,
+   "alternative": "greater"
+  },
+  "written_A": -0.15075285732746124,
+  "written_B": 0.989477276802063
+ },
+ "H24": {
+  "test": {
+   "n": 128,
+   "mean": 0.9897223091684282,
+   "ci95": [
+    0.9848001362290233,
+    0.9945220841560513
+   ],
+   "d_z": 35.44767886693753,
+   "frac_positive": 1.0,
+   "p": 9.999000099990002e-05,
+   "alternative": "greater"
+  },
+  "written_A": 0.9995373487472534,
+  "written_B": -0.9799072742462158,
+  "pattern_A_site14": [
+   0.783067524433136,
+   0.7760462760925293,
+   0.6484003663063049,
+   0.4034017324447632,
+   0.049205709248781204,
+   0.7394999861717224,
+   0.7783005237579346,
+   -0.8124513626098633,
+   0.8133528828620911,
+   0.5140836834907532
+  ],
+  "pattern_B_site14": [
+   0.3624688982963562,
+   0.613574743270874,
+   0.45958203077316284,
+   0.8061147928237915,
+   0.6765896677970886,
+   -0.7375327944755554,
+   -0.8243042826652527,
+   0.774900496006012,
+   -0.8177039623260498,
+   0.75484699010849
+  ]
+ },
+ "verdicts": {
+  "H24": {
+   "p": 9.999000099990002e-05,
+   "p_adj": 0.00039996000399960006,
+   "reject": true,
+   "mean": 0.9897223091684282,
+   "sesoi_met": true,
+   "supported": true
+  },
+  "H19": {
+   "p": 0.34556544345565443,
+   "p_adj": 1.0,
+   "reject": false,
+   "mean": 0.004224466276355088,
+   "sesoi_met": false,
+   "supported": false
+  },
+  "H20": {
+   "p": 0.9944005599440056,
+   "p_adj": 1.0,
+   "reject": false,
+   "mean": -0.015594135038554668,
+   "sesoi_met": false,
+   "supported": false
+  },
+  "H23": {
+   "p": 1.0,
+   "p_adj": 1.0,
+   "reject": false,
+   "mean": -0.5701150624081492,
+   "sesoi_met": true,
+   "supported": false
+  }
+ },
+ "confirmatory": true
+}

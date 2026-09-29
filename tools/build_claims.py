@@ -10,11 +10,18 @@ for n in ("E0", "E1", "S0", "S1"):
     R["ph" + n] = json.loads((ROOT / f"results/posthoc_{n}.json").read_text())
     F["ph" + n] = f"results/posthoc_{n}.json"
 for n in ("E0", "E1", "S0", "S1"):
-    for v in ("v2", "v3"):
+    for v in ("v2", "v3", "v4"):
         pth = ROOT / f"results/{v}_{n}.json"
         if pth.exists():
             R[f"{v}{n}"] = json.loads(pth.read_text())
             F[f"{v}{n}"] = f"results/{v}_{n}.json"
+for n in ("F0", "F1"):
+    pth = ROOT / f"results/v4_{n}.json"
+    if pth.exists():
+        R[f"v4{n}"] = json.loads(pth.read_text())
+        F[f"v4{n}"] = f"results/v4_{n}.json"
+R["align"] = json.loads((ROOT / "results/exploratory_code_alignment.json").read_text())
+F["align"] = "results/exploratory_code_alignment.json"
 R["pilot"] = json.loads((ROOT / "results/pilot/S102_n32.json").read_text())
 F["pilot"] = "results/pilot/S102_n32.json"
 
@@ -256,6 +263,40 @@ add("v3-H18", "v0.3: fission. Cut a trained worm in two, and the half that must 
     vstatus("v3", "H18", ALL),
     "as predicted, no, in every rule: posterior half E0 {E0_p}, E1 {E1_p}, S0 {S0_p}, S1 {S1_p}; the anterior half, which keeps the head, {E0_a}, {E1_a}, {S0_a}, {S1_a}. The body's copy exists only at a wound next to the head", e)
 
+
+# ============================================================ v0.4
+e = {}
+for r in ALL:
+    e[f"{r}"] = ev(f"v4{r}", "/H24/test/mean")
+add("v4-H24", "v0.4: one cell can hold a whole memory. A pattern designed for site 14 alone writes a memory into untrained headless bodies",
+    vstatus("v4", "H24", S),
+    "written memory (R(A) - R(B)) / 2 on 128 held-out worms: S0 {S0}, S1 {S1}; E0 {E0}, E1 {E1}", e, headline=True)
+e = {r: ev(f"v4{r}", "/H23/test/mean") for r in S}
+e["al"] = ev("align", "/memory_direction_edge_12_15")
+e["dec"] = ev("align", "/decoder_weights")
+add("v4-H23", "v0.4: a universal memory code. One selected rule's compiled memory, written into the other rule's body, writes the intended odour",
+    vstatus("v4", "H23", S),
+    "as predicted, no, and worse than no: S1's code in S0 bodies writes the opposite odour ({S0}), S0's in S1 bodies {S1}. Exploratory: the two rules' memory directions at the wound edge correlate {al}, their decoders {dec}. Each rule invented its own code", e, headline=True)
+FR = [r for r in ("F0", "F1") if f"v4{r}" in R]
+if FR:
+    e = {}
+    for r in FR:
+        e[f"{r}_19"] = ev(f"v4{r}", "/H19/test/mean")
+        e[f"{r}_20"] = ev(f"v4{r}", "/H20/test/mean")
+        e[f"{r}_22"] = ev(f"v4{r}", "/H22/test/mean")
+    for r in S:
+        e[f"{r}_19"] = ev(f"v4{r}", "/H19/test/mean", 3)
+    txt = "posterior half after a split at site 20 (trained) / 24 (held out): " + "; ".join(f"{r} {{{r}_19}} / {{{r}_20}}" for r in FR) + \
+          "; S siblings at 20: S0 {S0_19}, S1 {S1_19}. After complete decapitation: " + ", ".join(f"{r} {{{r}_22}}" for r in FR)
+    add("v4-H19", "v0.4: fission rules. Selection on split worms makes the back half, which must grow a new head, remember",
+        vstatus("v4", "H19", FR), txt, e, headline=True)
+    e = {}
+    for r in FR:
+        e[f"{r}_f"] = ev(f"v4{r}", "/H21/F_memory")
+        e[f"{r}_s"] = ev(f"v4{r}", "/H21/S_memory")
+    add("v4-H21", "v0.4: a distributed copy. In intact fission-selected worms the trunk and tail (sites 16-35) carry a copy that a decapitated twin's new head can use, more than in the S sibling",
+        vstatus("v4", "H21", FR), "memory transferred by sites 16-35 of intact trained worms: " + "; ".join(f"{r} {{{r}_f}} vs its S sibling {{{r}_s}}" for r in FR), e)
+
 # ---- post hoc: favoured odour
 e = {}
 for r in S:
@@ -319,7 +360,7 @@ add("anatomy", "All four rules grow the body from one founder cell and regrow it
     "body IoU with the target after 32 steps of growth / after head regeneration / 300 steps later: E0 {E0_g} / {E0_h} / {E0_l}; E1 {E1_g} / {E1_h} / {E1_l}; S0 {S0_g} / {S0_h} / {S0_l}; S1 {S1_g} / {S1_h} / {S1_l}",
     e)
 
-ORDER = ["H2-S", "H2-E", "H3c", "v2-H13", "v2-H12", "v3-H14", "v3-H15", "v3-H16", "v3-H17", "v3-H18", "H6",
+ORDER = ["H2-S", "H2-E", "H3c", "v2-H13", "v2-H12", "v4-H24", "v4-H19", "v4-H21", "v4-H23", "v3-H14", "v3-H15", "v3-H16", "v3-H17", "v3-H18", "H6",
          "v2-H11", "posthoc-attractor", "v2-H8", "v2-H9", "v2-H10", "H4b", "H3ab", "H4-E", "H4-S", "H5", "H7", "H1",
          "SESOI", "locus", "gj", "calibration", "anatomy"]
 claims.sort(key=lambda c: ORDER.index(c["id"]))
