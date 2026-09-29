@@ -75,7 +75,7 @@ label.small { font-size: 13px; color: var(--ink-soft); display: flex; gap: 8px; 
 .dishtop { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 10px; align-items: baseline; }
 .status { font: 400 13px/1.4 var(--mono); color: var(--ink-soft); }
 canvas { display: block; width: 100%; max-width: 100%; }
-#worm { aspect-ratio: 5 / 1.35; }
+#worm { aspect-ratio: 5 / 1.1; }
 #kymo { aspect-ratio: 5 / 1.25; }
 #trace { aspect-ratio: 5 / 0.9; }
 .readouts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
@@ -101,6 +101,7 @@ td.num { font-family: var(--mono); font-variant-numeric: tabular-nums; }
 footer { font-size: 13px; color: var(--ink-soft); max-width: 80ch; }
 @media (max-width: 760px) {
   .bench { grid-template-columns: 1fr; }
+  .dish { order: -1; }
   .readouts { grid-template-columns: 1fr 1fr 1fr; }
   .meter .v { font-size: 20px; }
 }
@@ -158,7 +159,7 @@ footer { font-size: 13px; color: var(--ink-soft); max-width: 80ch; }
     <div class="dish">
       <div class="panel" style="display:grid; gap:12px">
         <div class="dishtop"><h2>The dish</h2><div class="status" id="status">step 0</div></div>
-        <canvas id="worm" width="1000" height="270" aria-label="The worm, head on the left"></canvas>
+        <canvas id="worm" width="1000" height="220" aria-label="The worm, head on the left"></canvas>
         <div class="legend"><span><i style="background:var(--head)"></i>head (can smell)</span><span><i style="background:var(--trunk)"></i>trunk</span><span><i style="background:var(--tail)"></i>tail</span><span><i style="background:var(--cue-a)"></i>odour A</span><span><i style="background:var(--cue-b)"></i>odour B</span><span><i style="background:var(--shock)"></i>shock (US)</span></div>
         <div class="readouts">
           <div class="meter"><span class="k">Response to A</span><span class="v" id="rA">–</span><span class="n" id="rAn">not probed</span></div>
@@ -276,14 +277,14 @@ footer { font-size: 13px; color: var(--ink-soft); max-width: 80ch; }
       if (!alive[i] || lab[i] < 0) continue;
       const a = Math.max(0.15, Math.min(1, S.x[P.ALPHA * P.L + i]));
       const y = mid + Math.sin(i * 0.35 - t * 0.12) * 10;
-      const r = dx * 0.62 * (0.55 + 0.45 * a);
+      const r = dx * 0.62 * (0.55 + 0.45 * a), ry = r * 2.1;
       g.fillStyle = regionColor(lab[i]); g.globalAlpha = 0.35 + 0.65 * a;
-      g.beginPath(); g.ellipse(x0 + i * dx + dx / 2, y, r, r * 1.35, 0, 0, 7); g.fill();
+      g.beginPath(); g.ellipse(x0 + i * dx + dx / 2, y, r, ry, 0, 0, 7); g.fill();
       const v = S.x[P.V * P.L + i];
       g.globalAlpha = Math.min(0.9, Math.abs(v) / 3); g.strokeStyle = v >= 0 ? css("--eosin") : css("--ink");
-      g.lineWidth = 3; g.beginPath(); g.ellipse(x0 + i * dx + dx / 2, y, r + 3, r * 1.35 + 3, 0, 0, 7); g.stroke();
+      g.lineWidth = 3; g.beginPath(); g.ellipse(x0 + i * dx + dx / 2, y, r + 3, ry + 3, 0, 0, 7); g.stroke();
       if (hw[i] > 0.2 && (cue[0] || cue[1])) { g.globalAlpha = hw[i] * 0.8; g.fillStyle = cue[0] ? css("--cue-a") : css("--cue-b");
-        g.beginPath(); g.arc(x0 + i * dx + dx / 2, y - r * 1.35 - 8, 4, 0, 7); g.fill(); }
+        g.beginPath(); g.arc(x0 + i * dx + dx / 2, y - ry - 10, 5, 0, 7); g.fill(); }
       g.globalAlpha = 1;
     }
     const resp = P.response(S.x);
