@@ -55,6 +55,7 @@ def main(argv=None):
     t.add_argument("--seed", type=int, required=True)
     t.add_argument("--iterations", type=int, default=3000)
     t.add_argument("--threads", type=int, default=1)
+    t.add_argument("--init", help="start from these weights (S rules start from their E sibling)")
     t.add_argument("--out", required=True)
 
     r = sub.add_parser("run", help="run the preregistered (and exploratory) experiments on a rule")
@@ -85,7 +86,7 @@ def main(argv=None):
     a = ap.parse_args(argv)
     if a.cmd == "train":
         from . import train
-        res = train.train(train.Config(family=a.family, seed=a.seed, iterations=a.iterations, threads=a.threads))
+        res = train.train(train.Config(family=a.family, seed=a.seed, iterations=a.iterations, threads=a.threads, init=a.init))
         train.save(res, a.out)
     elif a.cmd == "run":
         from . import experiments, prereg
