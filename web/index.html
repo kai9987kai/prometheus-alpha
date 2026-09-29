@@ -1,0 +1,410 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Prometheus Worm Lab</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Young+Serif&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: an experimenter's bench. Protocol steps on the left, the dish (live worm + behaviour)
+   in the middle, the kymograph (space x time) across the full width, evidence below.
+   Palette: a hematoxylin-and-eosin slide in light, a fluorescence channel set in dark. */
+:root {
+  --slide: #f7f1f3;          /* eosin-tinted glass */
+  --plate: #fffafb;          /* coverslip panels */
+  --ink: #2b2140;            /* hematoxylin */
+  --ink-soft: #62587a;
+  --rule: #e2d6de;
+  --eosin: #c2456d;          /* accent */
+  --eosin-soft: #f3dbe4;
+  --head: #d08a1f;
+  --trunk: #3f8f86;
+  --tail: #7b62b8;
+  --cue-a: #d0661f;
+  --cue-b: #2f74c0;
+  --shock: #c2263b;
+  --good: #2f7d4f;
+  --warn: #9a6a07;
+  --display: "Young Serif", "Iowan Old Style", Georgia, serif;
+  --body: "Atkinson Hyperlegible", "Segoe UI", system-ui, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --slide: #120f1a; --plate: #1b1726; --ink: #ece6f5; --ink-soft: #a89fbd; --rule: #2e2840;
+    --eosin: #f0709a; --eosin-soft: #3a2233; --head: #f2b34a; --trunk: #5cc5b8; --tail: #a88cf0;
+    --cue-a: #f08a3c; --cue-b: #5aa2f0; --shock: #ff5a6e; --good: #5fcf8a; --warn: #e3b341;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --slide: #120f1a; --plate: #1b1726; --ink: #ece6f5; --ink-soft: #a89fbd; --rule: #2e2840;
+  --eosin: #f0709a; --eosin-soft: #3a2233; --head: #f2b34a; --trunk: #5cc5b8; --tail: #a88cf0;
+  --cue-a: #f08a3c; --cue-b: #5aa2f0; --shock: #ff5a6e; --good: #5fcf8a; --warn: #e3b341;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--slide); color: var(--ink); font: 16px/1.5 var(--body); }
+.wrap { max-width: 1180px; margin: 0 auto; padding-inline: 16px; padding-block: 28px 56px; display: grid; gap: 28px; }
+header { display: grid; gap: 8px; }
+.eyebrow { font: 500 12px/1.2 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--eosin); }
+h1 { font: 400 clamp(30px, 4.4vw, 48px)/1.08 var(--display); margin: 0; text-wrap: balance; }
+.lede { max-width: 66ch; margin: 0; color: var(--ink-soft); }
+h2 { font: 400 22px/1.2 var(--display); margin: 0; text-wrap: balance; }
+.bench { display: grid; grid-template-columns: minmax(230px, 280px) 1fr; gap: 20px; align-items: start; }
+.panel { background: var(--plate); border: 1px solid var(--rule); border-radius: 6px; padding: 16px; min-width: 0; }
+.protocol { display: grid; gap: 14px; }
+.group { display: grid; gap: 8px; }
+.group h3 { margin: 0; font: 500 11px/1.2 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--ink-soft); }
+.row { display: flex; flex-wrap: wrap; gap: 6px; }
+button, select { font: 500 14px/1 var(--body); color: var(--ink); background: var(--slide); border: 1px solid var(--rule);
+  border-radius: 4px; padding: 8px 10px; cursor: pointer; }
+button:hover { border-color: var(--eosin); }
+button:focus-visible, select:focus-visible { outline: 2px solid var(--eosin); outline-offset: 2px; }
+button.primary { background: var(--eosin); color: var(--plate); border-color: var(--eosin); }
+button[aria-pressed="true"] { background: var(--eosin-soft); border-color: var(--eosin); }
+button:disabled { opacity: .45; cursor: default; }
+.seg { display: inline-flex; border: 1px solid var(--rule); border-radius: 4px; overflow: hidden; }
+.seg button { border: 0; border-radius: 0; }
+.seg button + button { border-left: 1px solid var(--rule); }
+label.small { font-size: 13px; color: var(--ink-soft); display: flex; gap: 8px; align-items: center; }
+.dish { display: grid; gap: 14px; }
+.dishtop { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 10px; align-items: baseline; }
+.status { font: 400 13px/1.4 var(--mono); color: var(--ink-soft); }
+canvas { display: block; width: 100%; max-width: 100%; }
+#worm { aspect-ratio: 5 / 1.35; }
+#kymo { aspect-ratio: 5 / 1.25; }
+#trace { aspect-ratio: 5 / 0.9; }
+.readouts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+.meter { display: grid; gap: 4px; padding: 10px; border-radius: 4px; background: var(--slide); }
+.meter .k { font: 500 11px/1.2 var(--mono); letter-spacing: .06em; text-transform: uppercase; color: var(--ink-soft); }
+.meter .v { font: 400 26px/1 var(--display); font-variant-numeric: tabular-nums; }
+.meter .n { font-size: 12px; color: var(--ink-soft); }
+.legend { display: flex; flex-wrap: wrap; gap: 14px; font-size: 13px; color: var(--ink-soft); }
+.legend i { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 6px; vertical-align: -1px; }
+.kyhead { display: flex; flex-wrap: wrap; gap: 10px; justify-content: space-between; align-items: center; }
+.story { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; }
+.story p { margin: 0; max-width: 64ch; }
+.story .panel { display: grid; gap: 8px; }
+.tablewrap { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; font-size: 14px; }
+th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--rule); vertical-align: top; }
+th { font: 500 11px/1.2 var(--mono); letter-spacing: .06em; text-transform: uppercase; color: var(--ink-soft); }
+td.num { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+.pill { display: inline-block; font: 500 11px/1 var(--mono); letter-spacing: .04em; padding: 4px 6px; border-radius: 3px; white-space: nowrap; }
+.pill.supported, .pill.replicated { background: color-mix(in srgb, var(--good) 18%, transparent); color: var(--good); }
+.pill.not { background: color-mix(in srgb, var(--shock) 14%, transparent); color: var(--shock); }
+.pill.other { background: color-mix(in srgb, var(--warn) 16%, transparent); color: var(--warn); }
+footer { font-size: 13px; color: var(--ink-soft); max-width: 80ch; }
+@media (max-width: 760px) {
+  .bench { grid-template-columns: 1fr; }
+  .readouts { grid-template-columns: 1fr 1fr 1fr; }
+  .meter .v { font-size: 20px; }
+}
+@media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="eyebrow">Prometheus-α · a regenerating-worm laboratory</div>
+    <h1>Does the body remember what its lost head learned?</h1>
+    <p class="lede">A worm of 32 cells grows from one founder cell. It is taught that one odour predicts a shock, and the lesson is held only in its cells' state, because every cell runs the same fixed rule. Only head tissue can smell. Cut the head off, let it regrow, and ask the new head.</p>
+  </header>
+
+  <section class="bench">
+    <div class="panel protocol" aria-label="Protocol">
+      <div class="group">
+        <h3>Rule</h3>
+        <select id="rule" aria-label="Cell rule"></select>
+        <div class="status" id="ruleinfo"></div>
+      </div>
+      <div class="group">
+        <h3>1 · Grow</h3>
+        <div class="row"><button id="reset">New founder cell</button><button id="grow">Grow 32 steps</button></div>
+      </div>
+      <div class="group">
+        <h3>2 · Condition</h3>
+        <div class="row">
+          <span class="seg" role="group" aria-label="Odour paired with shock"><button id="csA" aria-pressed="true">CS+ = odour A</button><button id="csB" aria-pressed="false">odour B</button></span>
+        </div>
+        <div class="row">
+          <span class="seg" role="group" aria-label="Pairing"><button id="pPaired" aria-pressed="true">Paired</button><button id="pUnpaired" aria-pressed="false">Unpaired</button></span>
+          <button id="condition" class="primary">Condition</button>
+        </div>
+      </div>
+      <div class="group">
+        <h3>3 · Wound</h3>
+        <div class="row"><button id="cutHead">Remove head</button><button id="cutTail">Remove tail</button><button id="cutFrag">Keep trunk only</button></div>
+        <div class="row"><button id="regen">Regenerate 32 steps</button><button id="graft">Graft head from an odour-B worm</button></div>
+        <label class="small"><input type="checkbox" id="gj" checked> Gap junctions open</label>
+      </div>
+      <div class="group">
+        <h3>4 · Test</h3>
+        <div class="row"><button id="testA">Probe odour A</button><button id="testB">Probe odour B</button></div>
+        <div class="row"><button id="cycle" class="primary">Promethean cycle</button></div>
+        <div class="status">Cycle: remove the head, regrow it, probe A and B.</div>
+      </div>
+      <div class="group">
+        <h3>Playback</h3>
+        <div class="row"><button id="pause" aria-pressed="false">Pause</button><button id="stepbtn">Step</button></div>
+        <label class="small">Speed <input type="range" id="speed" min="1" max="30" value="10" aria-label="Steps per second"></label>
+      </div>
+    </div>
+
+    <div class="dish">
+      <div class="panel" style="display:grid; gap:12px">
+        <div class="dishtop"><h2>The dish</h2><div class="status" id="status">step 0</div></div>
+        <canvas id="worm" width="1000" height="270" aria-label="The worm, head on the left"></canvas>
+        <div class="legend"><span><i style="background:var(--head)"></i>head (can smell)</span><span><i style="background:var(--trunk)"></i>trunk</span><span><i style="background:var(--tail)"></i>tail</span><span><i style="background:var(--cue-a)"></i>odour A</span><span><i style="background:var(--cue-b)"></i>odour B</span><span><i style="background:var(--shock)"></i>shock (US)</span></div>
+        <div class="readouts">
+          <div class="meter"><span class="k">Response to A</span><span class="v" id="rA">–</span><span class="n" id="rAn">not probed</span></div>
+          <div class="meter"><span class="k">Response to B</span><span class="v" id="rB">–</span><span class="n" id="rBn">not probed</span></div>
+          <div class="meter"><span class="k">Memory index</span><span class="v" id="di">–</span><span class="n">R(CS+) − R(CS−)</span></div>
+        </div>
+      </div>
+      <div class="panel" style="display:grid; gap:10px">
+        <div class="kyhead"><h2>Kymograph</h2>
+          <select id="chan" aria-label="Channel shown in the kymograph">
+            <option value="region">body plan</option><option value="1">voltage</option><option value="5">response</option>
+            <option value="6">hidden h0</option><option value="7">hidden h1</option><option value="8">hidden h2</option>
+          </select></div>
+        <canvas id="kymo" width="1000" height="250" aria-label="Kymograph: position down, time across"></canvas>
+        <canvas id="trace" width="1000" height="180" aria-label="Behaviour over time"></canvas>
+        <div class="status">Kymograph: each column is one step, head at the top. Trace: the head's response, with odours and shocks marked below it.</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="story">
+    <div class="panel"><h2>What is being asked</h2>
+      <p>Planarian flatworms trained to find food in a lit, rough-floored dish still show the memory after their heads are cut off and regrown (Shomrat &amp; Levin 2013). Nobody knows where that memory waits while the brain is gone. Here the question is asked of a synthetic body where every cell's state can be read, copied and transplanted.</p></div>
+    <div class="panel"><h2>Two kinds of rule</h2>
+      <p><b>E</b> rules were trained to learn and to regenerate, but never asked to remember through a regeneration. <b>S</b> rules were also asked to remember after one head amputation. Trunk fragments, repeated amputation, chimeras and voltage transplants are never trained for either.</p></div>
+    <div class="panel"><h2>The controls</h2>
+      <p>Every paired worm has an unpaired twin: the same odours, the same shocks at the same moments of its life, the same random update noise, but the shocks fall between the odours. The memory index is measured within one worm, so a change in baseline cancels.</p></div>
+  </section>
+
+  <section class="panel" style="display:grid; gap:12px">
+    <h2>Evidence</h2>
+    <div class="tablewrap"><table id="claims"><thead><tr><th>claim</th><th>status</th><th>evidence</th></tr></thead><tbody></tbody></table></div>
+    <div class="status" id="claimsinfo"></div>
+  </section>
+
+  <footer>A synthetic computational experiment on a neural cellular automaton. "Memory", "head" and "shock" name parts of a simulation; nothing here is a model of a particular animal. Source: <a href="https://github.com/kai9987kai/prometheus-alpha">kai9987kai/prometheus-alpha</a>.</footer>
+</div>
+
+<script src="engine.js"></script>
+<script src="data.js"></script>
+<script>
+(function () {
+  "use strict";
+  const P = window.Prometheus, D = window.PROMETHEUS_DATA || { rules: {}, claims: [] };
+  const $ = (id) => document.getElementById(id);
+  const css = (name) => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+  const HISTORY = 360;
+
+  const S = { rule: null, ruleName: null, x: null, t: 0, rand: P.rng(7), queue: [], hist: [], paused: false,
+              csplus: 0, pairing: "paired", gj: true, probe: { 0: null, 1: null }, acc: { 0: [], 1: [] } };
+
+  function loadRule(name) {
+    S.ruleName = name;
+    S.rule = P.rule(D.rules[name]);
+    const r = D.rules[name];
+    $("ruleinfo").textContent = `${r.family === "E" ? "Emergent" : "Selected"} rule · seed ${r.seed} · ${r.n_params.toLocaleString()} parameters`;
+  }
+
+  function reset() {
+    S.x = P.founder(); S.t = 0; S.rand = P.rng(7 + Math.floor(Math.random() * 1e6)); S.queue = []; S.hist = [];
+    S.probe = { 0: null, 1: null }; S.acc = { 0: [], 1: [] };
+    renderReadouts();
+  }
+
+  const enqueue = (steps) => { S.queue.push(...steps); };
+  const doNow = (fn) => S.queue.push({ fn });
+
+  function tick() {
+    const item = S.queue.shift();
+    if (!item) return false;
+    if (item.fn) { item.fn(); return true; }
+    const fire = P.fireMask(S.rand);
+    S.x = P.step(S.rule, S.x, item.cue, item.us, fire, S.gj ? 1 : 0);
+    S.t += 1;
+    const resp = P.response(S.x);
+    S.hist.push({ x: S.x, cue: item.cue, us: item.us, resp, tag: item.tag, event: item.event });
+    if (S.hist.length > HISTORY) S.hist.shift();
+    if (item.tag && item.tag.startsWith("read")) {
+      const k = +item.tag.slice(4);
+      S.acc[k].push(resp);
+      if (S.acc[k].length === 3) { S.probe[k] = S.acc[k].reduce((a, b) => a + b, 0) / 3; S.acc[k] = []; renderReadouts(); }
+    }
+    return true;
+  }
+
+  function markEvent(label) { doNow(() => { if (S.hist.length) S.hist[S.hist.length - 1].event = label; }); }
+
+  function renderReadouts() {
+    const f = (v) => (v == null ? "–" : v.toFixed(2));
+    $("rA").textContent = f(S.probe[0]); $("rB").textContent = f(S.probe[1]);
+    $("rAn").textContent = S.probe[0] == null ? "not probed" : "last probe";
+    $("rBn").textContent = S.probe[1] == null ? "not probed" : "last probe";
+    const plus = S.probe[S.csplus], minus = S.probe[1 - S.csplus];
+    $("di").textContent = plus == null || minus == null ? "–" : (plus - minus >= 0 ? "+" : "") + (plus - minus).toFixed(2);
+  }
+
+  // ---------------------------------------------------------------- drawing
+  function regionColor(lab) { return lab === 0 ? css("--head") : lab === 1 ? css("--trunk") : lab === 2 ? css("--tail") : null; }
+
+  function drawWorm() {
+    const cv = $("worm"), g = cv.getContext("2d"), W = cv.width, H = cv.height;
+    g.clearRect(0, 0, W, H);
+    const lab = P.region(S.x), alive = P.alive(S.x), hw = P.headWeight(S.x);
+    const last = S.hist[S.hist.length - 1];
+    const cue = last ? last.cue : [0, 0], us = last ? last.us : 0;
+    const x0 = 40, dx = (W - 80) / P.L, mid = H / 2, t = S.t;
+    if (us) { g.fillStyle = css("--shock"); g.globalAlpha = 0.10; g.fillRect(0, 0, W, H); g.globalAlpha = 1; }
+    if (cue[0] || cue[1]) {
+      g.fillStyle = cue[0] ? css("--cue-a") : css("--cue-b");
+      for (let k = 0; k < 26; k++) { const px = ((k * 97 + t * 3) % 60) / 60 * x0 * 4, py = 20 + ((k * 53) % (H - 40));
+        g.globalAlpha = 0.25; g.beginPath(); g.arc(px, py, 3, 0, 7); g.fill(); }
+      g.globalAlpha = 1;
+    }
+    for (let i = 0; i < P.L; i++) {
+      if (!alive[i] || lab[i] < 0) continue;
+      const a = Math.max(0.15, Math.min(1, S.x[P.ALPHA * P.L + i]));
+      const y = mid + Math.sin(i * 0.35 - t * 0.12) * 10;
+      const r = dx * 0.62 * (0.55 + 0.45 * a);
+      g.fillStyle = regionColor(lab[i]); g.globalAlpha = 0.35 + 0.65 * a;
+      g.beginPath(); g.ellipse(x0 + i * dx + dx / 2, y, r, r * 1.35, 0, 0, 7); g.fill();
+      const v = S.x[P.V * P.L + i];
+      g.globalAlpha = Math.min(0.9, Math.abs(v) / 3); g.strokeStyle = v >= 0 ? css("--eosin") : css("--ink");
+      g.lineWidth = 3; g.beginPath(); g.ellipse(x0 + i * dx + dx / 2, y, r + 3, r * 1.35 + 3, 0, 0, 7); g.stroke();
+      if (hw[i] > 0.2 && (cue[0] || cue[1])) { g.globalAlpha = hw[i] * 0.8; g.fillStyle = cue[0] ? css("--cue-a") : css("--cue-b");
+        g.beginPath(); g.arc(x0 + i * dx + dx / 2, y - r * 1.35 - 8, 4, 0, 7); g.fill(); }
+      g.globalAlpha = 1;
+    }
+    const resp = P.response(S.x);
+    g.fillStyle = css("--ink-soft"); g.font = `500 22px ${css("--mono")}`;
+    g.fillText(`response ${resp >= 0 ? "+" : ""}${resp.toFixed(2)}`, W - 290, 34);
+    g.fillText(`gap junctions ${S.gj ? "open" : "blocked"}`, W - 290, H - 18);
+  }
+
+  function drawKymo() {
+    const cv = $("kymo"), g = cv.getContext("2d"), W = cv.width, H = cv.height;
+    g.fillStyle = css("--plate"); g.fillRect(0, 0, W, H);
+    const chan = $("chan").value, n = S.hist.length, cw = W / HISTORY, ch = H / P.L;
+    const pos = css("--eosin"), neg = css("--cue-b");
+    for (let k = 0; k < n; k++) {
+      const h = S.hist[k], lab = chan === "region" ? P.region(h.x) : null;
+      for (let i = 0; i < P.L; i++) {
+        if (chan === "region") { const c = regionColor(lab[i]); if (!c) continue; g.fillStyle = c; g.globalAlpha = 0.9; }
+        else { const v = h.x[+chan * P.L + i]; if (v === 0) continue; g.fillStyle = v > 0 ? pos : neg; g.globalAlpha = Math.min(1, Math.abs(v) / 2); }
+        g.fillRect(k * cw, i * ch, cw + 0.6, ch + 0.6);
+      }
+      if (h.event) { g.globalAlpha = 1; g.fillStyle = css("--ink"); g.fillRect(k * cw, 0, 2, H); }
+    }
+    g.globalAlpha = 1;
+  }
+
+  function drawTrace() {
+    const cv = $("trace"), g = cv.getContext("2d"), W = cv.width, H = cv.height;
+    g.fillStyle = css("--plate"); g.fillRect(0, 0, W, H);
+    const n = S.hist.length, cw = W / HISTORY, top = 12, bot = H - 40;
+    const yOf = (v) => bot - (Math.max(-0.2, Math.min(1.2, v)) + 0.2) / 1.4 * (bot - top);
+    g.strokeStyle = css("--rule"); g.lineWidth = 1;
+    for (const v of [0, 1]) { g.beginPath(); g.moveTo(0, yOf(v)); g.lineTo(W, yOf(v)); g.stroke(); }
+    g.fillStyle = css("--ink-soft"); g.font = `400 18px ${css("--mono")}`;
+    g.fillText("1", 4, yOf(1) - 4); g.fillText("0", 4, yOf(0) - 4);
+    for (let k = 0; k < n; k++) {
+      const h = S.hist[k];
+      if (h.cue[0]) { g.fillStyle = css("--cue-a"); g.fillRect(k * cw, bot + 8, cw + 0.6, 10); }
+      if (h.cue[1]) { g.fillStyle = css("--cue-b"); g.fillRect(k * cw, bot + 8, cw + 0.6, 10); }
+      if (h.us) { g.fillStyle = css("--shock"); g.fillRect(k * cw, bot + 22, cw + 0.6, 10); }
+    }
+    g.strokeStyle = css("--ink"); g.lineWidth = 2.5; g.beginPath();
+    for (let k = 0; k < n; k++) { const y = yOf(S.hist[k].resp); k ? g.lineTo(k * cw, y) : g.moveTo(k * cw, y); }
+    g.stroke();
+    if (n) { g.fillStyle = css("--eosin"); g.beginPath(); g.arc((n - 1) * cw, yOf(S.hist[n - 1].resp), 5, 0, 7); g.fill(); }
+  }
+
+  function draw() {
+    drawWorm(); drawKymo(); drawTrace();
+    $("status").textContent = `step ${S.t}${S.queue.length ? ` · ${S.queue.filter((q) => !q.fn).length} queued` : ""}`;
+  }
+
+  // ---------------------------------------------------------------- controls
+  function press(onId, offId) { $(onId).setAttribute("aria-pressed", "true"); $(offId).setAttribute("aria-pressed", "false"); }
+  $("csA").onclick = () => { S.csplus = 0; press("csA", "csB"); renderReadouts(); };
+  $("csB").onclick = () => { S.csplus = 1; press("csB", "csA"); renderReadouts(); };
+  $("pPaired").onclick = () => { S.pairing = "paired"; press("pPaired", "pUnpaired"); };
+  $("pUnpaired").onclick = () => { S.pairing = "unpaired"; press("pUnpaired", "pPaired"); };
+  $("reset").onclick = () => { reset(); draw(); };
+  $("grow").onclick = () => enqueue(P.program(P.GROW, "grow"));
+  $("condition").onclick = () => { markEvent("condition"); enqueue(P.conditioning(S.csplus, S.pairing, S.rand)); enqueue(P.program(P.DELAY)); };
+  const cut = (kind) => () => doNow(() => { S.x = P.amputate(S.x, kind); if (S.hist.length) S.hist[S.hist.length - 1].event = kind; });
+  $("cutHead").onclick = cut("head"); $("cutTail").onclick = cut("tail"); $("cutFrag").onclick = cut("fragment");
+  $("regen").onclick = () => enqueue(P.program(P.REGEN, "regen"));
+  $("testA").onclick = () => enqueue(P.probe(0));
+  $("testB").onclick = () => enqueue(P.probe(1));
+  $("cycle").onclick = () => { cut("head")(); enqueue(P.program(P.REGEN, "regen")); enqueue(P.probe(S.csplus)); enqueue(P.probe(1 - S.csplus)); };
+  $("graft").onclick = () => doNow(() => {
+    // Raise a donor worm in the background, trained on the other odour, and graft its head on.
+    let d = P.founder(); const rnd = P.rng(99);
+    const prog = [...P.program(P.GROW), ...P.conditioning(1 - S.csplus, "paired", rnd), ...P.program(P.DELAY)];
+    for (const s of prog) d = P.step(S.rule, d, s.cue, s.us, P.fireMask(rnd), 1);
+    S.x = P.graft(d, S.x); if (S.hist.length) S.hist[S.hist.length - 1].event = "graft";
+  });
+  $("gj").onchange = (e) => { S.gj = e.target.checked; };
+  $("pause").onclick = () => { S.paused = !S.paused; $("pause").setAttribute("aria-pressed", String(S.paused)); $("pause").textContent = S.paused ? "Resume" : "Pause"; };
+  $("stepbtn").onclick = () => { while (S.queue.length && S.queue[0].fn) tick(); tick(); draw(); };
+  $("chan").onchange = draw;
+  $("rule").onchange = (e) => { loadRule(e.target.value); reset(); demo(); draw(); };
+
+  function demo() {
+    enqueue(P.program(P.GROW, "grow"));
+    markEvent("condition"); enqueue(P.conditioning(S.csplus, S.pairing, S.rand)); enqueue(P.program(P.DELAY));
+    enqueue(P.probe(0)); enqueue(P.probe(1));
+    $("cycle").onclick();
+  }
+
+  // ---------------------------------------------------------------- evidence
+  function renderClaims() {
+    const tb = document.querySelector("#claims tbody");
+    tb.innerHTML = "";
+    for (const c of D.claims || []) {
+      const tr = document.createElement("tr");
+      const st = c.status.toLowerCase();
+      const cls = st === "supported" || st === "replicated" ? st : st.startsWith("not") ? "not" : "other";
+      tr.innerHTML = `<td></td><td><span class="pill ${cls}"></span></td><td></td>`;
+      tr.children[0].textContent = c.claim; tr.children[1].firstChild.textContent = c.status; tr.children[2].textContent = c.evidence;
+      if (c.headline) tr.children[0].style.fontWeight = "700";
+      tb.appendChild(tr);
+    }
+    $("claimsinfo").textContent = D.claims && D.claims.length ? `${D.claims.length} claims, rendered from claims/claims.json (${D.generated || ""})` : "No results exported yet.";
+  }
+
+  // ---------------------------------------------------------------- boot
+  const names = Object.keys(D.rules);
+  for (const n of names) { const o = document.createElement("option"); o.value = n; o.textContent = `${D.rules[n].family === "E" ? "Emergent" : "Selected"} rule ${n}`; $("rule").appendChild(o); }
+  const start = names.includes(D.default_rule) ? D.default_rule : names[0];
+  $("rule").value = start;
+  renderClaims();
+  if (!start) { $("status").textContent = "No rules found. Run `prometheus export-web`."; return; }
+  loadRule(start); reset(); demo();
+  let last = performance.now(), budget = 0;
+  function frame(now) {
+    const sps = +$("speed").value;
+    budget += ((now - last) / 1000) * sps; last = now;
+    if (!S.paused) { let k = 0; while (budget >= 1 && k < 30) { while (S.queue.length && S.queue[0].fn) tick(); if (!tick()) { budget = 0; break; } budget -= 1; k++; } }
+    else budget = 0;
+    draw();
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>

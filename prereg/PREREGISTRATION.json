@@ -1,0 +1,116 @@
+{
+ "title": "Prometheus-alpha v0.1: does a regenerating body remember what its lost head learned?",
+ "version": "0.1",
+ "date": "2026-09-29",
+ "status": "Committed and hash-locked before any confirmatory experiment and before S0 and S1 were trained. E0 and E1 had finished or were finishing training (3,000 iterations); no experiment has been run on any confirmatory rule.",
+ "model": {
+  "worm": "1D neural cellular automaton, 40 sites, 16 channels (alpha, voltage, head, trunk, tail, response, 10 hidden), one shared 2-layer MLP rule (4,368 parameters), asynchronous updates (p 0.5), fixed gap-junction voltage diffusion (conductance 0.25, 2 substeps) between cells in the alive mask",
+  "senses": "cue A and cue B are sensed only by cells more than half head (gate clamp(2*head-1, 0, 1)); the US is broadcast to every living cell",
+  "behaviour": "response = gated-head-weighted mean of the response channel; 0 when the gated head weight is below 0.5 (a headless worm has no behaviour)",
+  "conditioning": "differential Pavlovian conditioning, 6 slots of 8 steps in random order (2 CS+, 2 CS-, 2 empty); cue on steps 0-5; paired: US on steps 3-5 of each CS+ slot; unpaired twin: the same US steps inside the empty slots; CS+ identity balanced across worms",
+  "test": "CS+ alone and CS- alone for 6 steps each (order balanced), response averaged over the last 3 steps of each; discrimination index DI = R(CS+) - R(CS-)",
+  "memory_measure": "M = DI(paired worm) - DI(its unpaired twin), per worm; twins share founder, update masks, cue schedule and US count"
+ },
+ "rules": {
+  "E0, E1": "family E (emergent), seeds 0 and 1, 3000 iterations from random initialisation. Memory is scored only in lives with no wound after conditioning.",
+  "S0, S1": "family S (selected), each initialised from E0 / E1 and trained 2000 further iterations with memory also scored after a head or tail amputation that follows conditioning (training cuts are at the head/trunk boundary +-2 sites, so some training cuts leave head cells). Trunk fragments are never scored for memory.",
+  "shared": "batch 32; lives: grow 32, optional first wound + regenerate 32, condition 48, delay 4-16, optional second wound + regenerate 32, test 24; anatomy loss at 4 checkpoints; unconditioned-response and rest-baseline losses; Adam 2e-3 with warm-up and two x0.3 decays; per-tensor gradient normalisation"
+ },
+ "protocol": {
+  "n": 128,
+  "life": "grow 32 steps from one founder cell, condition 48, delay 12, then the experiment's manipulation",
+  "decapitation": "complete: every site up to the worm's own last head-labelled cell plus a 2-site margin is removed; residual gated head weight is reported",
+  "regeneration": "32 steps",
+  "cohort_seeds": "H1 1001, H2 1002, H3a 1031, H3b 1032, H3c 1033, H4 and H4b 1004 (sub-cohorts 10041-10045), H5 1005 (10051-10055), H6 1006, H7 1007, calibration 1100, locus 1201, gap junctions 1202, anatomy 1301. Pilot rehearsals used these seeds at n = 32 and 16, which draws different worms than n = 128, and only on pilot rules."
+ },
+ "hypotheses": {
+  "H1": {
+   "claim": "Intact worms learn which cue was paired",
+   "measure": "M after the 12-step delay",
+   "test": "one-sided sign-flip, M > 0"
+  },
+  "H2": {
+   "claim": "The memory survives complete decapitation and 32 steps of head regeneration",
+   "measure": "M after decapitation + regeneration",
+   "test": "one-sided sign-flip, M > 0",
+   "secondary": "retention = mean M(regrown) / mean M(intact) on the same cohort; regrowth anatomy"
+  },
+  "H3a": {
+   "claim": "Voltage is necessary: replacing a decapitated trained body's voltage channel with its unpaired twin's (all other channels untouched) reduces the regrown head's memory",
+   "measure": "M(untouched) - M(voltage swapped), both relative to the twin's DI after regeneration",
+   "test": "one-sided sign-flip, > 0"
+  },
+  "H3b": {
+   "claim": "Voltage is sufficient: writing a decapitated trained body's voltage channel into its unpaired twin's decapitated body makes the twin's regrown head remember",
+   "measure": "DI(implanted twin) - DI(untouched twin) after regeneration",
+   "test": "one-sided sign-flip, > 0"
+  },
+  "H3c": {
+   "claim": "The hidden channels are sufficient: writing a decapitated trained body's 10 hidden channels (and nothing else) into its unpaired twin's decapitated body makes the twin's regrown head remember",
+   "measure": "DI(implanted twin) - DI(untouched twin) after regeneration",
+   "test": "one-sided sign-flip, > 0"
+  },
+  "H4": {
+   "claim": "In a chimera (head sites [0, 12) of a worm trained on cue A grafted onto sites [12, 40) of a worm trained on cue B, and the mirror graft), after 32 steps of healing the expressed memory is not an even split between head and body",
+   "measure": "signed = (P(A|B) - P(B|A)) / 2 per worm index, where P = R(cue A) - R(cue B); > 0 means the head's memory wins",
+   "test": "two-sided sign-flip",
+   "secondary": "dominance = mean signed / mean uncontested memory (A|A' and B|B' grafts); preferences of each graft, which expose any bias toward one cue"
+  },
+  "H4b": {
+   "claim": "When the healed chimeras of H4 are completely decapitated and regrow for 32 steps, the regrown head carries the body's memory",
+   "measure": "signed = (P(A|B) - P(B|A)) / 2 after regeneration; < 0 means the body's memory wins",
+   "test": "one-sided sign-flip, < 0",
+   "secondary": "dominance after regeneration, scaled by the intact uncontested memory"
+  },
+  "H5": {
+   "claim": "Transfer: a naive head (from an unpaired worm) grafted onto a trained body takes on the body's memory without any amputation or regeneration",
+   "measure": "(P(N|A) - P(N|B)) / 2 per worm index, after 32 steps of healing",
+   "test": "one-sided sign-flip, > 0",
+   "secondary": "the reverse graft, a trained head on a naive body"
+  },
+  "H6": {
+   "claim": "Promethean cycles: the memory survives a third successive complete decapitation and regeneration (each cycle: cut, regenerate 32, test 24; no retraining)",
+   "measure": "M after cycle 3",
+   "test": "one-sided sign-flip, > 0",
+   "secondary": "M after cycles 1-4, anatomy per cycle"
+  },
+  "H7": {
+   "claim": "The memory survives the removal of both head and tail (a trunk fragment regenerates both)",
+   "measure": "M after fragment amputation + 32 steps",
+   "test": "one-sided sign-flip, > 0"
+  }
+ },
+ "decision_rules": {
+  "family": "H1, H2, H3a, H3b, H3c, H4, H4b, H5, H6, H7 in each rule separately (10 tests); Holm-Bonferroni at alpha 0.05",
+  "sesoi": "a hypothesis is supported only if Holm rejects AND |mean| >= 0.10 (response units; a fully trained conditioned response is about 1)",
+  "replication": "'replicated' within a family if supported in both of its rules; 'mixed' if in one",
+  "interpretation": "H3a-H3c, H4b, H5, H6 and H7 ask where and how a surviving memory lives. In a rule whose H2 is not supported they are still run and reported, but their failure only restates H2.",
+  "e_versus_s": "the E-versus-S contrast (what selection added) is descriptive: two rules per family cannot support an inferential claim about families"
+ },
+ "predictions": {
+  "H1": "supported in all four rules",
+  "H2": "E rules: not supported (both E pilots under the final gate and objective kept 0.2% of the memory). S rules: supported (positive control)",
+  "H3a": "S rules: not supported (pilot S102 kept 98% of the memory with its voltage swapped out)",
+  "H3b": "S rules: not supported (pilot: 3% transferred)",
+  "H3c": "S rules: supported (pilot: 85% transferred)",
+  "H4": "E rules: supported, the head wins (pilot E102 dominance +0.95 with the earlier H4 code). S rules: not supported (pilot dominance -0.01; both conflicting grafts preferred cue A)",
+  "H4b": "S rules: supported, the body wins (pilot dominance -0.66). E rules: not supported (no memory survives)",
+  "H5": "S rules: supported, partial (pilot 39% of the body's memory). E rules: not supported (pilot 0%)",
+  "H6": "S rules: supported (pilot 0.85, 0.83, 0.79, 0.79 over cycles 1-4). E rules: not supported",
+  "H7": "S rules: supported (pilot 0.81). E rules: not supported"
+ },
+ "exploratory": [
+  "calibration: 40 A/A tests (two independent cohorts of paired worms, identical protocol), false-positive rate at alpha 0.05",
+  "anatomy: IoU and region accuracy after growth, after each wound, and after 300 more steps",
+  "locus: every channel group (identity+response, voltage, hidden, all but voltage) swapped out of the trained body and implanted into the twin",
+  "gap junctions: blocked for the 12-step delay only (after learning, before the cut)"
+ ],
+ "disclosed_pilots": [
+  "E100 and S100 (1,200 iterations, the first objective, sensing gate clamp(head, 0, 1)): E100 learned (M +0.44 at n = 32) and did not remember through complete decapitation (-0.008); chimera heads won (dominance 0.98); S100 had not learned to discriminate at 1,200 iterations. These pilots led to the sensing gate, the redesigned H3 and S-by-selection (docs/DEVIATIONS.md, items 1-3).",
+  "E101 and S101 (anticipatory-CR loss): stopped at 850 iterations with no discrimination; the loss was dropped (item 4).",
+  "E102 (final objective and gate, 1,500 iterations) at n = 32: H1 M +0.60; H2 +0.001 (retention 0.2%); chimera head dominance +0.95; H5 +0.009; H6 +0.002; H7 -0.002.",
+  "S102 (E102 + 1,000 iterations of the S objective) at n = 32: H1 +0.84; H2 +0.71 (retention 84%); H3a +0.018 (98% kept after a voltage swap); H3b +0.022 (3% transferred); H3c +0.63 (85% transferred); H4 -0.006 (P(A|B) +0.58, P(B|A) +0.59); H4b -0.62 (dominance -0.66); H5 +0.38 (39%); H6 cycles 1-4: 0.85, 0.83, 0.79, 0.79; H7 +0.81; exploratory locus: swapping out all but voltage kept 1%; gap-junction block during the delay changed nothing (0.865 vs 0.853); calibration 0/40 false positives. H3c and H4b were added to the confirmatory family because of this pilot, and are therefore replications of a pilot observation on new rules, not discoveries.",
+  "All pilot results are in results/pilot/ and all pilot weights in weights/pilot/."
+ ],
+ "deviations": "Any departure from this document after the lock is listed in docs/DEVIATIONS.md with its reason."
+}

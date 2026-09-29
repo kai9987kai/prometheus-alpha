@@ -1,0 +1,12 @@
+{
+ "locked_at_utc": "2026-09-29T16:53:54+00:00",
+ "sha256": {
+  "PREREGISTRATION.json": "6fe1ba26512254b90dd41014bf2d9ff16c069298ed6983d396f6a371529e8ffe",
+  "src/prometheus/tissue.py": "a9801dbbc342d3c6d731a1f45489f35ab3ff470846ec3d548e3739fad4be5fe9",
+  "src/prometheus/body.py": "38e1ab56ef6edb442351a36fc9b2393c68717f617c9cf0b7e4f062f055b97083",
+  "src/prometheus/life.py": "79f72d508a2bac26a555077ea26d09c44e2432b35812958f2bad26c2fa4ee78f",
+  "src/prometheus/experiments.py": "0d2ac4b1b7aba1d30a72440e3d94c0773e989d1e231df02e050931c743acab67",
+  "src/prometheus/stats.py": "159e58ef2cdaffea9efb5f07ce86d54902dd4a3e01b483a1e06330d31c9be86e",
+  "src/prometheus/train.py": "f8f34b83bcba916b649e0bf7886ec2df001bca371d7a6e2c55e3636522e58436"
+ }
+}
