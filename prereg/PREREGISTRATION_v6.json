@@ -1,0 +1,30 @@
+{
+ "title": "Prometheus-alpha v0.6: memory across generations of fission, and attractor basins as a mechanism of robustness",
+ "version": "0.6",
+ "date": "2026-09-29",
+ "status": "Locked before any v0.6 experiment on a confirmatory rule. No new rules, no pilots; a code smoke test at n = 4 on pilot rule S102 checked output shapes only.",
+ "code": "src/prometheus/v6.py",
+ "hypotheses": {
+  "H29": {
+   "claim": "Transgenerational memory: split at site 20, the posterior half regrows for 48 steps; repeat three times. The third-generation worm remembers",
+   "measure": "M after generation 3",
+   "test": "one-sided sign-flip, > 0; Holm over the four rules tested",
+   "rules": "F0, F1 (S0, S1 as controls)",
+   "seed": 7029
+  },
+  "H30": {
+   "claim": "Attractor basin predicts robustness: across S0, S1, B0, B1, F0, F1, the critical noise sigma* (smallest sigma on the grid 0.25, 0.5, 1, 1.5, 2, 3, 4, 6 at which Gaussian noise added to the hidden channels of sites 12-19 of decapitated trained bodies halves the regrown head's memory; 64 worms, seed 7030, noise seed 1) is positively rank-correlated with the rule's v0.5 turnover memory (H25)",
+   "measure": "Spearman rho over 6 rules",
+   "test": "one-sided exact permutation test (720 permutations), alpha 0.05"
+  }
+ },
+ "decision_rules": {
+  "H29": "Holm over F0, F1, S0, S1 at alpha 0.05, SESOI 0.10",
+  "H30": "p <= 0.05 and rho > 0 (n = 6: low power; a null here is weak evidence)"
+ },
+ "predictions": {
+  "H29": "F0, F1: supported (each generation repeats the trained split). S0, S1: not supported",
+  "H30": "supported"
+ },
+ "deviations": "docs/DEVIATIONS.md, v0.6"
+}

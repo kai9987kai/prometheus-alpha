@@ -74,7 +74,7 @@ def main(argv=None):
 
     pr = sub.add_parser("prereg", help="lock or verify the preregistration")
     pr.add_argument("action", choices=["lock", "verify"])
-    pr.add_argument("--version", default="1", choices=["1", "2", "3", "4", "5"])
+    pr.add_argument("--version", default="1", choices=["1", "2", "3", "4", "5", "6"])
 
     r2 = sub.add_parser("run2", help="run the v0.2 experiments (extinction, reversal, compiler, engram locus, attractor)")
     r2.add_argument("--rule", required=True, help="E0, E1, S0 or S1")
