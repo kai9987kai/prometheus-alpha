@@ -1,0 +1,16 @@
+{
+ "locked_at_utc": "2026-09-29T19:47:45+00:00",
+ "sha256": {
+  "PREREGISTRATION_v4.json": "2282226b0a477e88fe0bf2a31010717b20906ba6ad507a7a2fa3b92130e07e97",
+  "src/prometheus/tissue.py": "a9801dbbc342d3c6d731a1f45489f35ab3ff470846ec3d548e3739fad4be5fe9",
+  "src/prometheus/body.py": "38e1ab56ef6edb442351a36fc9b2393c68717f617c9cf0b7e4f062f055b97083",
+  "src/prometheus/life.py": "79f72d508a2bac26a555077ea26d09c44e2432b35812958f2bad26c2fa4ee78f",
+  "src/prometheus/experiments.py": "0d2ac4b1b7aba1d30a72440e3d94c0773e989d1e231df02e050931c743acab67",
+  "src/prometheus/stats.py": "159e58ef2cdaffea9efb5f07ce86d54902dd4a3e01b483a1e06330d31c9be86e",
+  "src/prometheus/train.py": "f8f34b83bcba916b649e0bf7886ec2df001bca371d7a6e2c55e3636522e58436",
+  "src/prometheus/v2.py": "2a4f58a762a30568ef1276e00e1b868d16fceb79c6e08853d4e38b68faa1df9d",
+  "src/prometheus/v3.py": "03c1ee8caf32b52f6d3f0094e9aecaa6e90f88af39a9cc5c39a4a09915d1da30",
+  "src/prometheus/v4.py": "a1f854a6941751cdcd4acb134019a4f7767c01df7496519c914072ffc93aa652",
+  "src/prometheus/train_v4.py": "df76c3c149a1eb21d2eaeb8da1d0a398a50c3bbf75de29a0889291d48c32c3d6"
+ }
+}

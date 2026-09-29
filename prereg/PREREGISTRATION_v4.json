@@ -1,0 +1,64 @@
+{
+ "title": "Prometheus-alpha v0.4: can selection spread the copy through the body? Fission rules, a universal code, and single-cell memories",
+ "version": "0.4",
+ "date": "2026-09-29",
+ "status": "Locked before any v0.4 experiment on a confirmatory rule. F0 and F1 were training (from S0 and S1) when this was locked. No pilots were run; a code smoke test at n = 8 on pilot rule S102 checked only output shapes.",
+ "rules": {
+  "F0, F1": "each initialised from S0 / S1 and trained 2,000 iterations on lives in which, after conditioning, the worm is cut at site 20 (+-1) and the posterior half (70%) or the anterior half (15%) regrows for 48 steps, or the head is cut (15%); memory scored after regrowth"
+ },
+ "hypotheses": {
+  "H19": {
+   "claim": "Fission, trained split: the posterior half (cut at site 20) regrows for 48 steps into a worm that remembers",
+   "measure": "M of the posterior half",
+   "test": "one-sided sign-flip, > 0",
+   "rules": "F and S",
+   "seed": 5019
+  },
+  "H20": {
+   "claim": "Fission, held-out split: the same with the cut at site 24 and 64 steps of regrowth",
+   "measure": "M",
+   "test": "one-sided sign-flip, > 0",
+   "rules": "F and S",
+   "seed": 5020
+  },
+  "H21": {
+   "claim": "Distributed copy: in intact trained worms, the hidden channels of sites 16-35 copied into the untrained twin make the twin's regrown head (after complete decapitation) remember, more in F rules than in the S sibling",
+   "measure": "M_F - M_S per worm (same cohort)",
+   "test": "one-sided sign-flip, > 0",
+   "rules": "F",
+   "seed": 5021
+  },
+  "H22": {
+   "claim": "F rules keep the S ability: memory survives complete decapitation",
+   "measure": "M",
+   "test": "one-sided sign-flip, > 0",
+   "rules": "F",
+   "seed": 5022
+  },
+  "H23": {
+   "claim": "A universal code: the other S rule's v0.2 compiled patterns, written into this rule's untrained decapitated bodies, write the intended memory",
+   "measure": "(pref with its A pattern - pref with its B pattern) / 2",
+   "test": "one-sided sign-flip, > 0",
+   "rules": "S",
+   "seed": 5023
+  },
+  "H24": {
+   "claim": "Single-cell memory: a pattern designed at site 14 only (32 design worms, seed 5240) writes a memory into held-out untrained decapitated bodies (seed 5241)",
+   "measure": "(pref A - pref B) / 2",
+   "test": "one-sided sign-flip, > 0",
+   "rules": "all"
+  }
+ },
+ "decision_rules": {
+  "family": "the hypotheses run in each rule; Holm at alpha 0.05; SESOI 0.10; replicated = supported in both rules of a family"
+ },
+ "predictions": {
+  "H19": "F: supported. S: not supported (v0.3 H18)",
+  "H20": "F: supported, weaker than H19. S: not supported",
+  "H21": "supported: to survive fission the copy must spread along the trunk",
+  "H22": "supported",
+  "H23": "not supported: independently selected rules invent their own codes (as Morpheus's bioelectric codes did not transfer)",
+  "H24": "S and F: supported, partially (smaller than the four-cell 0.98). E: not supported"
+ },
+ "deviations": "docs/DEVIATIONS.md, v0.4"
+}
