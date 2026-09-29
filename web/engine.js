@@ -150,6 +150,25 @@
     return y;
   }
 
+  /* Keep one half of a worm after fission at site ``at``. */
+  function fission(x, keep, at = 20) {
+    const y = x.slice();
+    for (let c = 0; c < C; c++) for (let i = 0; i < L; i++)
+      if ((keep === "anterior") !== (i < at)) y[c * L + i] = 0;
+    return y;
+  }
+
+  /* Linear engram decoder (v0.3 H16): which odour each cell's hidden state encodes. */
+  function decode(x, dec) {
+    const out = new Float32Array(L);
+    for (let i = 0; i < L; i++) {
+      let s = dec.b;
+      for (let c = 0; c < dec.w.length; c++) s += dec.w[c] * x[(HIDDEN0 + c) * L + i];
+      out[i] = s;
+    }
+    return out;
+  }
+
   /* Deterministic generator for update masks and slot orders (mulberry32). */
   function rng(seed) {
     let s = seed >>> 0;
@@ -202,7 +221,7 @@
   const api = {
     L, C, ALPHA, V, HEAD, TRUNK, TAIL, R, HIDDEN0, PERC, FOUNDER, BODY_START, HEAD_END, TRUNK_END, BODY_END,
     PHYS, SLOT, N_SLOTS, GROW, REGEN, DELAY, TEST_T,
-    rule, founder, alive, step, writePattern, headWeight, response, region, amputate, graft, rng, fireMask, program, conditioning, probe,
+    rule, founder, alive, step, writePattern, fission, decode, headWeight, response, region, amputate, graft, rng, fireMask, program, conditioning, probe,
   };
   root.Prometheus = api;
   if (typeof module !== "undefined" && module.exports) module.exports = api;

@@ -33,6 +33,9 @@ def web(rules: list[str], out: str | pathlib.Path = ROOT / "web" / "data.js"):
             r2 = json.loads(v2.read_text())
             data["rules"][name]["compiled"] = {k: [[round(v, 4) for v in row] for row in pat]
                                                for k, pat in r2["H12"]["patterns"].items()}
+        v3 = ROOT / "results" / f"v3_{name}.json"
+        if v3.exists():
+            data["rules"][name]["decoder"] = json.loads(v3.read_text())["H16"]["decoder"]
     data["default_rule"] = next((k for k in data["rules"] if k.startswith("S")), next(iter(data["rules"]), None))
     try:
         data["claims"] = claims.rendered_rows()

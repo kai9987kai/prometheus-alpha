@@ -141,6 +141,7 @@ footer { font-size: 13px; color: var(--ink-soft); max-width: 80ch; }
       <div class="group">
         <h3>3 · Wound</h3>
         <div class="row"><button id="cutHead">Remove head</button><button id="cutTail">Remove tail</button><button id="cutFrag">Keep trunk only</button></div>
+        <div class="row"><button id="fisA">Split: keep front half</button><button id="fisP">Split: keep back half</button></div>
         <div class="row"><button id="regen">Regenerate 32 steps</button><button id="graft">Graft head from an odour-B worm</button></div>
         <label class="small"><input type="checkbox" id="gj" checked> Gap junctions open</label>
         <div class="row"><button id="writeA">Write compiled memory A</button><button id="writeB">Write B</button></div>
@@ -173,12 +174,12 @@ footer { font-size: 13px; color: var(--ink-soft); max-width: 80ch; }
       <div class="panel" style="display:grid; gap:10px">
         <div class="kyhead"><h2>Kymograph</h2>
           <select id="chan" aria-label="Channel shown in the kymograph">
-            <option value="region">body plan</option><option value="1">voltage</option><option value="5">response</option>
+            <option value="region">body plan</option><option value="engram">decoded engram</option><option value="1">voltage</option><option value="5">response</option>
             <option value="6">hidden h0</option><option value="7">hidden h1</option><option value="8">hidden h2</option>
           </select></div>
         <canvas id="kymo" width="1000" height="250" aria-label="Kymograph: position down, time across"></canvas>
         <canvas id="trace" width="1000" height="180" aria-label="Behaviour over time"></canvas>
-        <div class="status">Kymograph: each column is one step, head at the top. Trace: the head's response, with odours and shocks marked below it.</div>
+        <div class="status">Kymograph: each column is one step, head at the top. "Decoded engram" colours each cell by the v0.3 linear decoder (orange: odour A, blue: odour B), centred on the body's mean. Trace: the head's response, with odours and shocks marked below it.</div>
       </div>
     </div>
   </section>
@@ -306,8 +307,11 @@ footer { font-size: 13px; color: var(--ink-soft); max-width: 80ch; }
     const pos = css("--eosin"), neg = css("--cue-b");
     for (let k = 0; k < n; k++) {
       const h = S.hist[k], lab = chan === "region" ? P.region(h.x) : null;
+      let dec = chan === "engram" && D.rules[S.ruleName].decoder ? P.decode(h.x, D.rules[S.ruleName].decoder) : null;
+      if (dec) { let s = 0, m = 0; for (let i = 0; i < P.L; i++) if (h.x[i] > 0.1) { s += dec[i]; m++; } const mu = m ? s / m : 0; dec = dec.map((v) => v - mu); }
       for (let i = 0; i < P.L; i++) {
         if (chan === "region") { const c = regionColor(lab[i]); if (!c) continue; g.fillStyle = c; g.globalAlpha = 0.9; }
+        else if (chan === "engram") { if (!dec || !(h.x[i] > 0.1)) continue; const v = dec[i]; g.fillStyle = v > 0 ? css("--cue-a") : css("--cue-b"); g.globalAlpha = Math.min(1, Math.abs(v) / 1.5); }
         else { const v = h.x[+chan * P.L + i]; if (v === 0) continue; g.fillStyle = v > 0 ? pos : neg; g.globalAlpha = Math.min(1, Math.abs(v) / 2); }
         g.fillRect(k * cw, i * ch, cw + 0.6, ch + 0.6);
       }
@@ -354,6 +358,8 @@ footer { font-size: 13px; color: var(--ink-soft); max-width: 80ch; }
   const cut = (kind) => () => doNow(() => { S.x = P.amputate(S.x, kind); if (S.hist.length) S.hist[S.hist.length - 1].event = kind; });
   $("cutHead").onclick = cut("head"); $("cutTail").onclick = cut("tail"); $("cutFrag").onclick = cut("fragment");
   $("regen").onclick = () => enqueue(P.program(P.REGEN, "regen"));
+  const split = (keep) => () => doNow(() => { S.x = P.fission(S.x, keep); if (S.hist.length) S.hist[S.hist.length - 1].event = "fission"; });
+  $("fisA").onclick = split("anterior"); $("fisP").onclick = split("posterior");
   $("extinguish").onclick = () => { markEvent("extinguish"); for (let b = 0; b < 2; b++) enqueue(P.conditioning(S.csplus, "naive", S.rand)); enqueue(P.program(P.DELAY)); };
   const write = (k) => () => doNow(() => {
     const c = D.rules[S.ruleName].compiled;
