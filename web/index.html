@@ -188,7 +188,7 @@ footer { font-size: 13px; color: var(--ink-soft); max-width: 80ch; }
     <div class="panel"><h2>What is being asked</h2>
       <p>Planarian flatworms trained to find food in a lit, rough-floored dish still show the memory after their heads are cut off and regrown (Shomrat &amp; Levin 2013). Nobody knows where that memory waits while the brain is gone. Here the question is asked of a synthetic body where every cell's state can be read, copied and transplanted.</p></div>
     <div class="panel"><h2>Two kinds of rule</h2>
-      <p><b>E</b> rules were trained to learn and to regenerate, but never asked to remember through a regeneration. <b>S</b> rules were also asked to remember after one head amputation. Trunk fragments, repeated amputation, chimeras and voltage transplants are never trained for either.</p></div>
+      <p><b>E</b> rules were trained to learn and to regenerate, but never asked to remember through a regeneration. <b>S</b> rules were also asked to remember after one head amputation. <b>B</b> rules were asked after two. Trunk fragments, repeated amputation, chimeras and voltage transplants are never trained for either.</p></div>
     <div class="panel"><h2>The controls</h2>
       <p>Every paired worm has an unpaired twin: the same odours, the same shocks at the same moments of its life, the same random update noise, but the shocks fall between the odours. The memory index is measured within one worm, so a change in baseline cancels.</p></div>
   </section>
@@ -211,6 +211,7 @@ footer { font-size: 13px; color: var(--ink-soft); max-width: 80ch; }
   const $ = (id) => document.getElementById(id);
   const css = (name) => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
   const HISTORY = 360;
+  const FAMILY = { E: "Emergent", S: "Selected", B: "Balanced" };
 
   const S = { rule: null, ruleName: null, x: null, t: 0, rand: P.rng(7), queue: [], hist: [], paused: false,
               csplus: 0, pairing: "paired", gj: true, probe: { 0: null, 1: null }, acc: { 0: [], 1: [] } };
@@ -222,7 +223,7 @@ footer { font-size: 13px; color: var(--ink-soft); max-width: 80ch; }
     const has = !!r.compiled;
     $("writeA").disabled = $("writeB").disabled = !has;
     $("compinfo").textContent = has ? "Writes a gradient-designed hidden-channel pattern into the body (v0.2 H12). Cut the head first, then regenerate and probe." : "No compiled pattern for this rule.";
-    $("ruleinfo").textContent = `${r.family === "E" ? "Emergent" : "Selected"} rule · seed ${r.seed} · ${r.n_params.toLocaleString()} parameters`;
+    $("ruleinfo").textContent = `${FAMILY[r.family]} rule · seed ${r.seed} · ${r.n_params.toLocaleString()} parameters`;
   }
 
   function reset() {
@@ -408,7 +409,7 @@ footer { font-size: 13px; color: var(--ink-soft); max-width: 80ch; }
 
   // ---------------------------------------------------------------- boot
   const names = Object.keys(D.rules);
-  for (const n of names) { const o = document.createElement("option"); o.value = n; o.textContent = `${D.rules[n].family === "E" ? "Emergent" : "Selected"} rule ${n}`; $("rule").appendChild(o); }
+  for (const n of names) { const o = document.createElement("option"); o.value = n; o.textContent = `${FAMILY[D.rules[n].family]} rule ${n}`; $("rule").appendChild(o); }
   const start = names.includes(D.default_rule) ? D.default_rule : names[0];
   $("rule").value = start;
   renderClaims();

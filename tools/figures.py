@@ -71,7 +71,7 @@ def fig1_kymograph():
             diff = np.where(alive, diff, np.nan)
             m = np.nanpercentile(np.abs(diff), 99)
             im = axes[1, col].imshow(diff / m, aspect="auto", cmap="RdBu_r", vmin=-1, vmax=1, interpolation="nearest")
-        axes[1, col].set_title("odour information per cell (A-trained minus B-trained twin)", fontsize=9, loc="left", color=INK)
+        axes[1, col].set_title("odour information per cell", fontsize=9, loc="left", color=INK)
         for ax in axes[:, col]:
             ax.grid(False)
             for e in events:
@@ -80,7 +80,7 @@ def fig1_kymograph():
     for ax in axes[:, 0]:
         ax.set_ylabel("site (head at top)")
     fig.supxlabel("step (dotted: conditioning begins; solid: decapitation)", fontsize=9, color=INK2)
-    fig.colorbar(im, ax=axes[1, :], shrink=0.8, label="decoded odour (red A, blue B), scaled")
+    fig.colorbar(im, ax=axes[1, :], shrink=0.8, label="A-trained minus B-trained twin\n(red A, blue B)")
     fig.savefig(OUT / "fig1_kymograph.png")
 
 

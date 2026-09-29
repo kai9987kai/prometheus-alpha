@@ -9,6 +9,12 @@ F = {n: f"results/rule_{n}.json" for n in R}
 for n in ("E0", "E1", "S0", "S1"):
     R["ph" + n] = json.loads((ROOT / f"results/posthoc_{n}.json").read_text())
     F["ph" + n] = f"results/posthoc_{n}.json"
+for n in ("E0", "E1", "S0", "S1"):
+    for v in ("v2", "v3"):
+        pth = ROOT / f"results/{v}_{n}.json"
+        if pth.exists():
+            R[f"{v}{n}"] = json.loads(pth.read_text())
+            F[f"{v}{n}"] = f"results/{v}_{n}.json"
 R["pilot"] = json.loads((ROOT / "results/pilot/S102_n32.json").read_text())
 F["pilot"] = "results/pilot/S102_n32.json"
 
@@ -158,6 +164,98 @@ add("H1", "Worms learn which odour predicted the shock, in their state alone (th
     e)
 
 
+
+# ============================================================ v0.2
+def vsup(v, rule, h):
+    return R[f"{v}{rule}"]["verdicts"].get(h, {}).get("supported", False)
+
+
+def vstatus(v, h, rules):
+    s = [vsup(v, r, h) for r in rules]
+    return "replicated" if all(s) else "mixed" if any(s) else "not supported"
+
+
+e = {}
+for r in S:
+    e[f"{r}_e"] = ev(f"v2{r}", "/H13/edge_fraction")
+    e[f"{r}_r"] = ev(f"v2{r}", "/H13/rest_fraction", 3)
+add("v2-H13", "v0.2: the body's copy lives in the four cells at the wound edge",
+    vstatus("v2", "H13", S),
+    "hidden channels implanted into the untrained twin at sites 12-15 only transfer S0 {S0_e} / S1 {S1_e} of the donor's memory; at sites 16-27, {S0_r} / {S1_r}", e, headline=True)
+e = {}
+for r in ALL:
+    e[f"{r}_w"] = ev(f"v2{r}", "/H12/written_memory")
+    e[f"{r}_s"] = ev(f"v2{r}", "/H12/shuffled_memory")
+add("v2-H12", "v0.2: a memory compiler. A gradient-designed hidden pattern written into untrained headless bodies makes held-out regrown heads remember an odour they never experienced",
+    vstatus("v2", "H12", ALL),
+    "written memory vs the same values at shuffled sites: S0 {S0_w} vs {S0_s}, S1 {S1_w} vs {S1_s}; also in emergent rules, whose bodies never keep a copy: E0 {E0_w} vs {E0_s}, E1 {E1_w} vs {E1_s} (one odour only in each E rule)", e, headline=True)
+e = {}
+for r in S:
+    e[f"{r}_i"] = ev(f"v2{r}", "/H11/first_lesson_intact")
+    e[f"{r}_g"] = ev(f"v2{r}", "/H11/first_lesson_regrown")
+add("v2-H11", "v0.2: after a reversal the body is more conservative than the head: the regrown head reverts toward the first lesson",
+    vstatus("v2", "H11", S),
+    "memory of the first lesson after learning the other odour, intact vs regrown: S0 {S0_i} vs {S0_g}, S1 {S1_i} vs {S1_g}. The pilot predicted the opposite direction", e)
+e = {}
+for r in S:
+    e[f"{r}_f"] = ev(f"v2{r}", "/H8/test/favoured_mean")
+    e[f"{r}_o"] = ev(f"v2{r}", "/H8/test/other_mean")
+add("v2-H8", "v0.2 replication of the v0.1 post-hoc attractor, direction named in advance: after 4 cycles the favoured odour is remembered better",
+    vstatus("v2", "H8", S),
+    "favoured vs other odour at cycle 4 (fresh worms): S0 {S0_f} vs {S0_o} (below the 0.10 threshold), S1 {S1_f} vs {S1_o}", e)
+e = {}
+for r in ALL:
+    e[f"{r}_x"] = ev(f"v2{r}", "/H9/extinguished_fraction")
+add("v2-H9", "v0.2: unreinforced presentations extinguish the memory (never trained)",
+    vstatus("v2", "H9", ALL),
+    "fraction of the memory extinguished by 96 steps of cues without shock: E0 {E0_x}, E1 {E1_x}, S0 {S0_x}, S1 {S1_x}", e)
+e = {}
+for r in S:
+    e[f"{r}_i"] = ev(f"v2{r}", "/H10/extinguished_intact")
+    e[f"{r}_g"] = ev(f"v2{r}", "/H10/extinguished_regrown")
+add("v2-H10", "v0.2: a head regrown after extinction differs from the intact extinguished head",
+    vstatus("v2", "H10", S),
+    "S rules, intact vs regrown after extinction: S0 {S0_i} vs {S0_g}, S1 {S1_i} vs {S1_g}; the pilot's inversion did not replicate (E rules pass trivially: nothing survives regrowth)", e)
+
+
+# ============================================================ v0.3
+e = {}
+for r in S:
+    e[f"{r}_a"] = ev(f"v3{r}", "/H14/A_trained/pattern_B")
+    e[f"{r}_b"] = ev(f"v3{r}", "/H14/B_trained/pattern_A")
+    e[f"{r}_f"] = ev(f"v3{r}", "/H14/switched_fraction", 3)
+add("v3-H14", "v0.3: memory surgery. Writing the compiled pattern for the other odour into a trained worm's headless body overwrites its real memory",
+    vstatus("v3", "H14", S),
+    "R(A) - R(B) of the regrown head: A-trained worms given pattern B S0 {S0_a}, S1 {S1_a}; B-trained given pattern A S0 {S0_b}, S1 {S1_b}; fraction of worms whose memory switched {S0_f}, {S1_f}", e, headline=True)
+e = {}
+for r in ALL:
+    e[f"{r}_a"] = ev(f"v3{r}", "/H15/written_A")
+    e[f"{r}_b"] = ev(f"v3{r}", "/H15/written_B")
+add("v3-H15", "v0.3: four cells are enough. A compiled memory confined to the wound-edge sites 12-15 writes a full memory",
+    vstatus("v3", "H15", S),
+    "R(A) - R(B) of held-out regrown heads with the sparse A / B pattern: S0 {S0_a} / {S0_b}, S1 {S1_a} / {S1_b}; emergent rules E0 {E0_a} / {E0_b}, E1 {E1_a} / {E1_b}", e)
+e = {}
+for r in ALL:
+    e[f"{r}_e"] = ev(f"v3{r}", "/H16/edge_accuracy")
+    e[f"{r}_r"] = ev(f"v3{r}", "/H16/rest_accuracy")
+add("v3-H16", "v0.3: decodable is not used. A linear decoder reads the odour from the wound-edge cells, in emergent rules too, whose regrown heads never use it",
+    vstatus("v3", "H16", ALL),
+    "held-out decoding accuracy, edge vs rest of trunk: S0 {S0_e} vs {S0_r}, S1 {S1_e} vs {S1_r}; E0 {E0_e} vs {E0_r}, E1 {E1_e} vs {E1_r} (predicted: no in E rules, which keep 0% of the memory)", e, headline=True)
+e = {}
+for r in S:
+    e[f"{r}_b"] = ev(f"v3{r}", "/H17/B_other")
+    e[f"{r}_s"] = ev(f"v3{r}", "/H17/S_other")
+add("v3-H17", "v0.3: selection for two amputations rescues the disfavoured memory (balanced B rules)",
+    vstatus("v3", "H17", S),
+    "memory of the S rule's disfavoured odour at cycle 4, B rule vs S sibling: B1 {S1_b} vs S1 {S1_s}; B0 {S0_b} vs S0 {S0_s} (S0 was near ceiling; below the 0.10 threshold)", e)
+e = {}
+for r in ALL:
+    e[f"{r}_p"] = ev(f"v3{r}", "/H18/posterior_half_memory", 3)
+    e[f"{r}_a"] = ev(f"v3{r}", "/H18/anterior_half_memory")
+add("v3-H18", "v0.3: fission. Cut a trained worm in two, and the half that must regrow a head remembers",
+    vstatus("v3", "H18", ALL),
+    "as predicted, no, in every rule: posterior half E0 {E0_p}, E1 {E1_p}, S0 {S0_p}, S1 {S1_p}; the anterior half, which keeps the head, {E0_a}, {E1_a}, {S0_a}, {S1_a}. The body's copy exists only at a wound next to the head", e)
+
 # ---- post hoc: favoured odour
 e = {}
 for r in S:
@@ -221,7 +319,8 @@ add("anatomy", "All four rules grow the body from one founder cell and regrow it
     "body IoU with the target after 32 steps of growth / after head regeneration / 300 steps later: E0 {E0_g} / {E0_h} / {E0_l}; E1 {E1_g} / {E1_h} / {E1_l}; S0 {S0_g} / {S0_h} / {S0_l}; S1 {S1_g} / {S1_h} / {S1_l}",
     e)
 
-ORDER = ["H2-S", "H2-E", "H3c", "H6", "posthoc-attractor", "H4b", "H3ab", "H4-E", "H4-S", "H5", "H7", "H1",
+ORDER = ["H2-S", "H2-E", "H3c", "v2-H13", "v2-H12", "v3-H14", "v3-H15", "v3-H16", "v3-H17", "v3-H18", "H6",
+         "v2-H11", "posthoc-attractor", "v2-H8", "v2-H9", "v2-H10", "H4b", "H3ab", "H4-E", "H4-S", "H5", "H7", "H1",
          "SESOI", "locus", "gj", "calibration", "anatomy"]
 claims.sort(key=lambda c: ORDER.index(c["id"]))
 doc = {"schema": 1, "note": "Built from results/rule_*.json. Failed and unsupported claims stay in the ledger.", "claims": claims}

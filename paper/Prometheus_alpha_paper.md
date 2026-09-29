@@ -6,7 +6,7 @@
 
 ## Abstract
 
-Planarian flatworms trained before decapitation still show the training after their heads regrow, and nobody knows where the memory waits while the brain is gone. We built synthetic worms in which that question can be answered exactly. Each worm is a one-dimensional neural cellular automaton that grows from one founder cell; every cell runs the same small, learned rule, which is frozen within a life, so a worm can learn only by changing its cells' state. Only cells that are more than half head tissue can sense two odours, and behaviour is read from the head. Worms learn in differential Pavlovian conditioning, each measured against an explicitly unpaired twin with identical noise. Across three preregistered, hash-locked rounds (42 confirmatory hypotheses tests per round-rule, 128 worms per test) we find: (1) rules trained to learn and to regenerate, but never asked to remember through regeneration, regrow near-perfect heads that remember nothing (retention 0.1% and −0.7%); (2) the same rules, selected to remember through one amputation, keep the memory through complete decapitation (retention 98%, 102%), through removal of head and tail, and through repeated decapitation, none of which was trained; (3) the body's copy is held not in the bioelectric voltage channel, which is neither necessary nor sufficient, but in hidden cell state, and almost entirely (98–99%) in the four cells at the wound edge; (4) a gradient-designed pattern of that hidden state, written into an untrained headless body, makes the regrown head remember an odour the animal never experienced, even in rules whose bodies never keep a copy themselves; (5) after a reversal, the body is more conservative than the head and regrows the older lesson. Several pilot-based predictions failed, including the direction of reversal and the resolution of head–body memory conflicts, and are reported as failures. The failures led to a post-hoc finding, confirmed in one of two rules on fresh data, that selection makes one odour's memory an attractor and the other's metastable.
+Planarian flatworms trained before decapitation still show the training after their heads regrow, and nobody knows where the memory waits while the brain is gone. We built synthetic worms in which that question can be answered exactly. Each worm is a one-dimensional neural cellular automaton that grows from one founder cell; every cell runs the same small, learned rule, which is frozen within a life, so a worm can learn only by changing its cells' state. Only cells that are more than half head tissue can sense two odours, and behaviour is read from the head. Worms learn in differential Pavlovian conditioning, each measured against an explicitly unpaired twin with identical noise. Across three preregistered, hash-locked rounds (21 hypotheses, 80 confirmatory tests on six rules, 128 worms per test) we find: (1) rules trained to learn and to regenerate, but never asked to remember through regeneration, regrow near-perfect heads that remember nothing (retention 0.1% and −0.7%); (2) the same rules, selected to remember through one amputation, keep the memory through complete decapitation (retention 98%, 102%), through removal of head and tail, and through repeated decapitation, none of which was trained; (3) the body's copy is held not in the bioelectric voltage channel, which is neither necessary nor sufficient, but in hidden cell state, and almost entirely (98–99%) in the four cells at the wound edge; (4) a gradient-designed pattern of that hidden state, written into an untrained headless body, makes the regrown head remember an odour the animal never experienced (even in rules whose bodies never keep a copy), and written into a trained body it overwrites the real memory in 99.6–100% of worms, from four cells alone; (5) after a reversal, the body is more conservative than the head and regrows the older lesson; (6) the odour can be decoded from the wound edge of bodies that never pass it on, so decodable is not used; (7) a worm cut in two yields a front half that remembers and a back half that never does. Of 70 stated predictions, 57 held. Those that failed included the direction of reversal and the resolution of head–body memory conflicts, and they are reported as failures. One failure led to a post-hoc finding, confirmed in one of two rules on fresh data, that selection makes one odour's memory an attractor and the other's metastable.
 
 ## 1 Introduction
 
@@ -29,6 +29,10 @@ The study inherits its methods from a series of earlier projects: preregistratio
 **Statistics.** Per-worm paired differences; sign-flip permutation tests (10,000 permutations); Holm–Bonferroni within each rule's family at α = 0.05; a hypothesis counts as supported only if Holm rejects *and* |mean| ≥ 0.10 response units (a trained conditioned response is ~1), so precise trivial effects cannot pass. Each round's hypotheses, seeds, sample sizes, decision rules and predictions were committed, SHA-256-locked together with every source file that can change a confirmatory number, and pushed before any confirmatory run. Pilots on separate pilot rules are disclosed in each preregistration. Every number quoted in the README is a JSON pointer into a results file, checked in CI.
 
 ## 3 Results
+
+![Fig. 1](figures/fig1_kymograph.png)
+
+*Fig. 1. One worm of each kind learns, loses its head twice and regrows it. Top: body plan (head, trunk, tail). Bottom: the odour information carried by each cell's hidden state, as the v0.3 linear decoder's output for a twin trained on odour A minus an identical twin trained on odour B. In the emergent rule E0 it lives in the head and vanishes with it. In the selected rule S0 it persists at the neck and floods back into each new head.*
 
 ### 3.1 Without selection, the new head forgets (v0.1)
 
@@ -70,7 +74,16 @@ We designed, by gradient descent through regeneration on 32 design worms, a 10 �
 
 ### 3.5 v0.3
 
-<!-- v3 -->
+**Memory surgery (H14).** Writing the v0.2 compiled pattern for the *other* odour into a trained S worm's decapitated body overwrote its real memory: A-trained worms regrew heads preferring B (S0 -0.89, S1 -0.88) and B-trained worms heads preferring A (+0.96, +0.76); 99.6% and 100.0% of worms switched.
+
+**Four cells are enough (H15).** A pattern confined to the four wound-edge sites wrote full memories into held-out S bodies (R(A) − R(B) +0.98/-0.99 in S0, +0.98/-0.99 in S1), failed in E0 (+0.04/-0.04) and wrote one odour in E1.
+
+**Decodable is not used (H16).** A ridge decoder shared across cells, fit on half the worms, read the odour of the other half from the edge cells with accuracy 1.00 and 1.00 in S rules, against 0.69 and 0.48 from the rest of the trunk. We predicted no such signal in E rules, whose regrown heads keep 0% of the memory. The prediction failed: E0 0.97, E1 0.91 at the edge. The emergent body carries the information next to the wound and the regrowing head ignores it.
+
+**Balanced selection (H17).** B rules, selected for two amputations, rescued the S rule's disfavoured odour at cycle 4: B1 0.84 vs S1 0.33. In S0, near ceiling, the gain was +0.06, below threshold. Over eight cycles (exploratory, Fig. 4) B0 holds both odours at ≈1.0 throughout, while B1 still erodes after cycle 4.
+
+**Fission (H18).** Cut at site 20, the anterior half, which keeps the head, remembered in every rule (≈1.0) and the posterior half, which must regrow a head, remembered in none (all |M| ≤ 0.005), as predicted. The S rules' body copy is not distributed along the body; it exists at the neck of a decapitated worm.
+
 
 ## 4 Discussion
 
@@ -82,13 +95,45 @@ We designed, by gradient descent through regeneration on 32 design worms, a 10 �
 
 **Decodable is not used.** In E rules the odour can be decoded from the wound-edge cells (§3.5) although the regrown head never uses it. Reading information from a tissue is not evidence that the tissue stores the memory for the animal; causal transplants are.
 
-**Failures.** Of our pilot-based predictions, those about extinction inversion, reversal direction and head–body conflict failed on fresh rules. The pilots were one rule each; the confirmatory rules were two new ones. The attractor finding was itself born from a failure and replicated in one of two rules. We report these as failures rather than re-describing them.
+**Memories can be written and overwritten.** The body's copy is a small, local, low-dimensional state: four cells' hidden channels. A designed version of it installs a memory the animal never formed, and replaces one it did. In a regenerating animal, the tissue that will seed a new organ is also the place to edit what that organ will know.
+
+**One worm, two animals.** Planarians reproduce by fission. In our rules only the half that keeps the head remembers; the copy that lets a decapitated S worm remember is not present along the body before the cut. A rule selected to survive fission would need a distributed copy, which is a natural next experiment.
+
+**Failures.** Of our pilot-based predictions, those about extinction inversion, reversal direction and head–body conflict failed on fresh rules. The pilots were one rule each; the confirmatory rules were two new ones. The v0.3 decoder prediction failed in the most informative way: the emergent bodies carry the information and do not use it. The attractor finding was itself born from a failure and replicated in one of two rules. We report these as failures rather than re-describing them.
 
 **Limitations.** Two rules per family; a one-dimensional 32-cell body; odours and shock are input lines; training cuts in S rules sometimes spared head cells; the favoured-odour attractor has no mechanism yet.
 
 ## 5 Reproducibility
 
 `prometheus train` / `run` / `run2`, `python -m prometheus.v3`, `python tools/figures.py`, `python tools/build_claims.py && prometheus claims check`. Three preregistrations and locks in `prereg/`, verified in CI; every deviation in `docs/DEVIATIONS.md`, including an exploratory crash in v0.2 whose rerun reproduced every confirmatory number exactly. The browser lab (`web/index.html`) runs a JavaScript engine tested step for step against Python (maximum state error 2 × 10⁻⁶ on trained rules).
+
+## Appendix A. Every preregistered prediction
+
+| round | hypothesis | predicted E / S | E0 | E1 | S0 | S1 |
+|---|---|---|---|---|---|---|
+| v1 | H1 | yes / yes | yes (+0.80) | yes (+0.73) | yes (+0.99) | yes (+0.93) |
+| v1 | H2 | no / yes | no (+0.00) | no (-0.00) | yes (+0.97) | yes (+0.95) |
+| v1 | H3a | – / no | no (+0.00) | no (-0.00) | no (+0.02) | no (+0.01) |
+| v1 | H3b | – / no | no (+0.00) | no (-0.00) | no (+0.04) | no (+0.02) |
+| v1 | H3c | – / yes | no (+0.00) | no (-0.00) | yes (+0.99) | yes (+0.93) |
+| v1 | H4 | yes / no | yes (+0.99) | yes (+0.99) | yes (+0.84) ✗ | yes (+0.53) ✗ |
+| v1 | H4b | no / yes | no (+0.00) | no (-0.01) | no (+0.36) ✗ | yes (-0.12) |
+| v1 | H5 | no / yes | no (+0.00) | no (+0.00) | yes (+0.51) | yes (+0.47) |
+| v1 | H6 | no / yes | no (+0.00) | no (+0.00) | yes (+0.94) | yes (+0.73) |
+| v1 | H7 | no / yes | no (+0.00) | no (-0.00) | yes (+0.96) | yes (+0.96) |
+| v2 | H8 | – / yes | n/a | n/a | no (+0.09) ✗ | yes (+0.61) |
+| v2 | H9 | no / yes | no (+0.01) | no (-0.11) | no (+0.00) ✗ | yes (+0.44) |
+| v2 | H10 | yes, negative / yes, negative | yes (-0.97) | yes (-0.88) | no (-0.02) ✗ | no (-0.02) ✗ |
+| v2 | H11 | yes, negative / yes, negative | yes (-0.84) | yes (-0.82) | yes (+0.30) ✗ | yes (+0.29) ✗ |
+| v2 | H12 | – / yes | yes (+0.50) | yes (+0.67) | yes (+0.86) | yes (+1.00) |
+| v2 | H13 | no / yes | no (+0.00) | no (-0.00) | yes (+0.96) | yes (+0.93) |
+| v3 | H14 | – / yes | yes (+0.26) | yes (+0.33) | yes (+0.95) | yes (+0.89) |
+| v3 | H15 | no / yes | no (+0.04) | yes (+0.47) ✗ | yes (+0.98) | yes (+0.99) |
+| v3 | H16 | no / yes | yes (+0.45) ✗ | yes (+0.39) ✗ | yes (+0.31) | yes (+0.52) |
+| v3 | H17 | – / yes | n/a | n/a | no (+0.06) ✗ | yes (+0.51) |
+| v3 | H18 | no / no | no (-0.00) | no (+0.00) | no (+0.00) | no (-0.01) |
+
+57 of 70 stated predictions held. ✗ marks a miss; – means no prediction was stated; n/a means not tested in that rule; "yes, negative" required a supported effect with a negative sign. In E rules the v0.2 H10/H11 hits are trivial (no memory survives regrowth), as the preregistration said.
 
 ## References
 

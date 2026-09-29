@@ -1,0 +1,275 @@
+<!doctype html><meta charset=utf-8><title>Prometheus-alpha paper</title><style>body{font:10.5pt/1.5 Georgia,serif;max-width:46em;margin:2em auto;color:#111}h1{font-size:18pt;line-height:1.2}h2{font-size:13pt;margin-top:1.6em}h3{font-size:11pt}
+img{max-width:100%}table{border-collapse:collapse;font:8.5pt/1.3 sans-serif;margin:1em 0}td,th{border-bottom:1px solid #ccc;padding:3px 6px;text-align:left}
+blockquote{margin:0;padding:.4em 1em;background:#f4f4f2;font-size:9.5pt}em{color:#333}code{font-size:9pt}</style><h1>Memory that outlives its organ: preregistered experiments on learning, decapitation and regeneration in synthetic worms</h1>
+<p><strong>Kai Piper</strong> · Prometheus-α v0.3 · 29 September 2026 · code, data and preregistrations: <a href="https://github.com/kai9987kai/prometheus-alpha">github.com/kai9987kai/prometheus-alpha</a></p>
+<blockquote>
+<p><strong>Scientific status.</strong> This is a synthetic computational study of a neural cellular automaton. "Worm", "head", "odour", "shock" and "memory" name parts of a simulation. It models no particular animal and makes no claim about any person or clinical condition.</p>
+</blockquote>
+<h2>Abstract</h2>
+<p>Planarian flatworms trained before decapitation still show the training after their heads regrow, and nobody knows where the memory waits while the brain is gone. We built synthetic worms in which that question can be answered exactly. Each worm is a one-dimensional neural cellular automaton that grows from one founder cell; every cell runs the same small, learned rule, which is frozen within a life, so a worm can learn only by changing its cells' state. Only cells that are more than half head tissue can sense two odours, and behaviour is read from the head. Worms learn in differential Pavlovian conditioning, each measured against an explicitly unpaired twin with identical noise. Across three preregistered, hash-locked rounds (21 hypotheses, 80 confirmatory tests on six rules, 128 worms per test) we find: (1) rules trained to learn and to regenerate, but never asked to remember through regeneration, regrow near-perfect heads that remember nothing (retention 0.1% and −0.7%); (2) the same rules, selected to remember through one amputation, keep the memory through complete decapitation (retention 98%, 102%), through removal of head and tail, and through repeated decapitation, none of which was trained; (3) the body's copy is held not in the bioelectric voltage channel, which is neither necessary nor sufficient, but in hidden cell state, and almost entirely (98–99%) in the four cells at the wound edge; (4) a gradient-designed pattern of that hidden state, written into an untrained headless body, makes the regrown head remember an odour the animal never experienced (even in rules whose bodies never keep a copy), and written into a trained body it overwrites the real memory in 99.6–100% of worms, from four cells alone; (5) after a reversal, the body is more conservative than the head and regrows the older lesson; (6) the odour can be decoded from the wound edge of bodies that never pass it on, so decodable is not used; (7) a worm cut in two yields a front half that remembers and a back half that never does. Of 70 stated predictions, 57 held. Those that failed included the direction of reversal and the resolution of head–body memory conflicts, and they are reported as failures. One failure led to a post-hoc finding, confirmed in one of two rules on fresh data, that selection makes one odour's memory an attractor and the other's metastable.</p>
+<h2>1 Introduction</h2>
+<p>Every day an eagle ate Prometheus's liver and every night it grew back. Regeneration raises a question about memory that is older than the myth's modern readings. Planarians trained to find food in a textured, lit arena still show the habit after decapitation and head regrowth (Shomrat &amp; Levin 2013), and a 2026 preprint reports the same for light-to-food conditioning. Moths remember what they learned as caterpillars through metamorphosis (Blackiston et al. 2008). McConnell's memory-transfer experiments of the 1960s asked whether memory could live outside the brain and failed to replicate. The hypotheses on offer range from bioelectric pattern memory in the body (Levin 2021; Durant et al. 2017) to molecular engrams, and none can yet be tested cell by cell in an animal.</p>
+<p>A synthetic body can be read and edited completely. We use one to ask five questions: (i) does a body that can rebuild a head keep a copy of what the head learned, without being asked to? (ii) if selected to, where is the copy, and in which state variables? (iii) can the copy be written, overwritten, transplanted? (iv) what happens to it under conflict, extinction, reversal and repeated loss? (v) is information that can be decoded from the body the same as information the body uses?</p>
+<p>The study inherits its methods from a series of earlier projects: preregistration with a cryptographic lock and a claims ledger checked in continuous integration (Ghost in the Machine; Morpheus), yoked-twin controls (Ghost in the Machine), development from a single founder (GenesisEngine), a regenerating neural cellular automaton with fixed gap-junction physics (Morpheus), and the lesson that a learned module can act as a constant bias unless the readout is a within-subject contrast (Supermix Expanse).</p>
+<h2>2 Model</h2>
+<p><strong>Worm.</strong> A grid of 40 sites; the target body occupies 32 (head 8, trunk 16, tail 8). Each cell has 16 channels: alpha (aliveness), membrane voltage, three region identities, a response channel and ten hidden channels with no target. A cell perceives its own state and its two neighbours' (identity, gradient, Laplacian of every channel: 48 values) plus three signals from the world: odour A and odour B, gated by <code>clamp(2·head − 1, 0, 1)</code> so that only cells more than half head can sense them, and the unconditioned stimulus (US, "shock"), broadcast to every living cell. A two-layer MLP (51 → 64 → 16, 4,368 parameters, zero-initialised output) proposes a change of all channels; each cell applies it with probability 0.5 per step. Voltage then diffuses through gap junctions between cells in the alive mask by a fixed law (conductance 0.25, two substeps) that the rule cannot change. Behaviour is the gated-head-weighted mean of the response channel, and is zero when no head tissue remains.</p>
+<p><strong>Lives.</strong> Grow 32 steps from one founder cell; condition 48 steps (six 8-step slots in random order: two CS+, two CS−, two empty; the paired worm is shocked on steps 3–5 of each CS+ slot, its unpaired twin on the same steps of each empty slot); wait 12 steps; manipulate; regenerate 32 steps; test each odour alone for 6 steps. The memory measure is <code>M = [R(CS+) − R(CS−)]_paired − [R(CS+) − R(CS−)]_unpaired twin</code> for a worm and a twin that share founder, schedule and every asynchronous update mask.</p>
+<p><strong>Training.</strong> Exact backpropagation through lives of 180–240 steps (PyTorch, CPU, batch 32, Adam), scoring anatomy at checkpoints, the unconditioned response, a silent baseline and the memory test. <em>E (emergent)</em> rules (seeds 0, 1; 3,000 iterations) score memory only when no wound followed conditioning. <em>S (selected)</em> rules start from their E sibling and train 2,000 further iterations scoring memory also after a head or tail cut. <em>B (balanced)</em> rules (v0.3) start from their S sibling and train 1,500 iterations on lives with two successive amputations.</p>
+<p><strong>Decapitation</strong> in experiments is complete: every site up to the worm's own last head-labelled cell, plus a two-site margin. The residual gated head weight after decapitation is exactly zero in every experiment: no surviving cell can sense an odour.</p>
+<p><strong>Statistics.</strong> Per-worm paired differences; sign-flip permutation tests (10,000 permutations); Holm–Bonferroni within each rule's family at α = 0.05; a hypothesis counts as supported only if Holm rejects <em>and</em> |mean| ≥ 0.10 response units (a trained conditioned response is ~1), so precise trivial effects cannot pass. Each round's hypotheses, seeds, sample sizes, decision rules and predictions were committed, SHA-256-locked together with every source file that can change a confirmatory number, and pushed before any confirmatory run. Pilots on separate pilot rules are disclosed in each preregistration. Every number quoted in the README is a JSON pointer into a results file, checked in CI.</p>
+<h2>3 Results</h2>
+<p><img alt="Fig. 1" src="figures/fig1_kymograph.png" /></p>
+<p><em>Fig. 1. One worm of each kind learns, loses its head twice and regrows it. Top: body plan (head, trunk, tail). Bottom: the odour information carried by each cell's hidden state, as the v0.3 linear decoder's output for a twin trained on odour A minus an identical twin trained on odour B. In the emergent rule E0 it lives in the head and vanishes with it. In the selected rule S0 it persists at the neck and floods back into each new head.</em></p>
+<h3>3.1 Without selection, the new head forgets (v0.1)</h3>
+<p>All four rules learn (H1; M = 0.80, 0.73, 0.99, 0.93; d_z 3.8–12.7) and regrow the body from the founder and after every wound (IoU ≥ 0.99 after head regeneration). E rules regrow near-perfect heads that carry none of the memory (H2; M = 0.001 [95% CI −0.000, 0.001] and −0.005 [−0.006, −0.004]; Fig. 2). Selected rules keep it (M = 0.97, 0.95; retention 0.98, 1.02). Held-out generalisation in S rules: memory after removal of head and tail (H7; 0.96, 0.96) and after a third successive decapitation (H6; 0.94, 0.73).</p>
+<p><img alt="Fig. 2" src="figures/fig2_survival.png" /></p>
+<p><em>Fig. 2. Memory M in intact worms and after complete decapitation and regrowth; 128 worms per bar, bootstrap 95% CI on the regrown bars.</em></p>
+<h3>3.2 Where the copy lives (v0.1, v0.2)</h3>
+<p>Swapping a decapitated trained body's voltage for its untrained twin's keeps 98–99% of the memory (H3a) and implanting the voltage alone into the twin transfers 2–4% (H3b): voltage is neither necessary nor sufficient. The ten hidden channels alone transfer the memory almost completely (H3c; 1.00 and 0.98 of the donor's). Blocking gap junctions between learning and the cut has no effect. v0.2 localised the copy: implanting the hidden channels at only the four sites next to the wound transfers 99% (S0) and 98% (S1) of the memory; the rest of the trunk, 0.1% (H13; Fig. 3).</p>
+<p><img alt="Fig. 3" src="figures/fig3_engram_map.png" /></p>
+<p><em>Fig. 3. Engram map: the trained body's hidden channels implanted into its untrained twin's decapitated body, 4 sites at a time.</em></p>
+<h3>3.3 Writing memories (v0.2)</h3>
+<p>We designed, by gradient descent through regeneration on 32 design worms, a 10 × 40 pattern added to the hidden channels of an untrained decapitated body so that the regrown head prefers a chosen odour (H12). On 128 held-out worms the written memory was +1.00 (S0) and +0.99 (S1), against +0.14 and −0.01 for the same values at shuffled sites: the spatial code matters, not the dose. The compiler also wrote memories into E rules (+0.50, +0.67), whose bodies never keep a copy themselves, though only one odour reliably in each (E0 writes B at −0.96 but A at +0.05). Fig. 5 shows the compiled patterns.</p>
+<p><img alt="Fig. 5" src="figures/fig5_compiled.png" /></p>
+<p><em>Fig. 5. Compiled memories for S1: the values added to each hidden channel at each site. Most of the pattern sits at the wound edge.</em></p>
+<h3>3.4 Conflict, extinction, reversal and repeated loss (v0.1, v0.2)</h3>
+<p><strong>Chimeras.</strong> Grafting the head of a worm trained on one odour onto the body of a worm trained on the other: in E rules the head's memory wins outright (dominance 0.99, 1.01); in S rules the head leads (0.84, 0.53), contrary to the pilot-based prediction of an even split. After the chimera is decapitated and regrows, the pilot predicted the body's memory would return; this held weakly in S1 (−0.12) and reversed in S0 (+0.36).</p>
+<p><strong>An attractor.</strong> Reading the grafts post hoc showed that in each S rule conflicts resolved toward one odour whichever tissue carried it, transfer to a naive head passed that odour on and hardly the other, and over repeated decapitation that memory held while the other eroded. v0.2 tested this on fresh worms with the direction named in advance (H8): supported in S1 (favoured 0.96 vs other 0.34 at cycle 4; Fig. 4) and below the effect-size threshold in S0 (+0.09). Over eight cycles S0's pattern is not an attractor at all: its "favoured" odour collapses at cycle 8 (0.60).</p>
+<p><img alt="Fig. 4" src="figures/fig4_cycles.png" /></p>
+<p><em>Fig. 4. Memory for each CS+ over eight successive decapitations (64 worms per rule; exploratory).</em></p>
+<p><strong>Extinction.</strong> Unreinforced presentations weakened the memory of S1 (−45%) but not of S0 or of the E rules (H9). Neither rule was ever trained on extinction. The pilot's striking inversion, a regrown head more extinguished than the intact one, did not replicate: after extinction the body's copy followed the head's state (H10 means −0.02).</p>
+<p><strong>Reversal.</strong> After learning one odour and then the other, intact S heads half-adopted the new lesson (first-lesson memory 0.52, 0.34). Regrown heads reverted toward the first (0.82, 0.63; H11 +0.30, +0.29). The pilot had predicted the opposite. The body is more conservative than the head.</p>
+<h3>3.5 v0.3</h3>
+<p><strong>Memory surgery (H14).</strong> Writing the v0.2 compiled pattern for the <em>other</em> odour into a trained S worm's decapitated body overwrote its real memory: A-trained worms regrew heads preferring B (S0 -0.89, S1 -0.88) and B-trained worms heads preferring A (+0.96, +0.76); 99.6% and 100.0% of worms switched.</p>
+<p><strong>Four cells are enough (H15).</strong> A pattern confined to the four wound-edge sites wrote full memories into held-out S bodies (R(A) − R(B) +0.98/-0.99 in S0, +0.98/-0.99 in S1), failed in E0 (+0.04/-0.04) and wrote one odour in E1.</p>
+<p><strong>Decodable is not used (H16).</strong> A ridge decoder shared across cells, fit on half the worms, read the odour of the other half from the edge cells with accuracy 1.00 and 1.00 in S rules, against 0.69 and 0.48 from the rest of the trunk. We predicted no such signal in E rules, whose regrown heads keep 0% of the memory. The prediction failed: E0 0.97, E1 0.91 at the edge. The emergent body carries the information next to the wound and the regrowing head ignores it.</p>
+<p><strong>Balanced selection (H17).</strong> B rules, selected for two amputations, rescued the S rule's disfavoured odour at cycle 4: B1 0.84 vs S1 0.33. In S0, near ceiling, the gain was +0.06, below threshold. Over eight cycles (exploratory, Fig. 4) B0 holds both odours at ≈1.0 throughout, while B1 still erodes after cycle 4.</p>
+<p><strong>Fission (H18).</strong> Cut at site 20, the anterior half, which keeps the head, remembered in every rule (≈1.0) and the posterior half, which must regrow a head, remembered in none (all |M| ≤ 0.005), as predicted. The S rules' body copy is not distributed along the body; it exists at the neck of a decapitated worm.</p>
+<h2>4 Discussion</h2>
+<p><strong>Regeneration does not imply remembering.</strong> Rules that regrow flawless heads keep nothing of what the old head learned unless selected to; a body's capacity to rebuild an organ and its capacity to rebuild what the organ knew are separable.</p>
+<p><strong>The engram at the wound.</strong> Selected rules place the body's copy in the few cells that will seed the new head. This is where a copy is most useful and least costly: the regrowing head is built from the wound edge outward. Whether real regenerating animals concentrate memory-relevant state in their blastema is, as far as we know, untested and testable.</p>
+<p><strong>Not electrical, here.</strong> Voltage in this model is passive diffusion under a fixed law and the hidden channels are free, so training had an easy non-electrical route. The result shows that a regenerating body <em>can</em> keep the copy outside its voltage, not that bodies do; a model with active, bistable ion-channel dynamics could give the other answer.</p>
+<p><strong>Decodable is not used.</strong> In E rules the odour can be decoded from the wound-edge cells (§3.5) although the regrown head never uses it. Reading information from a tissue is not evidence that the tissue stores the memory for the animal; causal transplants are.</p>
+<p><strong>Memories can be written and overwritten.</strong> The body's copy is a small, local, low-dimensional state: four cells' hidden channels. A designed version of it installs a memory the animal never formed, and replaces one it did. In a regenerating animal, the tissue that will seed a new organ is also the place to edit what that organ will know.</p>
+<p><strong>One worm, two animals.</strong> Planarians reproduce by fission. In our rules only the half that keeps the head remembers; the copy that lets a decapitated S worm remember is not present along the body before the cut. A rule selected to survive fission would need a distributed copy, which is a natural next experiment.</p>
+<p><strong>Failures.</strong> Of our pilot-based predictions, those about extinction inversion, reversal direction and head–body conflict failed on fresh rules. The pilots were one rule each; the confirmatory rules were two new ones. The v0.3 decoder prediction failed in the most informative way: the emergent bodies carry the information and do not use it. The attractor finding was itself born from a failure and replicated in one of two rules. We report these as failures rather than re-describing them.</p>
+<p><strong>Limitations.</strong> Two rules per family; a one-dimensional 32-cell body; odours and shock are input lines; training cuts in S rules sometimes spared head cells; the favoured-odour attractor has no mechanism yet.</p>
+<h2>5 Reproducibility</h2>
+<p><code>prometheus train</code> / <code>run</code> / <code>run2</code>, <code>python -m prometheus.v3</code>, <code>python tools/figures.py</code>, <code>python tools/build_claims.py &amp;&amp; prometheus claims check</code>. Three preregistrations and locks in <code>prereg/</code>, verified in CI; every deviation in <code>docs/DEVIATIONS.md</code>, including an exploratory crash in v0.2 whose rerun reproduced every confirmatory number exactly. The browser lab (<code>web/index.html</code>) runs a JavaScript engine tested step for step against Python (maximum state error 2 × 10⁻⁶ on trained rules).</p>
+<h2>Appendix A. Every preregistered prediction</h2>
+<table>
+<thead>
+<tr>
+<th>round</th>
+<th>hypothesis</th>
+<th>predicted E / S</th>
+<th>E0</th>
+<th>E1</th>
+<th>S0</th>
+<th>S1</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>v1</td>
+<td>H1</td>
+<td>yes / yes</td>
+<td>yes (+0.80)</td>
+<td>yes (+0.73)</td>
+<td>yes (+0.99)</td>
+<td>yes (+0.93)</td>
+</tr>
+<tr>
+<td>v1</td>
+<td>H2</td>
+<td>no / yes</td>
+<td>no (+0.00)</td>
+<td>no (-0.00)</td>
+<td>yes (+0.97)</td>
+<td>yes (+0.95)</td>
+</tr>
+<tr>
+<td>v1</td>
+<td>H3a</td>
+<td>– / no</td>
+<td>no (+0.00)</td>
+<td>no (-0.00)</td>
+<td>no (+0.02)</td>
+<td>no (+0.01)</td>
+</tr>
+<tr>
+<td>v1</td>
+<td>H3b</td>
+<td>– / no</td>
+<td>no (+0.00)</td>
+<td>no (-0.00)</td>
+<td>no (+0.04)</td>
+<td>no (+0.02)</td>
+</tr>
+<tr>
+<td>v1</td>
+<td>H3c</td>
+<td>– / yes</td>
+<td>no (+0.00)</td>
+<td>no (-0.00)</td>
+<td>yes (+0.99)</td>
+<td>yes (+0.93)</td>
+</tr>
+<tr>
+<td>v1</td>
+<td>H4</td>
+<td>yes / no</td>
+<td>yes (+0.99)</td>
+<td>yes (+0.99)</td>
+<td>yes (+0.84) ✗</td>
+<td>yes (+0.53) ✗</td>
+</tr>
+<tr>
+<td>v1</td>
+<td>H4b</td>
+<td>no / yes</td>
+<td>no (+0.00)</td>
+<td>no (-0.01)</td>
+<td>no (+0.36) ✗</td>
+<td>yes (-0.12)</td>
+</tr>
+<tr>
+<td>v1</td>
+<td>H5</td>
+<td>no / yes</td>
+<td>no (+0.00)</td>
+<td>no (+0.00)</td>
+<td>yes (+0.51)</td>
+<td>yes (+0.47)</td>
+</tr>
+<tr>
+<td>v1</td>
+<td>H6</td>
+<td>no / yes</td>
+<td>no (+0.00)</td>
+<td>no (+0.00)</td>
+<td>yes (+0.94)</td>
+<td>yes (+0.73)</td>
+</tr>
+<tr>
+<td>v1</td>
+<td>H7</td>
+<td>no / yes</td>
+<td>no (+0.00)</td>
+<td>no (-0.00)</td>
+<td>yes (+0.96)</td>
+<td>yes (+0.96)</td>
+</tr>
+<tr>
+<td>v2</td>
+<td>H8</td>
+<td>– / yes</td>
+<td>n/a</td>
+<td>n/a</td>
+<td>no (+0.09) ✗</td>
+<td>yes (+0.61)</td>
+</tr>
+<tr>
+<td>v2</td>
+<td>H9</td>
+<td>no / yes</td>
+<td>no (+0.01)</td>
+<td>no (-0.11)</td>
+<td>no (+0.00) ✗</td>
+<td>yes (+0.44)</td>
+</tr>
+<tr>
+<td>v2</td>
+<td>H10</td>
+<td>yes, negative / yes, negative</td>
+<td>yes (-0.97)</td>
+<td>yes (-0.88)</td>
+<td>no (-0.02) ✗</td>
+<td>no (-0.02) ✗</td>
+</tr>
+<tr>
+<td>v2</td>
+<td>H11</td>
+<td>yes, negative / yes, negative</td>
+<td>yes (-0.84)</td>
+<td>yes (-0.82)</td>
+<td>yes (+0.30) ✗</td>
+<td>yes (+0.29) ✗</td>
+</tr>
+<tr>
+<td>v2</td>
+<td>H12</td>
+<td>– / yes</td>
+<td>yes (+0.50)</td>
+<td>yes (+0.67)</td>
+<td>yes (+0.86)</td>
+<td>yes (+1.00)</td>
+</tr>
+<tr>
+<td>v2</td>
+<td>H13</td>
+<td>no / yes</td>
+<td>no (+0.00)</td>
+<td>no (-0.00)</td>
+<td>yes (+0.96)</td>
+<td>yes (+0.93)</td>
+</tr>
+<tr>
+<td>v3</td>
+<td>H14</td>
+<td>– / yes</td>
+<td>yes (+0.26)</td>
+<td>yes (+0.33)</td>
+<td>yes (+0.95)</td>
+<td>yes (+0.89)</td>
+</tr>
+<tr>
+<td>v3</td>
+<td>H15</td>
+<td>no / yes</td>
+<td>no (+0.04)</td>
+<td>yes (+0.47) ✗</td>
+<td>yes (+0.98)</td>
+<td>yes (+0.99)</td>
+</tr>
+<tr>
+<td>v3</td>
+<td>H16</td>
+<td>no / yes</td>
+<td>yes (+0.45) ✗</td>
+<td>yes (+0.39) ✗</td>
+<td>yes (+0.31)</td>
+<td>yes (+0.52)</td>
+</tr>
+<tr>
+<td>v3</td>
+<td>H17</td>
+<td>– / yes</td>
+<td>n/a</td>
+<td>n/a</td>
+<td>no (+0.06) ✗</td>
+<td>yes (+0.51)</td>
+</tr>
+<tr>
+<td>v3</td>
+<td>H18</td>
+<td>no / no</td>
+<td>no (-0.00)</td>
+<td>no (+0.00)</td>
+<td>no (+0.00)</td>
+<td>no (-0.01)</td>
+</tr>
+</tbody>
+</table>
+<p>57 of 70 stated predictions held. ✗ marks a miss; – means no prediction was stated; n/a means not tested in that rule; "yes, negative" required a supported effect with a negative sign. In E rules the v0.2 H10/H11 hits are trivial (no memory survives regrowth), as the preregistration said.</p>
+<h2>References</h2>
+<p>Blackiston, D. J., Silva Casey, E. &amp; Weiss, M. R. (2008). Retention of memory through metamorphosis. <em>PLoS ONE</em> 3:e1736.
+Durant, F. et al. (2017). Long-term, stochastic editing of regenerative anatomy via targeting endogenous bioelectric gradients. <em>Biophys J</em> 112:2231–2243.
+Guichard, E. et al. (2025). EngramNCA: a neural cellular automaton model of memory transfer. arXiv:2504.11855.
+Levin, M. (2021). Bioelectric signaling: reprogrammable circuits underlying embryogenesis, regeneration, and cancer. <em>Cell</em> 184:1971–1989.
+McGrath, T. et al. (2023). The Hydra effect: emergent self-repair in language model computations. arXiv:2307.15771.
+Mordvintsev, A., Randazzo, E., Niklasson, E. &amp; Levin, M. (2020). Growing neural cellular automata. <em>Distill</em>.
+Pio-Lopez, L., Hartl, B. &amp; Levin, M. (2026). BraiNCA: brain-inspired neural cellular automata. arXiv:2604.01932.
+Rescorla, R. A. (1967). Pavlovian conditioning and its proper control procedures. <em>Psychol Rev</em> 74:71–80.
+Shomrat, T. &amp; Levin, M. (2013). An automated training paradigm reveals long-term memory in planarians and its persistence through head regeneration. <em>J Exp Biol</em> 216:3799–3810.
+Trained planaria retain memories through head regeneration (bioRxiv, 2026). doi:10.64898/2026.08.10.741213.</p>

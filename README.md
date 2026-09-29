@@ -2,7 +2,7 @@
 
 **Does a regenerating body remember what its lost head learned? Synthetic worms grow from one cell, learn which odour predicts a shock, lose their heads, regrow them, and are asked again.**
 
-Author/project lead: **Kai Piper** · Version **0.1.0** · 29 September 2026
+Author/project lead: **Kai Piper** · Version **0.3.0** · 29 September 2026 · **Paper: [paper/Prometheus_alpha_paper.md](paper/Prometheus_alpha_paper.md)**
 
 > **Scientific status.** Everything here is a synthetic computational experiment on a neural cellular automaton. "Memory", "head", "odour" and "shock" name parts of a simulation. Nothing here is a model of a particular animal, and nothing here bears on any person or clinical condition.
 
@@ -16,6 +16,24 @@ Prometheus-α asks it of a synthetic body in which every cell's state can be rea
 2. **Only the head can smell.** A cell senses the odours only when it is more than half head tissue. Behaviour is read from the head. After complete decapitation no surviving cell can smell or behave.
 3. **Pavlovian conditioning with the proper control.** One odour is paired with a shock. Every paired worm has an *explicitly unpaired twin*: the same odours, the same number of shocks at the same moments of its life, the same random update noise, the same founder; only the contingency differs. The memory measure is taken within the worm, so baseline shifts cancel.
 4. **Emergent versus selected.** *E* rules are trained to learn and to regenerate, but never asked to remember through a regeneration. *S* rules are selected from their E sibling by also asking for memory after one amputation. Chimeras, voltage transplants, trunk fragments and repeated amputation are never trained in either.
+
+### New in v0.3: memory surgery, four-cell memories, and information the body never uses
+
+* **Memory surgery.** Write the compiled pattern for the *other* odour into a trained worm's headless body, and the regrown head switches memory. This happened in 99.6% (S0) and 100% (S1) of worms.
+* **Four cells are enough.** A compiled memory confined to the four wound-edge cells writes a full memory into an untrained body (R(A) − R(B) about ±0.98).
+* **Decodable is not used.** A linear decoder reads the odour from the wound-edge cells with 100% accuracy in selected rules. It also reads it in the emergent rules (97%, 91%), whose regrown heads keep none of the memory. The body holds the information right next to the wound, and the new head ignores it. We predicted the opposite.
+* **Balanced selection.** B rules, selected to remember through two amputations, rescue the odour their S sibling forgets. At cycle 4, B1 keeps 0.84 where S1 keeps 0.33. B0 holds both odours at about 1.0 through eight decapitations.
+* **Fission.** Cut a trained worm in half. The front half, which keeps the head, remembers in every rule; the back half, which must grow a new head, remembers in none. The copy exists only at the neck of a decapitated worm.
+
+### New in v0.2: extinction, reversal, a memory compiler, and where the copy lives
+
+* **The engram is at the wound edge.** Implanting the trained body's hidden channels at only the four sites next to the wound transfers 99% and 98% of the memory. The rest of the trunk transfers 0.1%.
+* **A memory compiler.** A 10 × 40 hidden-state pattern, designed by gradient descent through regeneration on 32 worms, makes 128 held-out untrained worms regrow heads that remember an odour they never experienced (+1.00, +0.99). The same values at shuffled sites write 0.14 and −0.01. It even works, one odour at a time, in emergent rules whose bodies never keep a copy.
+* **The body is conservative.** After learning one odour and then the other, intact heads half-adopt the new lesson. Regrown heads revert toward the first (0.52 → 0.82 and 0.34 → 0.63). The pilot predicted the opposite.
+* **Attractor, half replicated.** The v0.1 post-hoc finding, retested with its direction named in advance, holds in S1 (0.96 vs 0.34 at cycle 4) and falls below threshold in S0.
+* **Extinction.** Only S1 extinguishes (−45%). The pilot's inversion after regrowth did not replicate.
+
+Across the three preregistered rounds, **57 of 70 stated predictions held**. All 70 are listed, misses marked, in the paper's Appendix A.
 
 ### What v0.1 found (four rules, 128 worms per test, preregistered)
 
@@ -43,7 +61,7 @@ Predictions made in the locked preregistration, against the outcomes:
 
 31 of 34 preregistered predictions held (✗ marks a miss; – means no prediction was stated). The number in brackets is the tested mean. "yes" requires Holm-corrected significance and an effect of at least 0.10.
 
-Every number in the results table is checked in CI against the results file it comes from (`prometheus claims check`). The hypotheses, sample sizes, seeds and decision rules were hash-locked in [`prereg/PREREGISTRATION.json`](prereg/PREREGISTRATION.json) before any confirmatory experiment; pilots and pre-lock design changes are disclosed there and in [`docs/DEVIATIONS.md`](docs/DEVIATIONS.md).
+Every number in the results table is checked in CI against the results file it comes from (`prometheus claims check`). The hypotheses, sample sizes, seeds and decision rules were hash-locked before each round's confirmatory experiments ([v0.1](prereg/PREREGISTRATION.json), [v0.2](prereg/PREREGISTRATION_v2.json), [v0.3](prereg/PREREGISTRATION_v3.json); CI verifies all three locks); pilots and pre-lock design changes are disclosed there and in [`docs/DEVIATIONS.md`](docs/DEVIATIONS.md).
 
 ## Built from eight earlier projects
 
@@ -66,6 +84,9 @@ To my knowledge none of these has been done before:
 * **Memory chimeras.** The head of a worm that learned A grafted onto the body of a worm that learned B: whose memory does the animal express, and whose comes back after the chimera's head is cut off?
 * **Memory transplant by state.** Copying one channel group of a trained, decapitated body (its voltage, or its hidden channels) and nothing else into an untrained twin's body, then asking the twin's regrown head.
 * **Promethean cycles.** Repeated decapitation of the same worm, far beyond anything trained.
+* **A memory compiler and memory surgery.** Gradient descent through regeneration designs a hidden-state pattern that installs a chosen memory, or overwrites an existing one, in the regrown head.
+* **Locating an engram to four cells, and separating decodable from used.** Causal implants and a linear decoder disagree in emergent rules, which is the point.
+* **Fission of a trained synthetic animal.** Which half remembers.
 
 ## How it works
 
@@ -96,8 +117,19 @@ flowchart LR
 | **Selected rules remember through complete decapitation: the regrown head, built from cells that never smelled the odours, knows which one predicted the shock** | **replicated** | memory M in the regrown head (paired minus unpaired twin, 128 worms): S0 0.97 (retention 0.98 of the intact memory, d_z 8.40, Holm p 0.001); S1 0.95 (retention 1.02, d_z 8.14, Holm p 0.001). Positive control: S rules were selected for one regeneration |
 | **Emergent rules also remember through decapitation** | **not supported** | as predicted, no: E rules regrow near-perfect heads (IoU E0 0.995, E1 0.999) that carry none of an intact memory of 0.81 / 0.74: M after regeneration E0 0.001 [95% CI -0.000, 0.001], E1 -0.005 [-0.006, -0.004], both intervals far inside the smallest effect of interest (0.10) |
 | **The memory in the body is carried by its hidden (non-electrical) channels: writing only those into an untrained twin's headless body makes the twin's new head remember** | **replicated** | M in the implanted twin's regrown head: S0 0.99 (1.00 of the donor's own), Holm p 0.001; S1 0.93 (0.98), Holm p 0.001. Predicted from pilot S102 (0.85) |
+| **v0.2: the body's copy lives in the four cells at the wound edge** | **replicated** | hidden channels implanted into the untrained twin at sites 12-15 only transfer S0 0.99 / S1 0.98 of the donor's memory; at sites 16-27, 0.001 / 0.001 |
+| **v0.2: a memory compiler. A gradient-designed hidden pattern written into untrained headless bodies makes held-out regrown heads remember an odour they never experienced** | **replicated** | written memory vs the same values at shuffled sites: S0 1.00 vs 0.14, S1 0.99 vs -0.01; also in emergent rules, whose bodies never keep a copy: E0 0.51 vs 0.01, E1 0.66 vs -0.01 (one odour only in each E rule) |
+| **v0.3: memory surgery. Writing the compiled pattern for the other odour into a trained worm's headless body overwrites its real memory** | **replicated** | R(A) - R(B) of the regrown head: A-trained worms given pattern B S0 -0.89, S1 -0.88; B-trained given pattern A S0 0.96, S1 0.76; fraction of worms whose memory switched 0.996, 1.000 |
+| v0.3: four cells are enough. A compiled memory confined to the wound-edge sites 12-15 writes a full memory | **replicated** | R(A) - R(B) of held-out regrown heads with the sparse A / B pattern: S0 0.98 / -0.99, S1 0.98 / -0.99; emergent rules E0 0.04 / -0.04, E1 0.74 / -0.20 |
+| **v0.3: decodable is not used. A linear decoder reads the odour from the wound-edge cells, in emergent rules too, whose regrown heads never use it** | **replicated** | held-out decoding accuracy, edge vs rest of trunk: S0 1.00 vs 0.69, S1 1.00 vs 0.48; E0 0.97 vs 0.52, E1 0.91 vs 0.52 (predicted: no in E rules, which keep 0% of the memory) |
+| v0.3: selection for two amputations rescues the disfavoured memory (balanced B rules) | **mixed** | memory of the S rule's disfavoured odour at cycle 4, B rule vs S sibling: B1 0.84 vs S1 0.33; B0 1.00 vs S0 0.94 (S0 was near ceiling; below the 0.10 threshold) |
+| v0.3: fission. Cut a trained worm in two, and the half that must regrow a head remembers | **not supported** | as predicted, no, in every rule: posterior half E0 -0.000, E1 0.002, S0 0.001, S1 -0.005; the anterior half, which keeps the head, 1.00, 0.99, 0.99, 1.00. The body's copy exists only at a wound next to the head |
 | **Promethean cycles: the memory survives a third successive decapitation (only one was ever trained)** | **replicated** | M after cycles 1, 2, 3, 4: S0 0.99, 0.99, 0.94, 0.90; S1 0.96, 0.89, 0.73, 0.63. Body IoU after cycle 4: S0 1.00, S1 0.97 |
+| v0.2: after a reversal the body is more conservative than the head: the regrown head reverts toward the first lesson | **replicated** | memory of the first lesson after learning the other odour, intact vs regrown: S0 0.52 vs 0.82, S1 0.34 vs 0.63. The pilot predicted the opposite direction |
 | **Post hoc: selection made one odour's memory an attractor and the other metastable. Conflicts, transfers and repeated regrowth all resolve toward the rule's favoured odour** | **post hoc** | odour bias of conflicting chimeras (R(A) - R(B) averaged over both grafts; > 0 favours A) intact / regrown: S0 -0.13 / -0.49, S1 0.36 / 0.76; E rules regrown 0.01, -0.07. Memory for each CS+ after Promethean cycle 1 and 4 (fresh cohort): S1 favoured A 0.96 to 0.96, other B 0.97 to 0.32; S0 favoured B 0.95 to 0.96, other A 0.99 to 0.86. Not preregistered; found by reading the H4, H4b and H5 grafts |
+| v0.2 replication of the v0.1 post-hoc attractor, direction named in advance: after 4 cycles the favoured odour is remembered better | **mixed** | favoured vs other odour at cycle 4 (fresh worms): S0 0.96 vs 0.88 (below the 0.10 threshold), S1 0.96 vs 0.34 |
+| v0.2: unreinforced presentations extinguish the memory (never trained) | **mixed** | fraction of the memory extinguished by 96 steps of cues without shock: E0 0.01, E1 -0.15, S0 0.00, S1 0.45 |
+| v0.2: a head regrown after extinction differs from the intact extinguished head | **not supported** | S rules, intact vs regrown after extinction: S0 0.99 vs 0.97, S1 0.54 vs 0.51; the pilot's inversion did not replicate (E rules pass trivially: nothing survives regrowth) |
 | Memory chimeras: cut the head off a chimera whose head learned one odour and whose body learned the other, and the regrown head remembers the body's | **mixed** | predicted from the pilot, and not borne out: dominance after regeneration (+1 = the head's memory, -1 = the body's) S0 0.36 (Holm p 1.000), S1 -0.12 (Holm p 0.001), far weaker than the pilot's -0.66. What the regrown head remembers is mostly the rule's favoured odour (see the post-hoc claim) |
 | The memory is bioelectric: the body's voltage pattern is necessary and sufficient for it | **not supported** | as predicted, no. Swapping the trained body's voltage for its twin's kept S0 0.98 / S1 0.99 of the memory (H3a); implanting the voltage alone into the twin transferred S0 0.04 / S1 0.02 (H3b). Gap-junction diffusion is a fixed law here, and the rules did not use it to hold the memory |
 | In an intact chimera of an emergent rule, the head's memory wins outright | **replicated** | dominance of the head's memory after 32 steps of healing: E0 0.99, E1 1.01 |
@@ -149,6 +181,10 @@ prometheus train --family S --seed 0 --iterations 2000 --init weights/rule_E0.js
 prometheus train --family S --seed 1 --iterations 2000 --init weights/rule_E1.json --out weights/rule_S1.json
 for r in E0 E1 S0 S1; do prometheus run --weights weights/rule_$r.json --out results/rule_$r.json; done   # ~1 min each
 python -m prometheus.posthoc                        # post-hoc per-odour analyses (not preregistered)
+prometheus run2 --rule S0 --out results/v2_S0.json   # v0.2 (and E0, E1, S1)
+python -m prometheus.train_v3 0 1500                 # v0.3 balanced rule B0 from S0 (and 1)
+python -m prometheus.v3 S0                           # v0.3 experiments (and E0, E1, S1)
+python tools/figures.py                              # paper figures
 python tools/build_claims.py && prometheus claims render && prometheus export-web
 ```
 
@@ -164,12 +200,14 @@ Runs are deterministic for a given PyTorch version: every founder, schedule and 
 | `src/prometheus/train.py` | backpropagation through whole lives; the E and S objectives |
 | `src/prometheus/experiments.py` | H1-H7 (with H3a-c and H4b), calibration, anatomy, the channel-locus and gap-junction explorations |
 | `src/prometheus/posthoc.py` | post-hoc analyses written after the results were seen (per-odour survival, transfer, chimera bias, cycles) |
+| `src/prometheus/v2.py`, `v3.py`, `train_v3.py` | v0.2 and v0.3 experiments and the balanced (B) rules; they import the locked v0.1 code unchanged |
+| `paper/` | the paper and its figures (`tools/figures.py`) |
 | `tools/build_claims.py` | builds `claims/claims.json` so that every quoted number is a pointer into a results file |
 | `src/prometheus/stats.py` | paired bootstrap, sign-flip tests, Holm |
 | `src/prometheus/claims.py`, `prereg.py` | the claims ledger and the preregistration lock |
 | `prereg/` | hypotheses, seeds and decision rules, and their SHA-256 lock |
 | `results/` | every results file the README quotes, with provenance; `results/pilot/` holds the disclosed pilots |
-| `weights/` | the four confirmatory rules (`weights/pilot/` the pilot rules) |
+| `weights/` | the six confirmatory rules E0, E1, S0, S1, B0, B1 (`weights/pilot/` the pilot rules) |
 | `web/` | the browser lab (`index.html`) and the JavaScript engine (`engine.js`), tested step for step against Python |
 
 ## Limitations

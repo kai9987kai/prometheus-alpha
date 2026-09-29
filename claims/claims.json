@@ -180,6 +180,345 @@
    }
   },
   {
+   "id": "v2-H13",
+   "claim": "v0.2: the body's copy lives in the four cells at the wound edge",
+   "status": "replicated",
+   "headline": true,
+   "evidence_text": "hidden channels implanted into the untrained twin at sites 12-15 only transfer S0 {S0_e} / S1 {S1_e} of the donor's memory; at sites 16-27, {S0_r} / {S1_r}",
+   "evidence": {
+    "S0_e": {
+     "file": "results/v2_S0.json",
+     "pointer": "/H13/edge_fraction",
+     "value": 0.9899625894240087,
+     "decimals": 2
+    },
+    "S0_r": {
+     "file": "results/v2_S0.json",
+     "pointer": "/H13/rest_fraction",
+     "value": 0.0008202791091161307,
+     "decimals": 3
+    },
+    "S1_e": {
+     "file": "results/v2_S1.json",
+     "pointer": "/H13/edge_fraction",
+     "value": 0.982074077698884,
+     "decimals": 2
+    },
+    "S1_r": {
+     "file": "results/v2_S1.json",
+     "pointer": "/H13/rest_fraction",
+     "value": 0.000793591666685167,
+     "decimals": 3
+    }
+   }
+  },
+  {
+   "id": "v2-H12",
+   "claim": "v0.2: a memory compiler. A gradient-designed hidden pattern written into untrained headless bodies makes held-out regrown heads remember an odour they never experienced",
+   "status": "replicated",
+   "headline": true,
+   "evidence_text": "written memory vs the same values at shuffled sites: S0 {S0_w} vs {S0_s}, S1 {S1_w} vs {S1_s}; also in emergent rules, whose bodies never keep a copy: E0 {E0_w} vs {E0_s}, E1 {E1_w} vs {E1_s} (one odour only in each E rule)",
+   "evidence": {
+    "E0_w": {
+     "file": "results/v2_E0.json",
+     "pointer": "/H12/written_memory",
+     "value": 0.5053641200065613,
+     "decimals": 2
+    },
+    "E0_s": {
+     "file": "results/v2_E0.json",
+     "pointer": "/H12/shuffled_memory",
+     "value": 0.010124743916094303,
+     "decimals": 2
+    },
+    "E1_w": {
+     "file": "results/v2_E1.json",
+     "pointer": "/H12/written_memory",
+     "value": 0.6561949849128723,
+     "decimals": 2
+    },
+    "E1_s": {
+     "file": "results/v2_E1.json",
+     "pointer": "/H12/shuffled_memory",
+     "value": -0.009617386385798454,
+     "decimals": 2
+    },
+    "S0_w": {
+     "file": "results/v2_S0.json",
+     "pointer": "/H12/written_memory",
+     "value": 1.0025520324707031,
+     "decimals": 2
+    },
+    "S0_s": {
+     "file": "results/v2_S0.json",
+     "pointer": "/H12/shuffled_memory",
+     "value": 0.13769525289535522,
+     "decimals": 2
+    },
+    "S1_w": {
+     "file": "results/v2_S1.json",
+     "pointer": "/H12/written_memory",
+     "value": 0.9897340536117554,
+     "decimals": 2
+    },
+    "S1_s": {
+     "file": "results/v2_S1.json",
+     "pointer": "/H12/shuffled_memory",
+     "value": -0.009031033143401146,
+     "decimals": 2
+    }
+   }
+  },
+  {
+   "id": "v3-H14",
+   "claim": "v0.3: memory surgery. Writing the compiled pattern for the other odour into a trained worm's headless body overwrites its real memory",
+   "status": "replicated",
+   "headline": true,
+   "evidence_text": "R(A) - R(B) of the regrown head: A-trained worms given pattern B S0 {S0_a}, S1 {S1_a}; B-trained given pattern A S0 {S0_b}, S1 {S1_b}; fraction of worms whose memory switched {S0_f}, {S1_f}",
+   "evidence": {
+    "S0_a": {
+     "file": "results/v3_S0.json",
+     "pointer": "/H14/A_trained/pattern_B",
+     "value": -0.8892275190446526,
+     "decimals": 2
+    },
+    "S0_b": {
+     "file": "results/v3_S0.json",
+     "pointer": "/H14/B_trained/pattern_A",
+     "value": 0.958810712210834,
+     "decimals": 2
+    },
+    "S0_f": {
+     "file": "results/v3_S0.json",
+     "pointer": "/H14/switched_fraction",
+     "value": 0.99609375,
+     "decimals": 3
+    },
+    "S1_a": {
+     "file": "results/v3_S1.json",
+     "pointer": "/H14/A_trained/pattern_B",
+     "value": -0.8760347359348089,
+     "decimals": 2
+    },
+    "S1_b": {
+     "file": "results/v3_S1.json",
+     "pointer": "/H14/B_trained/pattern_A",
+     "value": 0.7640893226489425,
+     "decimals": 2
+    },
+    "S1_f": {
+     "file": "results/v3_S1.json",
+     "pointer": "/H14/switched_fraction",
+     "value": 1.0,
+     "decimals": 3
+    }
+   }
+  },
+  {
+   "id": "v3-H15",
+   "claim": "v0.3: four cells are enough. A compiled memory confined to the wound-edge sites 12-15 writes a full memory",
+   "status": "replicated",
+   "headline": false,
+   "evidence_text": "R(A) - R(B) of held-out regrown heads with the sparse A / B pattern: S0 {S0_a} / {S0_b}, S1 {S1_a} / {S1_b}; emergent rules E0 {E0_a} / {E0_b}, E1 {E1_a} / {E1_b}",
+   "evidence": {
+    "E0_a": {
+     "file": "results/v3_E0.json",
+     "pointer": "/H15/written_A",
+     "value": 0.04380432888865471,
+     "decimals": 2
+    },
+    "E0_b": {
+     "file": "results/v3_E0.json",
+     "pointer": "/H15/written_B",
+     "value": -0.0398356094956398,
+     "decimals": 2
+    },
+    "E1_a": {
+     "file": "results/v3_E1.json",
+     "pointer": "/H15/written_A",
+     "value": 0.7405511736869812,
+     "decimals": 2
+    },
+    "E1_b": {
+     "file": "results/v3_E1.json",
+     "pointer": "/H15/written_B",
+     "value": -0.19771963357925415,
+     "decimals": 2
+    },
+    "S0_a": {
+     "file": "results/v3_S0.json",
+     "pointer": "/H15/written_A",
+     "value": 0.9843322038650513,
+     "decimals": 2
+    },
+    "S0_b": {
+     "file": "results/v3_S0.json",
+     "pointer": "/H15/written_B",
+     "value": -0.985236644744873,
+     "decimals": 2
+    },
+    "S1_a": {
+     "file": "results/v3_S1.json",
+     "pointer": "/H15/written_A",
+     "value": 0.9817594289779663,
+     "decimals": 2
+    },
+    "S1_b": {
+     "file": "results/v3_S1.json",
+     "pointer": "/H15/written_B",
+     "value": -0.9896432757377625,
+     "decimals": 2
+    }
+   }
+  },
+  {
+   "id": "v3-H16",
+   "claim": "v0.3: decodable is not used. A linear decoder reads the odour from the wound-edge cells, in emergent rules too, whose regrown heads never use it",
+   "status": "replicated",
+   "headline": true,
+   "evidence_text": "held-out decoding accuracy, edge vs rest of trunk: S0 {S0_e} vs {S0_r}, S1 {S1_e} vs {S1_r}; E0 {E0_e} vs {E0_r}, E1 {E1_e} vs {E1_r} (predicted: no in E rules, which keep 0% of the memory)",
+   "evidence": {
+    "E0_e": {
+     "file": "results/v3_E0.json",
+     "pointer": "/H16/edge_accuracy",
+     "value": 0.96875,
+     "decimals": 2
+    },
+    "E0_r": {
+     "file": "results/v3_E0.json",
+     "pointer": "/H16/rest_accuracy",
+     "value": 0.515625,
+     "decimals": 2
+    },
+    "E1_e": {
+     "file": "results/v3_E1.json",
+     "pointer": "/H16/edge_accuracy",
+     "value": 0.90625,
+     "decimals": 2
+    },
+    "E1_r": {
+     "file": "results/v3_E1.json",
+     "pointer": "/H16/rest_accuracy",
+     "value": 0.515625,
+     "decimals": 2
+    },
+    "S0_e": {
+     "file": "results/v3_S0.json",
+     "pointer": "/H16/edge_accuracy",
+     "value": 1.0,
+     "decimals": 2
+    },
+    "S0_r": {
+     "file": "results/v3_S0.json",
+     "pointer": "/H16/rest_accuracy",
+     "value": 0.6875,
+     "decimals": 2
+    },
+    "S1_e": {
+     "file": "results/v3_S1.json",
+     "pointer": "/H16/edge_accuracy",
+     "value": 1.0,
+     "decimals": 2
+    },
+    "S1_r": {
+     "file": "results/v3_S1.json",
+     "pointer": "/H16/rest_accuracy",
+     "value": 0.484375,
+     "decimals": 2
+    }
+   }
+  },
+  {
+   "id": "v3-H17",
+   "claim": "v0.3: selection for two amputations rescues the disfavoured memory (balanced B rules)",
+   "status": "mixed",
+   "headline": false,
+   "evidence_text": "memory of the S rule's disfavoured odour at cycle 4, B rule vs S sibling: B1 {S1_b} vs S1 {S1_s}; B0 {S0_b} vs S0 {S0_s} (S0 was near ceiling; below the 0.10 threshold)",
+   "evidence": {
+    "S0_b": {
+     "file": "results/v3_S0.json",
+     "pointer": "/H17/B_other",
+     "value": 0.9997431945976132,
+     "decimals": 2
+    },
+    "S0_s": {
+     "file": "results/v3_S0.json",
+     "pointer": "/H17/S_other",
+     "value": 0.9393517095932111,
+     "decimals": 2
+    },
+    "S1_b": {
+     "file": "results/v3_S1.json",
+     "pointer": "/H17/B_other",
+     "value": 0.8399231730891188,
+     "decimals": 2
+    },
+    "S1_s": {
+     "file": "results/v3_S1.json",
+     "pointer": "/H17/S_other",
+     "value": 0.3285757471276156,
+     "decimals": 2
+    }
+   }
+  },
+  {
+   "id": "v3-H18",
+   "claim": "v0.3: fission. Cut a trained worm in two, and the half that must regrow a head remembers",
+   "status": "not supported",
+   "headline": false,
+   "evidence_text": "as predicted, no, in every rule: posterior half E0 {E0_p}, E1 {E1_p}, S0 {S0_p}, S1 {S1_p}; the anterior half, which keeps the head, {E0_a}, {E1_a}, {S0_a}, {S1_a}. The body's copy exists only at a wound next to the head",
+   "evidence": {
+    "E0_p": {
+     "file": "results/v3_E0.json",
+     "pointer": "/H18/posterior_half_memory",
+     "value": -0.00040790962520986795,
+     "decimals": 3
+    },
+    "E0_a": {
+     "file": "results/v3_E0.json",
+     "pointer": "/H18/anterior_half_memory",
+     "value": 1.000492074882004,
+     "decimals": 2
+    },
+    "E1_p": {
+     "file": "results/v3_E1.json",
+     "pointer": "/H18/posterior_half_memory",
+     "value": 0.001734090270474553,
+     "decimals": 3
+    },
+    "E1_a": {
+     "file": "results/v3_E1.json",
+     "pointer": "/H18/anterior_half_memory",
+     "value": 0.9879826985461477,
+     "decimals": 2
+    },
+    "S0_p": {
+     "file": "results/v3_S0.json",
+     "pointer": "/H18/posterior_half_memory",
+     "value": 0.0005249320529401302,
+     "decimals": 3
+    },
+    "S0_a": {
+     "file": "results/v3_S0.json",
+     "pointer": "/H18/anterior_half_memory",
+     "value": 0.9937403304647887,
+     "decimals": 2
+    },
+    "S1_p": {
+     "file": "results/v3_S1.json",
+     "pointer": "/H18/posterior_half_memory",
+     "value": -0.005476541817188263,
+     "decimals": 3
+    },
+    "S1_a": {
+     "file": "results/v3_S1.json",
+     "pointer": "/H18/anterior_half_memory",
+     "value": 0.9976557875083927,
+     "decimals": 2
+    }
+   }
+  },
+  {
    "id": "H6",
    "claim": "Promethean cycles: the memory survives a third successive decapitation (only one was ever trained)",
    "status": "replicated",
@@ -244,6 +583,39 @@
      "file": "results/rule_S1.json",
      "pointer": "/H6/cycles/3/anatomy/iou",
      "value": 0.9686525464057922,
+     "decimals": 2
+    }
+   }
+  },
+  {
+   "id": "v2-H11",
+   "claim": "v0.2: after a reversal the body is more conservative than the head: the regrown head reverts toward the first lesson",
+   "status": "replicated",
+   "headline": false,
+   "evidence_text": "memory of the first lesson after learning the other odour, intact vs regrown: S0 {S0_i} vs {S0_g}, S1 {S1_i} vs {S1_g}. The pilot predicted the opposite direction",
+   "evidence": {
+    "S0_i": {
+     "file": "results/v2_S0.json",
+     "pointer": "/H11/first_lesson_intact",
+     "value": 0.5192644669514266,
+     "decimals": 2
+    },
+    "S0_g": {
+     "file": "results/v2_S0.json",
+     "pointer": "/H11/first_lesson_regrown",
+     "value": 0.8230990159804605,
+     "decimals": 2
+    },
+    "S1_i": {
+     "file": "results/v2_S1.json",
+     "pointer": "/H11/first_lesson_intact",
+     "value": 0.34067316937216674,
+     "decimals": 2
+    },
+    "S1_g": {
+     "file": "results/v2_S1.json",
+     "pointer": "/H11/first_lesson_regrown",
+     "value": 0.6318294704360596,
      "decimals": 2
     }
    }
@@ -337,6 +709,105 @@
      "file": "results/posthoc_E1.json",
      "pointer": "/derived/chimera_cue_bias_regrown",
      "value": -0.06503978863474913,
+     "decimals": 2
+    }
+   }
+  },
+  {
+   "id": "v2-H8",
+   "claim": "v0.2 replication of the v0.1 post-hoc attractor, direction named in advance: after 4 cycles the favoured odour is remembered better",
+   "status": "mixed",
+   "headline": false,
+   "evidence_text": "favoured vs other odour at cycle 4 (fresh worms): S0 {S0_f} vs {S0_o} (below the 0.10 threshold), S1 {S1_f} vs {S1_o}",
+   "evidence": {
+    "S0_f": {
+     "file": "results/v2_S0.json",
+     "pointer": "/H8/test/favoured_mean",
+     "value": 0.9605960616154334,
+     "decimals": 2
+    },
+    "S0_o": {
+     "file": "results/v2_S0.json",
+     "pointer": "/H8/test/other_mean",
+     "value": 0.8751280295118704,
+     "decimals": 2
+    },
+    "S1_f": {
+     "file": "results/v2_S1.json",
+     "pointer": "/H8/test/favoured_mean",
+     "value": 0.9572091610680218,
+     "decimals": 2
+    },
+    "S1_o": {
+     "file": "results/v2_S1.json",
+     "pointer": "/H8/test/other_mean",
+     "value": 0.3423708926893596,
+     "decimals": 2
+    }
+   }
+  },
+  {
+   "id": "v2-H9",
+   "claim": "v0.2: unreinforced presentations extinguish the memory (never trained)",
+   "status": "mixed",
+   "headline": false,
+   "evidence_text": "fraction of the memory extinguished by 96 steps of cues without shock: E0 {E0_x}, E1 {E1_x}, S0 {S0_x}, S1 {S1_x}",
+   "evidence": {
+    "E0_x": {
+     "file": "results/v2_E0.json",
+     "pointer": "/H9/extinguished_fraction",
+     "value": 0.014285334821694584,
+     "decimals": 2
+    },
+    "E1_x": {
+     "file": "results/v2_E1.json",
+     "pointer": "/H9/extinguished_fraction",
+     "value": -0.14613601251496755,
+     "decimals": 2
+    },
+    "S0_x": {
+     "file": "results/v2_S0.json",
+     "pointer": "/H9/extinguished_fraction",
+     "value": 0.0009419226534290726,
+     "decimals": 2
+    },
+    "S1_x": {
+     "file": "results/v2_S1.json",
+     "pointer": "/H9/extinguished_fraction",
+     "value": 0.45206210907359823,
+     "decimals": 2
+    }
+   }
+  },
+  {
+   "id": "v2-H10",
+   "claim": "v0.2: a head regrown after extinction differs from the intact extinguished head",
+   "status": "not supported",
+   "headline": false,
+   "evidence_text": "S rules, intact vs regrown after extinction: S0 {S0_i} vs {S0_g}, S1 {S1_i} vs {S1_g}; the pilot's inversion did not replicate (E rules pass trivially: nothing survives regrowth)",
+   "evidence": {
+    "S0_i": {
+     "file": "results/v2_S0.json",
+     "pointer": "/H10/extinguished_intact",
+     "value": 0.9885975775241604,
+     "decimals": 2
+    },
+    "S0_g": {
+     "file": "results/v2_S0.json",
+     "pointer": "/H10/extinguished_regrown",
+     "value": 0.9704106358040008,
+     "decimals": 2
+    },
+    "S1_i": {
+     "file": "results/v2_S1.json",
+     "pointer": "/H10/extinguished_intact",
+     "value": 0.5357927971999743,
+     "decimals": 2
+    },
+    "S1_g": {
+     "file": "results/v2_S1.json",
+     "pointer": "/H10/extinguished_regrown",
+     "value": 0.5112989412227762,
      "decimals": 2
     }
    }
