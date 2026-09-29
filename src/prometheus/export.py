@@ -28,6 +28,11 @@ def web(rules: list[str], out: str | pathlib.Path = ROOT / "web" / "data.js"):
         name = f"{doc['config']['family']}{doc['config']['seed']}"
         data["rules"][name] = {"family": doc["config"]["family"], "seed": doc["config"]["seed"],
                                "n_params": doc["n_params"], **doc["params"]}
+        v2 = ROOT / "results" / f"v2_{name}.json"
+        if v2.exists():
+            r2 = json.loads(v2.read_text())
+            data["rules"][name]["compiled"] = {k: [[round(v, 4) for v in row] for row in pat]
+                                               for k, pat in r2["H12"]["patterns"].items()}
     data["default_rule"] = next((k for k in data["rules"] if k.startswith("S")), next(iter(data["rules"]), None))
     try:
         data["claims"] = claims.rendered_rows()

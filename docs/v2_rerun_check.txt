@@ -1,0 +1,8 @@
+Confirmatory v0.2 numbers logged by the first (crashed) run, before long_cycles was fixed.
+The rerun after the fix must reproduce every one exactly (checked in the commit that adds results/v2_*.json).
+
+rule  H8                H9                H10               H11               H12               H13
+E0    n/a               +0.014 p 0.0034   -0.969 p 0.0001   -0.842 p 0.0001   +0.495 p 0.0001   +0.000 p 0.189
+E1    n/a               -0.110 p 1        -0.882 p 0.0001   -0.816 p 0.0001   +0.666 p 0.0001   -0.002 p 1
+S0    +0.085 p 0.0127   +0.001 p 0.287    -0.018 p 0.0086   +0.304 p 0.0001   +0.865 p 0.0001   +0.964 p 0.0001
+S1    +0.615 p 0.0001   +0.442 p 0.0001   -0.024 p 0.0026   +0.291 p 0.0001   +0.999 p 0.0001   +0.929 p 0.0001

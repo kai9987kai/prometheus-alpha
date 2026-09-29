@@ -136,12 +136,15 @@ footer { font-size: 13px; color: var(--ink-soft); max-width: 80ch; }
           <span class="seg" role="group" aria-label="Pairing"><button id="pPaired" aria-pressed="true">Paired</button><button id="pUnpaired" aria-pressed="false">Unpaired</button></span>
           <button id="condition" class="primary">Condition</button>
         </div>
+        <div class="row"><button id="extinguish">Extinguish (odours, no shock)</button></div>
       </div>
       <div class="group">
         <h3>3 · Wound</h3>
         <div class="row"><button id="cutHead">Remove head</button><button id="cutTail">Remove tail</button><button id="cutFrag">Keep trunk only</button></div>
         <div class="row"><button id="regen">Regenerate 32 steps</button><button id="graft">Graft head from an odour-B worm</button></div>
         <label class="small"><input type="checkbox" id="gj" checked> Gap junctions open</label>
+        <div class="row"><button id="writeA">Write compiled memory A</button><button id="writeB">Write B</button></div>
+        <div class="status" id="compinfo">Writes a gradient-designed hidden-channel pattern into the body (v0.2 H12). Cut the head first, then regenerate and probe.</div>
       </div>
       <div class="group">
         <h3>4 · Test</h3>
@@ -215,6 +218,9 @@ footer { font-size: 13px; color: var(--ink-soft); max-width: 80ch; }
     S.ruleName = name;
     S.rule = P.rule(D.rules[name]);
     const r = D.rules[name];
+    const has = !!r.compiled;
+    $("writeA").disabled = $("writeB").disabled = !has;
+    $("compinfo").textContent = has ? "Writes a gradient-designed hidden-channel pattern into the body (v0.2 H12). Cut the head first, then regenerate and probe." : "No compiled pattern for this rule.";
     $("ruleinfo").textContent = `${r.family === "E" ? "Emergent" : "Selected"} rule · seed ${r.seed} · ${r.n_params.toLocaleString()} parameters`;
   }
 
@@ -348,6 +354,13 @@ footer { font-size: 13px; color: var(--ink-soft); max-width: 80ch; }
   const cut = (kind) => () => doNow(() => { S.x = P.amputate(S.x, kind); if (S.hist.length) S.hist[S.hist.length - 1].event = kind; });
   $("cutHead").onclick = cut("head"); $("cutTail").onclick = cut("tail"); $("cutFrag").onclick = cut("fragment");
   $("regen").onclick = () => enqueue(P.program(P.REGEN, "regen"));
+  $("extinguish").onclick = () => { markEvent("extinguish"); for (let b = 0; b < 2; b++) enqueue(P.conditioning(S.csplus, "naive", S.rand)); enqueue(P.program(P.DELAY)); };
+  const write = (k) => () => doNow(() => {
+    const c = D.rules[S.ruleName].compiled;
+    if (!c) return;
+    S.x = P.writePattern(S.x, c[k]); if (S.hist.length) S.hist[S.hist.length - 1].event = "write " + k;
+  });
+  $("writeA").onclick = write("A"); $("writeB").onclick = write("B");
   $("testA").onclick = () => enqueue(P.probe(0));
   $("testB").onclick = () => enqueue(P.probe(1));
   $("cycle").onclick = () => { cut("head")(); enqueue(P.program(P.REGEN, "regen")); enqueue(P.probe(S.csplus)); enqueue(P.probe(1 - S.csplus)); };

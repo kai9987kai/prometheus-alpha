@@ -234,18 +234,21 @@ def engram_map(p, n=N, window=4) -> dict:
 
 
 def long_cycles(p, rule: str, n=64, cycles=8) -> dict:
-    r = h8_attractor(p, rule, n=n, cycles=cycles) if rule in FAVOURED else None
-    if r is None:
-        co = X.cohort(SEEDS["long_cycles"], n)
-        P, U = X.twins(p, co)
-        out = []
-        for k in range(cycles):
-            P, U = P.cut("head")[0].free(X.REGEN), U.cut("head")[0].free(X.REGEN)
-            P, a = P.test()
-            U, b = U.test()
-            out.append({"cycle": k + 1, "memory": float((a["di"] - b["di"]).mean())})
-        return {"cycles": out}
-    return {"cycles": r["cycles"]}
+    """Memory per odour over 8 Promethean cycles. Needs more update masks than the v0.1
+    experiments allocate (X.MAX_T), so it builds its worms with its own (docs/DEVIATIONS.md, v0.2)."""
+    co = X.cohort(SEEDS["long_cycles"], n)
+    T_needed = X.GROW + life.COND_T + X.DELAY + cycles * (X.REGEN + life.TEST_T)
+    base = X.Worms(p, co, T.founder(co.n), 0, T.fire_masks(co.mask_seeds, T_needed))
+    P, U = base.learn("paired"), base.learn("unpaired")
+    out = []
+    for k in range(cycles):
+        P, U = P.cut("head")[0].free(X.REGEN), U.cut("head")[0].free(X.REGEN)
+        P, a = P.test()
+        U, b = U.test()
+        d = a["di"] - b["di"]
+        out.append({"cycle": k + 1, "memory": float(d.mean()),
+                    "A": float(d[co.csplus == 0].mean()), "B": float(d[co.csplus == 1].mean())})
+    return {"cycles": out}
 
 
 CONFIRMATORY = ["H8", "H9", "H10", "H11", "H12", "H13"]

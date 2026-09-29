@@ -142,6 +142,14 @@
     return y;
   }
 
+  /* Add a compiled hidden-channel pattern (10 x L) to the living cells (as v2._written). */
+  function writePattern(x, pattern) {
+    const y = x.slice();
+    for (let c = 0; c < pattern.length; c++)
+      for (let i = 0; i < L; i++) if (x[ALPHA * L + i] > 0.1) y[(HIDDEN0 + c) * L + i] += pattern[c][i];
+    return y;
+  }
+
   /* Deterministic generator for update masks and slot orders (mulberry32). */
   function rng(seed) {
     let s = seed >>> 0;
@@ -194,7 +202,7 @@
   const api = {
     L, C, ALPHA, V, HEAD, TRUNK, TAIL, R, HIDDEN0, PERC, FOUNDER, BODY_START, HEAD_END, TRUNK_END, BODY_END,
     PHYS, SLOT, N_SLOTS, GROW, REGEN, DELAY, TEST_T,
-    rule, founder, alive, step, headWeight, response, region, amputate, graft, rng, fireMask, program, conditioning, probe,
+    rule, founder, alive, step, writePattern, headWeight, response, region, amputate, graft, rng, fireMask, program, conditioning, probe,
   };
   root.Prometheus = api;
   if (typeof module !== "undefined" && module.exports) module.exports = api;
