@@ -24,3 +24,8 @@ No confirmatory protocol, sample size, seed, test or decision rule was changed a
 ## v0.2
 
 1. **Exploratory crash, fixed and relocked.** The first confirmatory v0.2 run computed every confirmatory hypothesis (H8-H13) and then crashed in the exploratory 8-cycle analysis, which needs more update masks than the v0.1 experiment code allocates (420 steps), so no results file was written. `long_cycles` was changed to allocate its own masks (and to split memory by odour); no confirmatory function changed. The v0.2 lock was regenerated with that change, and the rerun was checked against the crashed run's logged confirmatory means and p-values (`logs/run2_*.crashed.log`, reproduced in `docs/v2_rerun_check.txt`), which it must reproduce exactly because the engine is deterministic.
+
+## v0.6
+
+1. **The lock was committed but not pushed before the run.** The v0.6 lock commit (458217d) was made before the confirmatory run, but its push was rejected: the owner had meanwhile added CODE_OF_CONDUCT.md and SECURITY.md to the branch on GitHub. The run went ahead in the same command before the rejection was noticed. The lock commit precedes the results in the history, and it was pushed immediately after, merged with the owner's commits (f19916f). No protocol was changed.
+2. **A post-hoc analysis after H30 failed.** `src/prometheus/posthoc_v6.py` measures the basin in the heads of intact worms instead of at the neck of decapitated ones, and is labelled post hoc everywhere it is quoted.

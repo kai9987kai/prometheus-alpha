@@ -2,7 +2,7 @@
 
 **Does a regenerating body remember what its lost head learned? Synthetic worms grow from one cell, learn which odour predicts a shock, lose their heads, regrow them, and are asked again.**
 
-Author/project lead: **Kai Piper** · Version **0.5.0** · 29 September 2026 · **Paper: [paper/Prometheus_alpha_paper.md](paper/Prometheus_alpha_paper.md)**
+Author/project lead: **Kai Piper** · Version **0.6.0** · 29 September 2026 · **Paper: [paper/Prometheus_alpha_paper.md](paper/Prometheus_alpha_paper.md)**
 
 > **Scientific status.** Everything here is a synthetic computational experiment on a neural cellular automaton. "Memory", "head", "odour" and "shock" name parts of a simulation. Nothing here is a model of a particular animal, and nothing here bears on any person or clinical condition.
 
@@ -17,6 +17,14 @@ Prometheus-α asks it of a synthetic body in which every cell's state can be rea
 3. **Pavlovian conditioning with the proper control.** One odour is paired with a shock. Every paired worm has an *explicitly unpaired twin*: the same odours, the same number of shocks at the same moments of its life, the same random update noise, the same founder; only the contingency differs. The memory measure is taken within the worm, so baseline shifts cancel.
 4. **Emergent versus selected.** *E* rules are trained to learn and to regenerate, but never asked to remember through a regeneration. *S* rules are selected from their E sibling by also asking for memory after one amputation. Chimeras, voltage transplants, trunk fragments and repeated amputation are never trained in either.
 
+### New in v0.6: memory across generations, and a mechanism that failed
+
+* **Memory passes down generations.** Split a fission-rule worm, let the back half regrow, and split that worm again, three times. Only one split was ever trained. The memory reaches the third generation, fading as it goes: F0 0.95 → 0.77 → 0.25, F1 0.97 → 0.49 → 0.47.
+* **My mechanism for robustness failed.** I predicted that a wider attractor basin would make a memory survive cell turnover. The correlation came out negative (ρ = -0.43).
+* **A possible trade-off (post hoc, not a finding).** Measured where turnover acts, in the heads of intact worms, the correlation is strongly negative (ρ = -0.83). Memories that shrug off noise die with their cells, and memories that survive cell death are easily scrambled. This is the next hypothesis to test.
+
+Across six preregistered rounds, **108 of 127 stated predictions held**.
+
 ### New in v0.5: turnover, time and eight-cell animals
 
 Four challenges no rule was ever trained for, run on all eight rules:
@@ -25,8 +33,6 @@ Four challenges no rule was ever trained for, run on all eight rules:
 * **Only a distributed copy survives in the tail.** From 8 tail cells, only F1 regrows a remembering worm (+0.25). F0 inverts the memory again (−0.14).
 * **Ship of Theseus.** The memory survives 200 steps in which 10% of cells die at random every 20 steps. This holds in 7 of 8 rules, and robustness follows lineage: the S0 line (0.89, 0.96, 0.57) is much sturdier than the S1 line (0.19, 0.45, 0.32).
 * **Time.** Without reminders the memory lasts 300 steps, twenty times the longest trained delay, in 7 of 8 rules. E1 forgets.
-
-Across five preregistered rounds, **104 of 122 stated predictions held**.
 
 ### New in v0.4: selection can spread the copy, one cell can hold a memory, and every rule has a private code
 
@@ -78,7 +84,7 @@ Predictions made in the locked preregistration, against the outcomes:
 
 31 of 34 preregistered predictions held (✗ marks a miss; – means no prediction was stated). The number in brackets is the tested mean. "yes" requires Holm-corrected significance and an effect of at least 0.10.
 
-Every number in the results table is checked in CI against the results file it comes from (`prometheus claims check`). The hypotheses, sample sizes, seeds and decision rules were hash-locked before each round's confirmatory experiments ([v0.1](prereg/PREREGISTRATION.json), [v0.2](prereg/PREREGISTRATION_v2.json), [v0.3](prereg/PREREGISTRATION_v3.json), [v0.4](prereg/PREREGISTRATION_v4.json), [v0.5](prereg/PREREGISTRATION_v5.json); CI verifies all five locks); pilots and pre-lock design changes are disclosed there and in [`docs/DEVIATIONS.md`](docs/DEVIATIONS.md).
+Every number in the results table is checked in CI against the results file it comes from (`prometheus claims check`). The hypotheses, sample sizes, seeds and decision rules were hash-locked before each round's confirmatory experiments ([v0.1](prereg/PREREGISTRATION.json), [v0.2](prereg/PREREGISTRATION_v2.json), [v0.3](prereg/PREREGISTRATION_v3.json), [v0.4](prereg/PREREGISTRATION_v4.json), [v0.5](prereg/PREREGISTRATION_v5.json), [v0.6](prereg/PREREGISTRATION_v6.json); CI verifies all six locks); pilots and pre-lock design changes are disclosed there and in [`docs/DEVIATIONS.md`](docs/DEVIATIONS.md).
 
 ## Built from eight earlier projects
 
@@ -144,6 +150,9 @@ flowchart LR
 | **v0.5: Ship of Theseus. The memory survives 200 steps of random cell death and replacement (10% of cells every 20 steps)** | **supported in 7 of 8 rules** | M after turnover: S0 0.89, B0 0.96, F0 0.57 (the S0 lineage) vs S1 0.19, B1 0.45, F1 0.32 (the S1 lineage); E0 0.36, E1 0.06 (not supported). Robustness follows lineage more than selection regime |
 | v0.5: from an 8-cell tail fragment (sites 24-31) only the rule with a distributed copy regrows a remembering worm | **descriptive** | as predicted: F1 0.25; F0 -0.14 (inverted again); S0 0.01, S1 -0.00, B0 -0.00, B1 -0.00, E0 -0.00, E1 0.00 |
 | v0.5: the memory lasts 300 steps without any reminder (training delays were 4-16) | **supported in 7 of 8 rules** | M: E0 0.92, E1 -0.01 (forgets), S0 0.96, S1 0.80, B0 0.99, B1 1.00, F0 0.88, F1 0.87 |
+| **v0.6: memory passes down three generations of fission (only one split was ever trained), fading each time** | **replicated** | M after generations 1, 2, 3: F0 0.95, 0.77, 0.25; F1 0.97, 0.49, 0.47; S0 0.00, 0.00, 0.00 and S1 -0.00, -0.00, -0.01 never pass it on |
+| v0.6: a wider attractor basin at the neck predicts survival of cell turnover | **not supported** | Spearman rho -0.43 (one-sided exact p 0.822, 6 rules). Critical noise sigma*: S0 1.00, S1 1.50, B0 1.00, B1 1.50, F0 3.00, F1 1.00 |
+| Post hoc: a trade-off. Rules whose head memory tolerates noise are the ones whose memory dies with cell turnover | **post hoc** | Spearman rho between head-basin area and v0.5 turnover memory, 6 rules: -0.83. Basin area: S0 1.16, B0 1.13, F0 1.33 (turnover-robust) vs S1 2.26, B1 2.55, F1 1.59. Not preregistered; a hypothesis for the next round |
 | **v0.3: memory surgery. Writing the compiled pattern for the other odour into a trained worm's headless body overwrites its real memory** | **replicated** | R(A) - R(B) of the regrown head: A-trained worms given pattern B S0 -0.89, S1 -0.88; B-trained given pattern A S0 0.96, S1 0.76; fraction of worms whose memory switched 0.996, 1.000 |
 | v0.3: four cells are enough. A compiled memory confined to the wound-edge sites 12-15 writes a full memory | **replicated** | R(A) - R(B) of held-out regrown heads with the sparse A / B pattern: S0 0.98 / -0.99, S1 0.98 / -0.99; emergent rules E0 0.04 / -0.04, E1 0.74 / -0.20 |
 | **v0.3: decodable is not used. A linear decoder reads the odour from the wound-edge cells, in emergent rules too, whose regrown heads never use it** | **replicated** | held-out decoding accuracy, edge vs rest of trunk: S0 1.00 vs 0.69, S1 1.00 vs 0.48; E0 0.97 vs 0.52, E1 0.91 vs 0.52 (predicted: no in E rules, which keep 0% of the memory) |
@@ -212,6 +221,8 @@ python -m prometheus.v3 S0                           # v0.3 experiments (and E0,
 python -m prometheus.train_v4 0 2000                 # v0.4 fission rule F0 from S0 (and 1)
 python -m prometheus.v4 F0                           # v0.4 experiments (and E0, E1, S0, S1, F1)
 python -m prometheus.v5 B0                           # v0.5 experiments (all eight rules)
+python -m prometheus.v6                              # v0.6 generations and attractor basins
+python -m prometheus.posthoc_v6                      # post hoc (not preregistered)
 python tools/figures.py                              # paper figures
 python tools/build_claims.py && prometheus claims render && prometheus export-web
 ```
@@ -228,7 +239,7 @@ Runs are deterministic for a given PyTorch version: every founder, schedule and 
 | `src/prometheus/train.py` | backpropagation through whole lives; the E and S objectives |
 | `src/prometheus/experiments.py` | H1-H7 (with H3a-c and H4b), calibration, anatomy, the channel-locus and gap-junction explorations |
 | `src/prometheus/posthoc.py` | post-hoc analyses written after the results were seen (per-odour survival, transfer, chimera bias, cycles) |
-| `src/prometheus/v2.py`, `v3.py`, `v4.py`, `v5.py`, `train_v3.py`, `train_v4.py` | v0.2-v0.5 experiments and the balanced (B) and fission (F) rules; they import the locked v0.1 code unchanged |
+| `src/prometheus/v2.py`, `v3.py`, `v4.py`, `v5.py`, `v6.py`, `train_v3.py`, `train_v4.py` | v0.2-v0.6 experiments and the balanced (B) and fission (F) rules; they import the locked v0.1 code unchanged |
 | `paper/` | the paper and its figures (`tools/figures.py`) |
 | `tools/build_claims.py` | builds `claims/claims.json` so that every quoted number is a pointer into a results file |
 | `src/prometheus/stats.py` | paired bootstrap, sign-flip tests, Holm |

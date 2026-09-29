@@ -25,6 +25,10 @@ for n in ("E0", "E1", "S0", "S1", "B0", "B1", "F0", "F1"):
     if pth.exists():
         R[f"v5{n}"] = json.loads(pth.read_text())
         F[f"v5{n}"] = f"results/v5_{n}.json"
+for name in ("v6", "posthoc_v6"):
+    if (ROOT / f"results/{name}.json").exists():
+        R[name] = json.loads((ROOT / f"results/{name}.json").read_text())
+        F[name] = f"results/{name}.json"
 R["align"] = json.loads((ROOT / "results/exploratory_code_alignment.json").read_text())
 F["align"] = "results/exploratory_code_alignment.json"
 R["pilot"] = json.loads((ROOT / "results/pilot/S102_n32.json").read_text())
@@ -323,6 +327,28 @@ if all(f"v5{r}" in R for r in EIGHT):
         "supported in 7 of 8 rules",
         "M: E0 {E0}, E1 {E1} (forgets), S0 {S0}, S1 {S1}, B0 {B0}, B1 {B1}, F0 {F0}, F1 {F1}", e)
 
+
+# ============================================================ v0.6
+if "v6" in R:
+    e = {}
+    for r in ("F0", "F1", "S0", "S1"):
+        for g in range(3):
+            e[f"{r}_{g + 1}"] = ev("v6", f"/H29/{r}/by_generation/{g}")
+    st = "replicated" if all(R["v6"]["verdicts"][f"H29_{r}"]["supported"] for r in ("F0", "F1")) else "mixed"
+    add("v6-H29", "v0.6: memory passes down three generations of fission (only one split was ever trained), fading each time",
+        st, "M after generations 1, 2, 3: F0 {F0_1}, {F0_2}, {F0_3}; F1 {F1_1}, {F1_2}, {F1_3}; S0 {S0_1}, {S0_2}, {S0_3} and S1 {S1_1}, {S1_2}, {S1_3} never pass it on", e, headline=True)
+    e = {"rho": ev("v6", "/H30/test/mean"), "p": ev("v6", "/H30/test/p", 3)}
+    for r in ("S0", "S1", "B0", "B1", "F0", "F1"):
+        e[f"{r}"] = ev("v6", f"/H30/sigma_star/{r}")
+    add("v6-H30", "v0.6: a wider attractor basin at the neck predicts survival of cell turnover",
+        "not supported", "Spearman rho {rho} (one-sided exact p {p}, 6 rules). Critical noise sigma*: S0 {S0}, S1 {S1}, B0 {B0}, B1 {B1}, F0 {F0}, F1 {F1}", e)
+if "posthoc_v6" in R:
+    e = {"rho": ev("posthoc_v6", "/spearman_area_vs_turnover/rho")}
+    for r in ("S0", "S1", "B0", "B1", "F0", "F1"):
+        e[r] = ev("posthoc_v6", f"/basins/{r}/area")
+    add("posthoc-tradeoff", "Post hoc: a trade-off. Rules whose head memory tolerates noise are the ones whose memory dies with cell turnover",
+        "post hoc", "Spearman rho between head-basin area and v0.5 turnover memory, 6 rules: {rho}. Basin area: S0 {S0}, B0 {B0}, F0 {F0} (turnover-robust) vs S1 {S1}, B1 {B1}, F1 {F1}. Not preregistered; a hypothesis for the next round", e)
+
 # ---- post hoc: favoured odour
 e = {}
 for r in S:
@@ -386,7 +412,7 @@ add("anatomy", "All four rules grow the body from one founder cell and regrow it
     "body IoU with the target after 32 steps of growth / after head regeneration / 300 steps later: E0 {E0_g} / {E0_h} / {E0_l}; E1 {E1_g} / {E1_h} / {E1_l}; S0 {S0_g} / {S0_h} / {S0_l}; S1 {S1_g} / {S1_h} / {S1_l}",
     e)
 
-ORDER = ["H2-S", "H2-E", "H3c", "v2-H13", "v2-H12", "v4-H24", "v4-H19", "v4-H21", "v4-H23", "v5-H27", "v5-H25", "v5-H28", "v5-H26", "v3-H14", "v3-H15", "v3-H16", "v3-H17", "v3-H18", "H6",
+ORDER = ["H2-S", "H2-E", "H3c", "v2-H13", "v2-H12", "v4-H24", "v4-H19", "v4-H21", "v4-H23", "v5-H27", "v5-H25", "v5-H28", "v5-H26", "v6-H29", "v6-H30", "posthoc-tradeoff", "v3-H14", "v3-H15", "v3-H16", "v3-H17", "v3-H18", "H6",
          "v2-H11", "posthoc-attractor", "v2-H8", "v2-H9", "v2-H10", "H4b", "H3ab", "H4-E", "H4-S", "H5", "H7", "H1",
          "SESOI", "locus", "gj", "calibration", "anatomy"]
 claims.sort(key=lambda c: ORDER.index(c["id"]))

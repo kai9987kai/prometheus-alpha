@@ -196,7 +196,33 @@ def fig7_robustness():
     fig.savefig(OUT / "fig7_robustness.png")
 
 
+def fig8_generations_tradeoff():
+    v6, ph = R("v6.json"), R("posthoc_v6.json")
+    fig, axes = plt.subplots(1, 2, figsize=(7.8, 2.9))
+    ax = axes[0]
+    for r, c in (("F0", BLUE), ("F1", ORANGE), ("S0", AQUA)):
+        y = v6["H29"][r]["by_generation"]
+        ax.plot(range(1, len(y) + 1), y, "-o", color=c, lw=2, ms=5, label=r)
+    ax.set_xticks([1, 2, 3])
+    ax.set_xlabel("generation of fission (posterior half each time)")
+    ax.set_ylabel("memory M")
+    ax.set_ylim(-0.05, 1.05)
+    ax.legend(frameon=False, fontsize=8)
+    ax.set_title("memory across generations", fontsize=9, loc="left")
+    ax = axes[1]
+    rules = list(ph["basins"])
+    xs = [ph["basins"][r]["area"] for r in rules]
+    ys = [R(f"v5_{r}.json")["H25"]["test"]["mean"] for r in rules]
+    ax.scatter(xs, ys, s=40, color=BLUE, zorder=3)
+    for r, x, y in zip(rules, xs, ys):
+        ax.annotate(r, (x, y), xytext=(5, 3), textcoords="offset points", fontsize=8, color=INK)
+    ax.set_xlabel("head basin area (noise tolerance, post hoc)")
+    ax.set_ylabel("memory after cell turnover")
+    ax.set_title(f"a trade-off? rho = {ph['spearman_area_vs_turnover']['rho']:.2f} (post hoc)", fontsize=9, loc="left")
+    fig.savefig(OUT / "fig8_generations_tradeoff.png")
+
+
 if __name__ == "__main__":
-    for f in (fig2_survival, fig3_engram_map, fig4_cycles, fig5_compiled, fig6_fission, fig7_robustness, fig1_kymograph):
+    for f in (fig8_generations_tradeoff, fig2_survival, fig3_engram_map, fig4_cycles, fig5_compiled, fig6_fission, fig7_robustness, fig1_kymograph):
         f()
         print("wrote", f.__name__)
