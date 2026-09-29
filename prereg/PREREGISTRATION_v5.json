@@ -1,0 +1,22 @@
+{
+ "title": "Prometheus-alpha v0.5: memory through cell turnover, long delay and minimal fragments",
+ "version": "0.5",
+ "date": "2026-09-29",
+ "status": "Locked before any v0.5 experiment on a confirmatory rule. No new rules. No pilots; a code smoke test at n = 4 on pilot rule S102 checked output shapes only.",
+ "code": "src/prometheus/v5.py (imports the locked v0.1 code unchanged)",
+ "rules": "E0, E1, S0, S1, B0, B1, F0, F1 (all frozen)",
+ "hypotheses": {
+  "H25": {"claim": "Turnover: after conditioning and the delay, every 20 steps for 200 steps 10% of cells chosen at random die (mask seed 1); the intact worm still remembers", "measure": "M after turnover", "test": "one-sided sign-flip, > 0", "seed": 6025},
+  "H26": {"claim": "Long delay: the memory survives 300 steps without any presentation", "measure": "M", "test": "one-sided sign-flip, > 0", "seed": 6026},
+  "H27": {"claim": "Minimal anterior fragment: keeping only sites 12-19 (8 cells) and regrowing for 64 steps yields a worm that remembers", "measure": "M", "test": "one-sided sign-flip, > 0", "seed": 6027},
+  "H28": {"claim": "Minimal posterior fragment: keeping only sites 24-31 (8 cells) and regrowing for 64 steps yields a worm that remembers", "measure": "M", "test": "one-sided sign-flip, > 0", "seed": 6028}
+ },
+ "decision_rules": {"family": "H25-H28 in each rule; Holm at alpha 0.05; SESOI 0.10; replicated = supported in both rules of a family"},
+ "predictions": {
+  "H25": "all eight rules: supported (the rule repairs lost cells from their neighbours)",
+  "H26": "all eight rules: supported",
+  "H27": "S, B, F: supported (the copy sits at the neck). E: not supported",
+  "H28": "F1: supported (distributed copy). F0, S, B, E: not supported"
+ },
+ "deviations": "docs/DEVIATIONS.md, v0.5"
+}
