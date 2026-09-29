@@ -2,7 +2,7 @@
 
 **Does a regenerating body remember what its lost head learned? Synthetic worms grow from one cell, learn which odour predicts a shock, lose their heads, regrow them, and are asked again.**
 
-Author/project lead: **Kai Piper** · Version **0.3.0** · 29 September 2026 · **Paper: [paper/Prometheus_alpha_paper.md](paper/Prometheus_alpha_paper.md)**
+Author/project lead: **Kai Piper** · Version **0.4.0** · 29 September 2026 · **Paper: [paper/Prometheus_alpha_paper.md](paper/Prometheus_alpha_paper.md)**
 
 > **Scientific status.** Everything here is a synthetic computational experiment on a neural cellular automaton. "Memory", "head", "odour" and "shock" name parts of a simulation. Nothing here is a model of a particular animal, and nothing here bears on any person or clinical condition.
 
@@ -16,6 +16,16 @@ Prometheus-α asks it of a synthetic body in which every cell's state can be rea
 2. **Only the head can smell.** A cell senses the odours only when it is more than half head tissue. Behaviour is read from the head. After complete decapitation no surviving cell can smell or behave.
 3. **Pavlovian conditioning with the proper control.** One odour is paired with a shock. Every paired worm has an *explicitly unpaired twin*: the same odours, the same number of shocks at the same moments of its life, the same random update noise, the same founder; only the contingency differs. The memory measure is taken within the worm, so baseline shifts cancel.
 4. **Emergent versus selected.** *E* rules are trained to learn and to regenerate, but never asked to remember through a regeneration. *S* rules are selected from their E sibling by also asking for memory after one amputation. Chimeras, voltage transplants, trunk fragments and repeated amputation are never trained in either.
+
+### New in v0.4: selection can spread the copy, one cell can hold a memory, and every rule has a private code
+
+* **Fission rules.** In v0.3 only the front half of a split worm remembered. F rules, selected from their S siblings on split worms, regrow a whole worm from the back half, and that worm remembers (+0.97, +0.99). The two F rules found different solutions:
+  * **F1** built a genuinely distributed copy. The trunk and tail of an intact worm carry a usable copy (+0.39 vs ~0 in S1), and a held-out split further back partly works (+0.21).
+  * **F0** solved the trained cut only. Its trunk state, transplanted, writes the *opposite* odour (−0.32), and the held-out split fails.
+* **One cell is enough.** A pattern designed for a single cell writes a full memory into untrained headless bodies (S0 +0.99, S1 +0.97, F1 +0.99).
+* **Private codes.** One selected rule's compiled memory, written into the other's body, writes the *opposite* odour (−0.57, −0.36). The two rules' codes are weakly anti-aligned and their decoders unrelated. Each rule invented its own engram code, as Morpheus's tissues invented opposite voltage codes.
+
+Across four preregistered rounds, **74 of 90 stated predictions held**. The paper's Appendix A lists all of them.
 
 ### New in v0.3: memory surgery, four-cell memories, and information the body never uses
 
@@ -32,8 +42,6 @@ Prometheus-α asks it of a synthetic body in which every cell's state can be rea
 * **The body is conservative.** After learning one odour and then the other, intact heads half-adopt the new lesson. Regrown heads revert toward the first (0.52 → 0.82 and 0.34 → 0.63). The pilot predicted the opposite.
 * **Attractor, half replicated.** The v0.1 post-hoc finding, retested with its direction named in advance, holds in S1 (0.96 vs 0.34 at cycle 4) and falls below threshold in S0.
 * **Extinction.** Only S1 extinguishes (−45%). The pilot's inversion after regrowth did not replicate.
-
-Across the three preregistered rounds, **57 of 70 stated predictions held**. All 70 are listed, misses marked, in the paper's Appendix A.
 
 ### What v0.1 found (four rules, 128 worms per test, preregistered)
 
@@ -61,7 +69,7 @@ Predictions made in the locked preregistration, against the outcomes:
 
 31 of 34 preregistered predictions held (✗ marks a miss; – means no prediction was stated). The number in brackets is the tested mean. "yes" requires Holm-corrected significance and an effect of at least 0.10.
 
-Every number in the results table is checked in CI against the results file it comes from (`prometheus claims check`). The hypotheses, sample sizes, seeds and decision rules were hash-locked before each round's confirmatory experiments ([v0.1](prereg/PREREGISTRATION.json), [v0.2](prereg/PREREGISTRATION_v2.json), [v0.3](prereg/PREREGISTRATION_v3.json); CI verifies all three locks); pilots and pre-lock design changes are disclosed there and in [`docs/DEVIATIONS.md`](docs/DEVIATIONS.md).
+Every number in the results table is checked in CI against the results file it comes from (`prometheus claims check`). The hypotheses, sample sizes, seeds and decision rules were hash-locked before each round's confirmatory experiments ([v0.1](prereg/PREREGISTRATION.json), [v0.2](prereg/PREREGISTRATION_v2.json), [v0.3](prereg/PREREGISTRATION_v3.json), [v0.4](prereg/PREREGISTRATION_v4.json); CI verifies all four locks); pilots and pre-lock design changes are disclosed there and in [`docs/DEVIATIONS.md`](docs/DEVIATIONS.md).
 
 ## Built from eight earlier projects
 
@@ -120,6 +128,8 @@ flowchart LR
 | **v0.2: the body's copy lives in the four cells at the wound edge** | **replicated** | hidden channels implanted into the untrained twin at sites 12-15 only transfer S0 0.99 / S1 0.98 of the donor's memory; at sites 16-27, 0.001 / 0.001 |
 | **v0.2: a memory compiler. A gradient-designed hidden pattern written into untrained headless bodies makes held-out regrown heads remember an odour they never experienced** | **replicated** | written memory vs the same values at shuffled sites: S0 1.00 vs 0.14, S1 0.99 vs -0.01; also in emergent rules, whose bodies never keep a copy: E0 0.51 vs 0.01, E1 0.66 vs -0.01 (one odour only in each E rule) |
 | **v0.4: one cell can hold a whole memory. A pattern designed for site 14 alone writes a memory into untrained headless bodies** | **replicated** | written memory (R(A) - R(B)) / 2 on 128 held-out worms: S0 0.99, S1 0.97; E0 0.04, E1 0.44 |
+| **v0.4: fission rules. Selection on split worms makes the back half, which must grow a new head, remember** | **replicated** | posterior half after a split at site 20 (trained) / 24 (held out): F0 0.97 / -0.09; F1 0.99 / 0.21; S siblings at 20: S0 0.004, S1 -0.005. After complete decapitation: F0 0.97, F1 0.98 |
+| v0.4: a distributed copy. In intact fission-selected worms the trunk and tail (sites 16-35) carry a copy that a decapitated twin's new head can use, more than in the S sibling | **mixed** | memory transferred by sites 16-35 of intact trained worms: F0 -0.32 vs its S sibling 0.00; F1 0.39 vs its S sibling 0.00 |
 | **v0.4: a universal memory code. One selected rule's compiled memory, written into the other rule's body, writes the intended odour** | **not supported** | as predicted, no, and worse than no: S1's code in S0 bodies writes the opposite odour (-0.57), S0's in S1 bodies -0.36. Exploratory: the two rules' memory directions at the wound edge correlate -0.39, their decoders -0.07. Each rule invented its own code |
 | **v0.3: memory surgery. Writing the compiled pattern for the other odour into a trained worm's headless body overwrites its real memory** | **replicated** | R(A) - R(B) of the regrown head: A-trained worms given pattern B S0 -0.89, S1 -0.88; B-trained given pattern A S0 0.96, S1 0.76; fraction of worms whose memory switched 0.996, 1.000 |
 | v0.3: four cells are enough. A compiled memory confined to the wound-edge sites 12-15 writes a full memory | **replicated** | R(A) - R(B) of held-out regrown heads with the sparse A / B pattern: S0 0.98 / -0.99, S1 0.98 / -0.99; emergent rules E0 0.04 / -0.04, E1 0.74 / -0.20 |
@@ -186,6 +196,8 @@ python -m prometheus.posthoc                        # post-hoc per-odour analyse
 prometheus run2 --rule S0 --out results/v2_S0.json   # v0.2 (and E0, E1, S1)
 python -m prometheus.train_v3 0 1500                 # v0.3 balanced rule B0 from S0 (and 1)
 python -m prometheus.v3 S0                           # v0.3 experiments (and E0, E1, S1)
+python -m prometheus.train_v4 0 2000                 # v0.4 fission rule F0 from S0 (and 1)
+python -m prometheus.v4 F0                           # v0.4 experiments (and E0, E1, S0, S1, F1)
 python tools/figures.py                              # paper figures
 python tools/build_claims.py && prometheus claims render && prometheus export-web
 ```
@@ -202,14 +214,14 @@ Runs are deterministic for a given PyTorch version: every founder, schedule and 
 | `src/prometheus/train.py` | backpropagation through whole lives; the E and S objectives |
 | `src/prometheus/experiments.py` | H1-H7 (with H3a-c and H4b), calibration, anatomy, the channel-locus and gap-junction explorations |
 | `src/prometheus/posthoc.py` | post-hoc analyses written after the results were seen (per-odour survival, transfer, chimera bias, cycles) |
-| `src/prometheus/v2.py`, `v3.py`, `train_v3.py` | v0.2 and v0.3 experiments and the balanced (B) rules; they import the locked v0.1 code unchanged |
+| `src/prometheus/v2.py`, `v3.py`, `v4.py`, `train_v3.py`, `train_v4.py` | v0.2-v0.4 experiments and the balanced (B) and fission (F) rules; they import the locked v0.1 code unchanged |
 | `paper/` | the paper and its figures (`tools/figures.py`) |
 | `tools/build_claims.py` | builds `claims/claims.json` so that every quoted number is a pointer into a results file |
 | `src/prometheus/stats.py` | paired bootstrap, sign-flip tests, Holm |
 | `src/prometheus/claims.py`, `prereg.py` | the claims ledger and the preregistration lock |
 | `prereg/` | hypotheses, seeds and decision rules, and their SHA-256 lock |
 | `results/` | every results file the README quotes, with provenance; `results/pilot/` holds the disclosed pilots |
-| `weights/` | the six confirmatory rules E0, E1, S0, S1, B0, B1 (`weights/pilot/` the pilot rules) |
+| `weights/` | the eight confirmatory rules E0, E1, S0, S1, B0, B1, F0, F1 (`weights/pilot/` the pilot rules) |
 | `web/` | the browser lab (`index.html`) and the JavaScript engine (`engine.js`), tested step for step against Python |
 
 ## Limitations

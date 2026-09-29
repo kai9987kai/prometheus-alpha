@@ -159,7 +159,28 @@ def fig5_compiled():
     fig.savefig(OUT / "fig5_compiled.png")
 
 
+
+
+def fig6_fission():
+    """Memory of the posterior half after fission at the trained site (20) and a held-out site (24)."""
+    rules = ["S0", "S1", "F0", "F1"]
+    a = [R(f"v4_{r}.json")["H19"]["test"]["mean"] for r in rules]
+    b = [R(f"v4_{r}.json")["H20"]["test"]["mean"] for r in rules]
+    fig, ax = plt.subplots(figsize=(4.6, 2.8))
+    xs = np.arange(len(rules))
+    ax.bar(xs - 0.19, a, 0.36, color=BLUE, label="split at site 20 (trained in F)")
+    ax.bar(xs + 0.19, b, 0.36, color=ORANGE, label="split at site 24 (held out)")
+    for x, v in list(zip(xs - 0.19, a)) + list(zip(xs + 0.19, b)):
+        ax.text(x, max(v, 0) + 0.03, f"{v:+.2f}", ha="center", fontsize=7.5, color=INK)
+    ax.axhline(0, color=INK2, lw=0.8)
+    ax.set_xticks(xs, rules)
+    ax.set_ylim(-0.2, 1.15)
+    ax.set_ylabel("memory M of the posterior half")
+    ax.legend(frameon=False, fontsize=8, loc="upper left")
+    fig.savefig(OUT / "fig6_fission.png")
+
+
 if __name__ == "__main__":
-    for f in (fig2_survival, fig3_engram_map, fig4_cycles, fig5_compiled, fig1_kymograph):
+    for f in (fig2_survival, fig3_engram_map, fig4_cycles, fig5_compiled, fig6_fission, fig1_kymograph):
         f()
         print("wrote", f.__name__)

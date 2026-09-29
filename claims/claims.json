@@ -303,6 +303,96 @@
    }
   },
   {
+   "id": "v4-H19",
+   "claim": "v0.4: fission rules. Selection on split worms makes the back half, which must grow a new head, remember",
+   "status": "replicated",
+   "headline": true,
+   "evidence_text": "posterior half after a split at site 20 (trained) / 24 (held out): F0 {F0_19} / {F0_20}; F1 {F1_19} / {F1_20}; S siblings at 20: S0 {S0_19}, S1 {S1_19}. After complete decapitation: F0 {F0_22}, F1 {F1_22}",
+   "evidence": {
+    "F0_19": {
+     "file": "results/v4_F0.json",
+     "pointer": "/H19/test/mean",
+     "value": 0.968591996350824,
+     "decimals": 2
+    },
+    "F0_20": {
+     "file": "results/v4_F0.json",
+     "pointer": "/H20/test/mean",
+     "value": -0.09066134728709585,
+     "decimals": 2
+    },
+    "F0_22": {
+     "file": "results/v4_F0.json",
+     "pointer": "/H22/test/mean",
+     "value": 0.9686013902246486,
+     "decimals": 2
+    },
+    "F1_19": {
+     "file": "results/v4_F1.json",
+     "pointer": "/H19/test/mean",
+     "value": 0.9903438862438634,
+     "decimals": 2
+    },
+    "F1_20": {
+     "file": "results/v4_F1.json",
+     "pointer": "/H20/test/mean",
+     "value": 0.20609851900371723,
+     "decimals": 2
+    },
+    "F1_22": {
+     "file": "results/v4_F1.json",
+     "pointer": "/H22/test/mean",
+     "value": 0.9798345919411986,
+     "decimals": 2
+    },
+    "S0_19": {
+     "file": "results/v4_S0.json",
+     "pointer": "/H19/test/mean",
+     "value": 0.004224466276355088,
+     "decimals": 3
+    },
+    "S1_19": {
+     "file": "results/v4_S1.json",
+     "pointer": "/H19/test/mean",
+     "value": -0.004975134041160345,
+     "decimals": 3
+    }
+   }
+  },
+  {
+   "id": "v4-H21",
+   "claim": "v0.4: a distributed copy. In intact fission-selected worms the trunk and tail (sites 16-35) carry a copy that a decapitated twin's new head can use, more than in the S sibling",
+   "status": "mixed",
+   "headline": false,
+   "evidence_text": "memory transferred by sites 16-35 of intact trained worms: F0 {F0_f} vs its S sibling {F0_s}; F1 {F1_f} vs its S sibling {F1_s}",
+   "evidence": {
+    "F0_f": {
+     "file": "results/v4_F0.json",
+     "pointer": "/H21/F_memory",
+     "value": -0.31704201345928595,
+     "decimals": 2
+    },
+    "F0_s": {
+     "file": "results/v4_F0.json",
+     "pointer": "/H21/S_memory",
+     "value": 0.000400610587803385,
+     "decimals": 2
+    },
+    "F1_f": {
+     "file": "results/v4_F1.json",
+     "pointer": "/H21/F_memory",
+     "value": 0.3887724602468552,
+     "decimals": 2
+    },
+    "F1_s": {
+     "file": "results/v4_F1.json",
+     "pointer": "/H21/S_memory",
+     "value": 0.0006400961683539208,
+     "decimals": 2
+    }
+   }
+  },
+  {
    "id": "v4-H23",
    "claim": "v0.4: a universal memory code. One selected rule's compiled memory, written into the other rule's body, writes the intended odour",
    "status": "not supported",
