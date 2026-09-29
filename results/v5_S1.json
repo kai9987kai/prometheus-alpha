@@ -1,0 +1,135 @@
+{
+ "rule": "S1",
+ "weights_sha256": "ca2e5111ab5b764d90de9c97f93a7b52cf762369a4baa56e5bdf8cf1f46460bb",
+ "prereg_sha256": "275fe2c2f1480502c5def7ae6c901062119ff2fce7d5f639ed0055d111ae69e2",
+ "provenance": {
+  "git": "d4d65aa229823db3c2df144d627911e93d2e3d4d",
+  "python": "3.11.15",
+  "numpy": "2.4.6",
+  "torch": "2.14.0+cpu",
+  "sources": {
+   "__init__.py": "161e1ff52b98f02cfade5f71957ff4905008d647aaa98e5c096fa34a62f7adaa",
+   "__main__.py": "13a1a5b340cdcfc1902b62be90e508c7c71886000d5bf087e7854aadf09fb35e",
+   "body.py": "38e1ab56ef6edb442351a36fc9b2393c68717f617c9cf0b7e4f062f055b97083",
+   "claims.py": "c92b97f4ba15b00f5390eb6d8e828b74de216486fe078300f9fcc84924743bb8",
+   "cli.py": "827c0cbef6e4773d7af49de137e21abfc114835572fbe27b0fd53804f257465e",
+   "experiments.py": "0d2ac4b1b7aba1d30a72440e3d94c0773e989d1e231df02e050931c743acab67",
+   "export.py": "15b5505ae98b6c649b97b111dcaaa68d49f63e5c0ba88f6b7a9f7640ae6ce5c3",
+   "life.py": "79f72d508a2bac26a555077ea26d09c44e2432b35812958f2bad26c2fa4ee78f",
+   "posthoc.py": "2849c93eb67693000486cfe6e4ec7dcb8bf2df413e01031df72acd8dc642abf2",
+   "prereg.py": "5480089accc76bfc37f786e615418c592933794e159547904b338dca654787cf",
+   "provenance.py": "96a8024a2a3b2421d51b072e525fc90a366b7e4cb84ff5101d24f952449fe1a1",
+   "stats.py": "159e58ef2cdaffea9efb5f07ce86d54902dd4a3e01b483a1e06330d31c9be86e",
+   "tissue.py": "a9801dbbc342d3c6d731a1f45489f35ab3ff470846ec3d548e3739fad4be5fe9",
+   "train.py": "f8f34b83bcba916b649e0bf7886ec2df001bca371d7a6e2c55e3636522e58436",
+   "train_v3.py": "c8f385c657554ccec706c4172b7dab02435d85fee481d88936a24c43f2fb8f35",
+   "train_v4.py": "df76c3c149a1eb21d2eaeb8da1d0a398a50c3bbf75de29a0889291d48c32c3d6",
+   "v2.py": "2a4f58a762a30568ef1276e00e1b868d16fceb79c6e08853d4e38b68faa1df9d",
+   "v3.py": "03c1ee8caf32b52f6d3f0094e9aecaa6e90f88af39a9cc5c39a4a09915d1da30",
+   "v4.py": "a1f854a6941751cdcd4acb134019a4f7767c01df7496519c914072ffc93aa652",
+   "v5.py": "13e55a3e1833e36156bec70d661976bcbf8487a1b883c7f85e64ced72b42bb88"
+  }
+ },
+ "n": 128,
+ "alpha": 0.05,
+ "sesoi": 0.1,
+ "H25": {
+  "test": {
+   "n": 128,
+   "mean": 0.19035832700319588,
+   "ci95": [
+    0.08205047206138262,
+    0.30024853475624697
+   ],
+   "d_z": 0.30255304431543717,
+   "frac_positive": 0.578125,
+   "p": 0.00029997000299970003,
+   "alternative": "greater"
+  },
+  "iou_after": 0.8943855166435242,
+  "region_acc_after": 0.80029296875
+ },
+ "H26": {
+  "test": {
+   "n": 128,
+   "mean": 0.8025189125037286,
+   "ci95": [
+    0.7826387766370317,
+    0.8217490145616466
+   ],
+   "d_z": 7.140895381070665,
+   "frac_positive": 1.0,
+   "p": 9.999000099990002e-05,
+   "alternative": "greater"
+  }
+ },
+ "H27": {
+  "test": {
+   "n": 128,
+   "mean": 0.9863867162526958,
+   "ci95": [
+    0.9800655405694784,
+    0.9926195363319096
+   ],
+   "d_z": 27.08415586967191,
+   "frac_positive": 1.0,
+   "p": 9.999000099990002e-05,
+   "alternative": "greater"
+  },
+  "iou": 0.8726251721382141,
+  "region_acc": 0.74365234375,
+  "head_cells": 8.1171875
+ },
+ "H28": {
+  "test": {
+   "n": 128,
+   "mean": -0.0009557055309414864,
+   "ci95": [
+    -0.0059872560319490726,
+    0.004118841758463525
+   ],
+   "d_z": -0.03296488157475802,
+   "frac_positive": 0.4375,
+   "p": 0.6417358264173583,
+   "alternative": "greater"
+  },
+  "iou": 0.7171446084976196,
+  "region_acc": 0.4375,
+  "head_cells": 8.9921875
+ },
+ "verdicts": {
+  "H26": {
+   "p": 9.999000099990002e-05,
+   "p_adj": 0.00039996000399960006,
+   "reject": true,
+   "mean": 0.8025189125037286,
+   "sesoi_met": true,
+   "supported": true
+  },
+  "H27": {
+   "p": 9.999000099990002e-05,
+   "p_adj": 0.00039996000399960006,
+   "reject": true,
+   "mean": 0.9863867162526958,
+   "sesoi_met": true,
+   "supported": true
+  },
+  "H25": {
+   "p": 0.00029997000299970003,
+   "p_adj": 0.0005999400059994001,
+   "reject": true,
+   "mean": 0.19035832700319588,
+   "sesoi_met": true,
+   "supported": true
+  },
+  "H28": {
+   "p": 0.6417358264173583,
+   "p_adj": 0.6417358264173583,
+   "reject": false,
+   "mean": -0.0009557055309414864,
+   "sesoi_met": false,
+   "supported": false
+  }
+ },
+ "confirmatory": true
+}

@@ -1,0 +1,135 @@
+{
+ "rule": "E1",
+ "weights_sha256": "f0479b819c1abfc551571a04c367ce89d5bcca74fd004bbac7cc7540e39a430d",
+ "prereg_sha256": "275fe2c2f1480502c5def7ae6c901062119ff2fce7d5f639ed0055d111ae69e2",
+ "provenance": {
+  "git": "d4d65aa229823db3c2df144d627911e93d2e3d4d",
+  "python": "3.11.15",
+  "numpy": "2.4.6",
+  "torch": "2.14.0+cpu",
+  "sources": {
+   "__init__.py": "161e1ff52b98f02cfade5f71957ff4905008d647aaa98e5c096fa34a62f7adaa",
+   "__main__.py": "13a1a5b340cdcfc1902b62be90e508c7c71886000d5bf087e7854aadf09fb35e",
+   "body.py": "38e1ab56ef6edb442351a36fc9b2393c68717f617c9cf0b7e4f062f055b97083",
+   "claims.py": "c92b97f4ba15b00f5390eb6d8e828b74de216486fe078300f9fcc84924743bb8",
+   "cli.py": "827c0cbef6e4773d7af49de137e21abfc114835572fbe27b0fd53804f257465e",
+   "experiments.py": "0d2ac4b1b7aba1d30a72440e3d94c0773e989d1e231df02e050931c743acab67",
+   "export.py": "15b5505ae98b6c649b97b111dcaaa68d49f63e5c0ba88f6b7a9f7640ae6ce5c3",
+   "life.py": "79f72d508a2bac26a555077ea26d09c44e2432b35812958f2bad26c2fa4ee78f",
+   "posthoc.py": "2849c93eb67693000486cfe6e4ec7dcb8bf2df413e01031df72acd8dc642abf2",
+   "prereg.py": "5480089accc76bfc37f786e615418c592933794e159547904b338dca654787cf",
+   "provenance.py": "96a8024a2a3b2421d51b072e525fc90a366b7e4cb84ff5101d24f952449fe1a1",
+   "stats.py": "159e58ef2cdaffea9efb5f07ce86d54902dd4a3e01b483a1e06330d31c9be86e",
+   "tissue.py": "a9801dbbc342d3c6d731a1f45489f35ab3ff470846ec3d548e3739fad4be5fe9",
+   "train.py": "f8f34b83bcba916b649e0bf7886ec2df001bca371d7a6e2c55e3636522e58436",
+   "train_v3.py": "c8f385c657554ccec706c4172b7dab02435d85fee481d88936a24c43f2fb8f35",
+   "train_v4.py": "df76c3c149a1eb21d2eaeb8da1d0a398a50c3bbf75de29a0889291d48c32c3d6",
+   "v2.py": "2a4f58a762a30568ef1276e00e1b868d16fceb79c6e08853d4e38b68faa1df9d",
+   "v3.py": "03c1ee8caf32b52f6d3f0094e9aecaa6e90f88af39a9cc5c39a4a09915d1da30",
+   "v4.py": "a1f854a6941751cdcd4acb134019a4f7767c01df7496519c914072ffc93aa652",
+   "v5.py": "13e55a3e1833e36156bec70d661976bcbf8487a1b883c7f85e64ced72b42bb88"
+  }
+ },
+ "n": 128,
+ "alpha": 0.05,
+ "sesoi": 0.1,
+ "H25": {
+  "test": {
+   "n": 128,
+   "mean": 0.0623944541439414,
+   "ci95": [
+    -0.01238655476772692,
+    0.13924306022381638
+   ],
+   "d_z": 0.1427836129238248,
+   "frac_positive": 0.5234375,
+   "p": 0.049095090490950906,
+   "alternative": "greater"
+  },
+  "iou_after": 0.8748005628585815,
+  "region_acc_after": 0.687744140625
+ },
+ "H26": {
+  "test": {
+   "n": 128,
+   "mean": -0.008211203385144472,
+   "ci95": [
+    -0.0499707083508838,
+    0.03348769595031624
+   ],
+   "d_z": -0.034562919976643396,
+   "frac_positive": 0.484375,
+   "p": 0.6514348565143485,
+   "alternative": "greater"
+  }
+ },
+ "H27": {
+  "test": {
+   "n": 128,
+   "mean": -0.005691908052540384,
+   "ci95": [
+    -0.007727917952797725,
+    -0.0036087080996367164
+   ],
+   "d_z": -0.4808046469833544,
+   "frac_positive": 0.3359375,
+   "p": 1.0,
+   "alternative": "greater"
+  },
+  "iou": 0.873046875,
+  "region_acc": 0.74755859375,
+  "head_cells": 8.0
+ },
+ "H28": {
+  "test": {
+   "n": 128,
+   "mean": 0.0005150115466676652,
+   "ci95": [
+    -0.0008099426588159986,
+    0.001861376604938414
+   ],
+   "d_z": 0.06671931142693271,
+   "frac_positive": 0.5234375,
+   "p": 0.23007699230076992,
+   "alternative": "greater"
+  },
+  "iou": 0.7153468132019043,
+  "region_acc": 0.437744140625,
+  "head_cells": 8.9921875
+ },
+ "verdicts": {
+  "H25": {
+   "p": 0.049095090490950906,
+   "p_adj": 0.19638036196380362,
+   "reject": false,
+   "mean": 0.0623944541439414,
+   "sesoi_met": false,
+   "supported": false
+  },
+  "H28": {
+   "p": 0.23007699230076992,
+   "p_adj": 0.6902309769023097,
+   "reject": false,
+   "mean": 0.0005150115466676652,
+   "sesoi_met": false,
+   "supported": false
+  },
+  "H26": {
+   "p": 0.6514348565143485,
+   "p_adj": 1.0,
+   "reject": false,
+   "mean": -0.008211203385144472,
+   "sesoi_met": false,
+   "supported": false
+  },
+  "H27": {
+   "p": 1.0,
+   "p_adj": 1.0,
+   "reject": false,
+   "mean": -0.005691908052540384,
+   "sesoi_met": false,
+   "supported": false
+  }
+ },
+ "confirmatory": true
+}

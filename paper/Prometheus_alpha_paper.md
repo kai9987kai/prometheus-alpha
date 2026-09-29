@@ -1,12 +1,12 @@
 # Memory that outlives its organ: preregistered experiments on learning, decapitation and regeneration in synthetic worms
 
-**Kai Piper** · Prometheus-α v0.4 · 29 September 2026 · code, data and preregistrations: [github.com/kai9987kai/prometheus-alpha](https://github.com/kai9987kai/prometheus-alpha)
+**Kai Piper** · Prometheus-α v0.5 · 29 September 2026 · code, data and preregistrations: [github.com/kai9987kai/prometheus-alpha](https://github.com/kai9987kai/prometheus-alpha)
 
 > **Scientific status.** This is a synthetic computational study of a neural cellular automaton. "Worm", "head", "odour", "shock" and "memory" name parts of a simulation. It models no particular animal and makes no claim about any person or clinical condition.
 
 ## Abstract
 
-Planarian flatworms trained before decapitation still show the training after their heads regrow, and nobody knows where the memory waits while the brain is gone. We built synthetic worms in which that question can be answered exactly. Each worm is a one-dimensional neural cellular automaton that grows from one founder cell; every cell runs the same small, learned rule, which is frozen within a life, so a worm can learn only by changing its cells' state. Only cells that are more than half head tissue can sense two odours, and behaviour is read from the head. Worms learn in differential Pavlovian conditioning, each measured against an explicitly unpaired twin with identical noise. Across three preregistered, hash-locked rounds (27 hypotheses, 100 confirmatory tests on eight rules, 128 worms per test) we find: (1) rules trained to learn and to regenerate, but never asked to remember through regeneration, regrow near-perfect heads that remember nothing (retention 0.1% and −0.7%); (2) the same rules, selected to remember through one amputation, keep the memory through complete decapitation (retention 98%, 102%), through removal of head and tail, and through repeated decapitation, none of which was trained; (3) the body's copy is held not in the bioelectric voltage channel, which is neither necessary nor sufficient, but in hidden cell state, and almost entirely (98–99%) in the four cells at the wound edge; (4) a gradient-designed pattern of that hidden state, written into an untrained headless body, makes the regrown head remember an odour the animal never experienced (even in rules whose bodies never keep a copy), and written into a trained body it overwrites the real memory in 99.6–100% of worms, from four cells alone; (5) after a reversal, the body is more conservative than the head and regrows the older lesson; (6) the odour can be decoded from the wound edge of bodies that never pass it on, so decodable is not used; (7) a worm cut in two yields a front half that remembers and a back half that never does, until selection for fission makes the back half remember too, by two different mechanisms in two rules; (8) one cell can hold a whole memory, and independently selected rules use private, even opposite, codes. Of 90 stated predictions over four rounds, 74 held. Those that failed included the direction of reversal and the resolution of head–body memory conflicts, and they are reported as failures. One failure led to a post-hoc finding, confirmed in one of two rules on fresh data, that selection makes one odour's memory an attractor and the other's metastable.
+Planarian flatworms trained before decapitation still show the training after their heads regrow, and nobody knows where the memory waits while the brain is gone. We built synthetic worms in which that question can be answered exactly. Each worm is a one-dimensional neural cellular automaton that grows from one founder cell; every cell runs the same small, learned rule, which is frozen within a life, so a worm can learn only by changing its cells' state. Only cells that are more than half head tissue can sense two odours, and behaviour is read from the head. Worms learn in differential Pavlovian conditioning, each measured against an explicitly unpaired twin with identical noise. Across three preregistered, hash-locked rounds (31 hypotheses, 132 confirmatory tests on eight rules, 128 worms per test) we find: (1) rules trained to learn and to regenerate, but never asked to remember through regeneration, regrow near-perfect heads that remember nothing (retention 0.1% and −0.7%); (2) the same rules, selected to remember through one amputation, keep the memory through complete decapitation (retention 98%, 102%), through removal of head and tail, and through repeated decapitation, none of which was trained; (3) the body's copy is held not in the bioelectric voltage channel, which is neither necessary nor sufficient, but in hidden cell state, and almost entirely (98–99%) in the four cells at the wound edge; (4) a gradient-designed pattern of that hidden state, written into an untrained headless body, makes the regrown head remember an odour the animal never experienced (even in rules whose bodies never keep a copy), and written into a trained body it overwrites the real memory in 99.6–100% of worms, from four cells alone; (5) after a reversal, the body is more conservative than the head and regrows the older lesson; (6) the odour can be decoded from the wound edge of bodies that never pass it on, so decodable is not used; (7) a worm cut in two yields a front half that remembers and a back half that never does, until selection for fission makes the back half remember too, by two different mechanisms in two rules; (8) one cell can hold a whole memory, and independently selected rules use private, even opposite, codes; (9) eight neck cells regrow a whole worm that remembers, and memories survive random cell turnover and twenty-fold longer delays than trained, with robustness inherited along lineages. Of 122 stated predictions over five rounds, 104 held. Those that failed included the direction of reversal and the resolution of head–body memory conflicts, and they are reported as failures. One failure led to a post-hoc finding, confirmed in one of two rules on fresh data, that selection makes one odour's memory an attractor and the other's metastable.
 
 ## 1 Introduction
 
@@ -98,6 +98,14 @@ We designed, by gradient descent through regeneration on 32 design worms, a 10 �
 
 **Private codes (H23).** Independently selected rules do not share a memory code. S1's compiled memory written into S0 bodies wrote the *opposite* odour (-0.57), and S0's into S1 -0.36. Post hoc, the two rules' memory directions at the wound edge are weakly anti-aligned (r = -0.39) and their decoders unrelated (r = -0.07). The same happened to bioelectric codes in Morpheus, where two independently evolved tissues used opposite voltages for the tail.
 
+### 3.7 Turnover, time and fragments (v0.5)
+
+Four held-out challenges, no new rules, all eight rules (Fig. 7). **Minimal fragments (H27, H28).** Keeping only the eight cells of the neck and anterior trunk, every selected, balanced and fission rule regrew a whole worm that remembered (0.96–1.00); neither emergent rule did. From eight cells of the tail, only F1, the rule with a distributed copy, regrew a remembering worm (+0.25); F0 again inverted the memory (-0.14). **Ship of Theseus (H25).** After 200 steps in which a random 10% of cells died every 20 steps, the memory survived in seven of eight rules, but by very different margins, and the margins follow lineage more than selection regime: the S0 line kept it well (S0 +0.89, B0 +0.96, F0 +0.57), the S1 line poorly (S1 +0.19, B1 +0.45, F1 +0.32). **Time (H26).** Without reminders the memory lasted 300 steps, twenty times the longest trained delay, in seven rules (0.80–1.00); E1 forgot (-0.01). Both misses in this round were E1's.
+
+![Fig. 7](figures/fig7_robustness.png)
+
+*Fig. 7. Memory after each v0.5 challenge, per rule (128 worms per cell).*
+
 ## 4 Discussion
 
 **Regeneration does not imply remembering.** Rules that regrow flawless heads keep nothing of what the old head learned unless selected to; a body's capacity to rebuild an organ and its capacity to rebuild what the organ knew are separable.
@@ -162,6 +170,17 @@ v0.4, with the F rules:
 | v4 | H24 | E no, S yes, F yes | no (+0.04) | yes (+0.44) ✗ | yes (+0.99) | yes (+0.97) | yes (+0.53) | yes (+0.99) |
 
 17 of 20 v0.4 predictions held; across all four rounds, 74 of 90.
+
+v0.5, all eight rules (predictions in prereg/PREREGISTRATION_v5.json):
+
+| round | hypothesis | E0 | E1 | S0 | S1 | B0 | B1 | F0 | F1 |
+|---|---|---|---|---|---|---|---|---|---|
+| v5 | H25 | yes (+0.36) | no (+0.06) ✗ | yes (+0.89) | yes (+0.19) | yes (+0.96) | yes (+0.45) | yes (+0.57) | yes (+0.32) |
+| v5 | H26 | yes (+0.92) | no (-0.01) ✗ | yes (+0.96) | yes (+0.80) | yes (+0.99) | yes (+1.00) | yes (+0.88) | yes (+0.87) |
+| v5 | H27 | no (-0.00) | no (-0.01) | yes (+0.99) | yes (+0.99) | yes (+0.96) | yes (+1.00) | yes (+0.99) | yes (+0.99) |
+| v5 | H28 | no (-0.00) | no (+0.00) | no (+0.01) | no (-0.00) | no (-0.00) | no (-0.00) | no (-0.14) | yes (+0.25) |
+
+30 of 32 v0.5 predictions held; across all five rounds, 104 of 122.
 
 ## References
 

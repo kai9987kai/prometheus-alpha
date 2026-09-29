@@ -180,7 +180,23 @@ def fig6_fission():
     fig.savefig(OUT / "fig6_fission.png")
 
 
+def fig7_robustness():
+    rules = ["E0", "E1", "S0", "S1", "B0", "B1", "F0", "F1"]
+    tests = [("H25", "cell turnover"), ("H26", "300-step delay"), ("H27", "8-cell neck\nfragment"), ("H28", "8-cell tail\nfragment")]
+    M = np.array([[R(f"v5_{r}.json")[h]["test"]["mean"] for h, _ in tests] for r in rules])
+    fig, ax = plt.subplots(figsize=(4.8, 3.6))
+    ax.imshow(M, cmap="RdBu_r", vmin=-1, vmax=1, aspect="auto")
+    ax.grid(False)
+    ax.set_xticks(range(len(tests)), [t for _, t in tests], fontsize=8)
+    ax.set_yticks(range(len(rules)), rules)
+    for i in range(len(rules)):
+        for j in range(len(tests)):
+            ax.text(j, i, f"{M[i, j]:+.2f}", ha="center", va="center", fontsize=8, color="white" if abs(M[i, j]) > 0.6 else INK)
+    ax.set_title("memory M after each held-out challenge", fontsize=9, loc="left")
+    fig.savefig(OUT / "fig7_robustness.png")
+
+
 if __name__ == "__main__":
-    for f in (fig2_survival, fig3_engram_map, fig4_cycles, fig5_compiled, fig6_fission, fig1_kymograph):
+    for f in (fig2_survival, fig3_engram_map, fig4_cycles, fig5_compiled, fig6_fission, fig7_robustness, fig1_kymograph):
         f()
         print("wrote", f.__name__)

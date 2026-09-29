@@ -20,6 +20,11 @@ for n in ("F0", "F1"):
     if pth.exists():
         R[f"v4{n}"] = json.loads(pth.read_text())
         F[f"v4{n}"] = f"results/v4_{n}.json"
+for n in ("E0", "E1", "S0", "S1", "B0", "B1", "F0", "F1"):
+    pth = ROOT / f"results/v5_{n}.json"
+    if pth.exists():
+        R[f"v5{n}"] = json.loads(pth.read_text())
+        F[f"v5{n}"] = f"results/v5_{n}.json"
 R["align"] = json.loads((ROOT / "results/exploratory_code_alignment.json").read_text())
 F["align"] = "results/exploratory_code_alignment.json"
 R["pilot"] = json.loads((ROOT / "results/pilot/S102_n32.json").read_text())
@@ -297,6 +302,27 @@ if FR:
     add("v4-H21", "v0.4: a distributed copy. In intact fission-selected worms the trunk and tail (sites 16-35) carry a copy that a decapitated twin's new head can use, more than in the S sibling",
         vstatus("v4", "H21", FR), "memory transferred by sites 16-35 of intact trained worms: " + "; ".join(f"{r} {{{r}_f}} vs its S sibling {{{r}_s}}" for r in FR), e)
 
+
+# ============================================================ v0.5
+EIGHT = ("E0", "E1", "S0", "S1", "B0", "B1", "F0", "F1")
+if all(f"v5{r}" in R for r in EIGHT):
+    e = {r: ev(f"v5{r}", "/H27/test/mean") for r in EIGHT}
+    add("v5-H27", "v0.5: eight cells regrow a remembering worm. Keep only the neck and anterior trunk (sites 12-19) and the whole new worm remembers",
+        vstatus("v5", "H27", ("S0", "S1", "B0", "B1", "F0", "F1")),
+        "M after 64 steps of regrowth from 8 cells: S0 {S0}, S1 {S1}, B0 {B0}, B1 {B1}, F0 {F0}, F1 {F1}; emergent rules E0 {E0}, E1 {E1}", e, headline=True)
+    e = {r: ev(f"v5{r}", "/H28/test/mean") for r in EIGHT}
+    add("v5-H28", "v0.5: from an 8-cell tail fragment (sites 24-31) only the rule with a distributed copy regrows a remembering worm",
+        "descriptive",
+        "as predicted: F1 {F1}; F0 {F0} (inverted again); S0 {S0}, S1 {S1}, B0 {B0}, B1 {B1}, E0 {E0}, E1 {E1}", e)
+    e = {r: ev(f"v5{r}", "/H25/test/mean") for r in EIGHT}
+    add("v5-H25", "v0.5: Ship of Theseus. The memory survives 200 steps of random cell death and replacement (10% of cells every 20 steps)",
+        "supported in 7 of 8 rules",
+        "M after turnover: S0 {S0}, B0 {B0}, F0 {F0} (the S0 lineage) vs S1 {S1}, B1 {B1}, F1 {F1} (the S1 lineage); E0 {E0}, E1 {E1} (not supported). Robustness follows lineage more than selection regime", e, headline=True)
+    e = {r: ev(f"v5{r}", "/H26/test/mean") for r in EIGHT}
+    add("v5-H26", "v0.5: the memory lasts 300 steps without any reminder (training delays were 4-16)",
+        "supported in 7 of 8 rules",
+        "M: E0 {E0}, E1 {E1} (forgets), S0 {S0}, S1 {S1}, B0 {B0}, B1 {B1}, F0 {F0}, F1 {F1}", e)
+
 # ---- post hoc: favoured odour
 e = {}
 for r in S:
@@ -360,7 +386,7 @@ add("anatomy", "All four rules grow the body from one founder cell and regrow it
     "body IoU with the target after 32 steps of growth / after head regeneration / 300 steps later: E0 {E0_g} / {E0_h} / {E0_l}; E1 {E1_g} / {E1_h} / {E1_l}; S0 {S0_g} / {S0_h} / {S0_l}; S1 {S1_g} / {S1_h} / {S1_l}",
     e)
 
-ORDER = ["H2-S", "H2-E", "H3c", "v2-H13", "v2-H12", "v4-H24", "v4-H19", "v4-H21", "v4-H23", "v3-H14", "v3-H15", "v3-H16", "v3-H17", "v3-H18", "H6",
+ORDER = ["H2-S", "H2-E", "H3c", "v2-H13", "v2-H12", "v4-H24", "v4-H19", "v4-H21", "v4-H23", "v5-H27", "v5-H25", "v5-H28", "v5-H26", "v3-H14", "v3-H15", "v3-H16", "v3-H17", "v3-H18", "H6",
          "v2-H11", "posthoc-attractor", "v2-H8", "v2-H9", "v2-H10", "H4b", "H3ab", "H4-E", "H4-S", "H5", "H7", "H1",
          "SESOI", "locus", "gj", "calibration", "anatomy"]
 claims.sort(key=lambda c: ORDER.index(c["id"]))

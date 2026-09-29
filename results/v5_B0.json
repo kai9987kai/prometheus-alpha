@@ -1,0 +1,135 @@
+{
+ "rule": "B0",
+ "weights_sha256": "47a40d29448d9bdacb76e3b94084c80e7cf6933ceceedb3e8fda9d7c863d7c53",
+ "prereg_sha256": "275fe2c2f1480502c5def7ae6c901062119ff2fce7d5f639ed0055d111ae69e2",
+ "provenance": {
+  "git": "d4d65aa229823db3c2df144d627911e93d2e3d4d",
+  "python": "3.11.15",
+  "numpy": "2.4.6",
+  "torch": "2.14.0+cpu",
+  "sources": {
+   "__init__.py": "161e1ff52b98f02cfade5f71957ff4905008d647aaa98e5c096fa34a62f7adaa",
+   "__main__.py": "13a1a5b340cdcfc1902b62be90e508c7c71886000d5bf087e7854aadf09fb35e",
+   "body.py": "38e1ab56ef6edb442351a36fc9b2393c68717f617c9cf0b7e4f062f055b97083",
+   "claims.py": "c92b97f4ba15b00f5390eb6d8e828b74de216486fe078300f9fcc84924743bb8",
+   "cli.py": "827c0cbef6e4773d7af49de137e21abfc114835572fbe27b0fd53804f257465e",
+   "experiments.py": "0d2ac4b1b7aba1d30a72440e3d94c0773e989d1e231df02e050931c743acab67",
+   "export.py": "15b5505ae98b6c649b97b111dcaaa68d49f63e5c0ba88f6b7a9f7640ae6ce5c3",
+   "life.py": "79f72d508a2bac26a555077ea26d09c44e2432b35812958f2bad26c2fa4ee78f",
+   "posthoc.py": "2849c93eb67693000486cfe6e4ec7dcb8bf2df413e01031df72acd8dc642abf2",
+   "prereg.py": "5480089accc76bfc37f786e615418c592933794e159547904b338dca654787cf",
+   "provenance.py": "96a8024a2a3b2421d51b072e525fc90a366b7e4cb84ff5101d24f952449fe1a1",
+   "stats.py": "159e58ef2cdaffea9efb5f07ce86d54902dd4a3e01b483a1e06330d31c9be86e",
+   "tissue.py": "a9801dbbc342d3c6d731a1f45489f35ab3ff470846ec3d548e3739fad4be5fe9",
+   "train.py": "f8f34b83bcba916b649e0bf7886ec2df001bca371d7a6e2c55e3636522e58436",
+   "train_v3.py": "c8f385c657554ccec706c4172b7dab02435d85fee481d88936a24c43f2fb8f35",
+   "train_v4.py": "df76c3c149a1eb21d2eaeb8da1d0a398a50c3bbf75de29a0889291d48c32c3d6",
+   "v2.py": "2a4f58a762a30568ef1276e00e1b868d16fceb79c6e08853d4e38b68faa1df9d",
+   "v3.py": "03c1ee8caf32b52f6d3f0094e9aecaa6e90f88af39a9cc5c39a4a09915d1da30",
+   "v4.py": "a1f854a6941751cdcd4acb134019a4f7767c01df7496519c914072ffc93aa652",
+   "v5.py": "13e55a3e1833e36156bec70d661976bcbf8487a1b883c7f85e64ced72b42bb88"
+  }
+ },
+ "n": 128,
+ "alpha": 0.05,
+ "sesoi": 0.1,
+ "H25": {
+  "test": {
+   "n": 128,
+   "mean": 0.9570086908256599,
+   "ci95": [
+    0.9413250982488194,
+    0.9784306725099895
+   ],
+   "d_z": 8.922398497642362,
+   "frac_positive": 1.0,
+   "p": 9.999000099990002e-05,
+   "alternative": "greater"
+  },
+  "iou_after": 0.9788058996200562,
+  "region_acc_after": 0.95458984375
+ },
+ "H26": {
+  "test": {
+   "n": 128,
+   "mean": 0.9923398904095393,
+   "ci95": [
+    0.9873673894282149,
+    0.9969748051297074
+   ],
+   "d_z": 35.93398726246,
+   "frac_positive": 1.0,
+   "p": 9.999000099990002e-05,
+   "alternative": "greater"
+  }
+ },
+ "H27": {
+  "test": {
+   "n": 128,
+   "mean": 0.9558818947648433,
+   "ci95": [
+    0.9411560262991543,
+    0.9696357455155976
+   ],
+   "d_z": 11.637116362428056,
+   "frac_positive": 1.0,
+   "p": 9.999000099990002e-05,
+   "alternative": "greater"
+  },
+  "iou": 0.8701171875,
+  "region_acc": 0.739501953125,
+  "head_cells": 8.8828125
+ },
+ "H28": {
+  "test": {
+   "n": 128,
+   "mean": -0.003907221835106611,
+   "ci95": [
+    -0.00967835303163156,
+    0.0018677332089282567
+   ],
+   "d_z": -0.1179957289178087,
+   "frac_positive": 0.4296875,
+   "p": 0.9045095490450955,
+   "alternative": "greater"
+  },
+  "iou": 0.63427734375,
+  "region_acc": 0.3984375,
+  "head_cells": 6.7421875
+ },
+ "verdicts": {
+  "H25": {
+   "p": 9.999000099990002e-05,
+   "p_adj": 0.00039996000399960006,
+   "reject": true,
+   "mean": 0.9570086908256599,
+   "sesoi_met": true,
+   "supported": true
+  },
+  "H26": {
+   "p": 9.999000099990002e-05,
+   "p_adj": 0.00039996000399960006,
+   "reject": true,
+   "mean": 0.9923398904095393,
+   "sesoi_met": true,
+   "supported": true
+  },
+  "H27": {
+   "p": 9.999000099990002e-05,
+   "p_adj": 0.00039996000399960006,
+   "reject": true,
+   "mean": 0.9558818947648433,
+   "sesoi_met": true,
+   "supported": true
+  },
+  "H28": {
+   "p": 0.9045095490450955,
+   "p_adj": 0.9045095490450955,
+   "reject": false,
+   "mean": -0.003907221835106611,
+   "sesoi_met": false,
+   "supported": false
+  }
+ },
+ "confirmatory": true
+}
