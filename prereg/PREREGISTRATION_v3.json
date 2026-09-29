@@ -1,0 +1,57 @@
+{
+ "title": "Prometheus-alpha v0.3: memory surgery, a sparse compiler, an engram decoder, balanced selection and fission",
+ "version": "0.3",
+ "date": "2026-09-29",
+ "status": "Locked before any v0.3 experiment on a confirmatory rule. B0 and B1 were training (from S0 and S1) when this was locked. v0.1 and v0.2 locks unchanged.",
+ "code": "src/prometheus/v3.py and train_v3.py (the v0.1 and v0.2 code is imported unchanged)",
+ "rules": {
+  "E0, E1, S0, S1": "frozen since v0.1",
+  "B0, B1": "each initialised from S0 / S1 and trained 1,500 iterations on lives with two successive amputations after conditioning (head 70%, tail 15%, none 15% each), memory scored after both regrowths; batch 32, Adam 2e-3 with the v0.1 schedule"
+ },
+ "hypotheses": {
+  "H14": {
+   "claim": "Memory surgery: the rule's v0.2 compiled pattern for the other odour, written into a trained worm's decapitated body, overwrites its memory in the regrown head",
+   "measure": "overwrite = ((pref_A-trained without - with) + (pref_B-trained with - without)) / 4 per worm index; 1 = a full switch",
+   "test": "one-sided sign-flip, > 0",
+   "seeds": "40141 (A-trained), 40142 (B-trained)"
+  },
+  "H15": {
+   "claim": "Sparse compiler: a pattern designed only at sites 12-15 (design seed 4150, 32 worms, 150 Adam steps) writes a memory into held-out untrained decapitated bodies",
+   "measure": "(pref with A pattern - pref with B pattern) / 2 per held-out worm (seed 4151)",
+   "test": "one-sided sign-flip, > 0"
+  },
+  "H16": {
+   "claim": "Engram decoder: a ridge readout of the odour from one cell's 10 hidden channels, fit on half the decapitated paired worms at sites up to 15, identifies the odour better from the edge cells (12-15) than from the rest of the trunk (16-27) in the other half",
+   "measure": "correct(edge majority) - correct(rest majority) per held-out worm",
+   "test": "one-sided sign-flip, > 0",
+   "seed": 4016
+  },
+  "H17": {
+   "claim": "Balanced selection: at cycle 4, a B rule remembers its S sibling's disfavoured odour better than the S sibling does",
+   "measure": "M(B) - M(S) for the same worms of the disfavoured odour (S0: A, S1: B), seed 4017",
+   "test": "one-sided sign-flip, > 0",
+   "rules": "tested in the S0/S1 runs against B0/B1"
+  },
+  "H18": {
+   "claim": "Fission: after cutting a trained worm at site 20 and 48 steps of regrowth, the posterior half (which must regrow a head) remembers",
+   "measure": "M of the posterior half, per worm (twins cut the same way)",
+   "test": "one-sided sign-flip, > 0",
+   "secondary": "memory of the anterior half, which keeps the head",
+   "seed": 4018
+  }
+ },
+ "decision_rules": {
+  "family": "H14-H18 per rule (H17 in S rules); Holm at alpha 0.05; SESOI 0.10; replicated = supported in both rules of a family"
+ },
+ "predictions": {
+  "H14": "S rules: supported. E rules: no prediction (their bodies hold no memory to overwrite; the v0.2 compiler wrote one odour only)",
+  "H15": "S rules: supported (v0.2: the memory lives at these sites). E rules: not supported",
+  "H16": "S rules: supported. E rules: not supported",
+  "H17": "supported in both, by a small margin",
+  "H18": "S rules: NOT supported, the posterior half forgets while the anterior half remembers. E rules: not supported"
+ },
+ "disclosed_pilots": [
+  "No v0.3 pilots were run on pilot rules for H14, H15 or H17. A code smoke test of H16 and H18 on pilot rule S102 at n = 16 was seen before the lock: decoder edge accuracy 0.88 vs rest 0.38; fission posterior half -0.01, anterior half 0.91. It informed the H16 and H18 predictions."
+ ],
+ "deviations": "docs/DEVIATIONS.md, v0.3"
+}

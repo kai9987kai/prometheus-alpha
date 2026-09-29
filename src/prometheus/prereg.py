@@ -17,6 +17,7 @@ LOCKED_SOURCES = ["tissue.py", "body.py", "life.py", "experiments.py", "stats.py
 VERSIONS = {  # version -> (preregistration, lock, extra locked sources)
     "1": ("PREREGISTRATION.json", "PREREGISTRATION.lock.json", []),
     "2": ("PREREGISTRATION_v2.json", "PREREGISTRATION_v2.lock.json", ["v2.py"]),
+    "3": ("PREREGISTRATION_v3.json", "PREREGISTRATION_v3.lock.json", ["v2.py", "v3.py", "train_v3.py"]),
 }
 PREREG = ROOT / "prereg" / VERSIONS["1"][0]
 LOCK = ROOT / "prereg" / VERSIONS["1"][1]
