@@ -1,0 +1,68 @@
+{
+ "rule": "S0",
+ "posthoc": true,
+ "weights_sha256": "5e08d46642f30818a28d7b06bf4ea2e87bd0400f7d9b19e3a04a59de43816647",
+ "provenance": {
+  "git": "6b4f4ae300125ed1b022b565cee4124d5507d1ba-dirty",
+  "python": "3.11.15",
+  "numpy": "2.4.6",
+  "torch": "2.14.0+cpu",
+  "sources": {
+   "__init__.py": "161e1ff52b98f02cfade5f71957ff4905008d647aaa98e5c096fa34a62f7adaa",
+   "__main__.py": "13a1a5b340cdcfc1902b62be90e508c7c71886000d5bf087e7854aadf09fb35e",
+   "body.py": "38e1ab56ef6edb442351a36fc9b2393c68717f617c9cf0b7e4f062f055b97083",
+   "claims.py": "c92b97f4ba15b00f5390eb6d8e828b74de216486fe078300f9fcc84924743bb8",
+   "cli.py": "da47d3d9aa4caad84cc01664b28b3523d10b92f93e8556a3d95646dedfa5019c",
+   "experiments.py": "0d2ac4b1b7aba1d30a72440e3d94c0773e989d1e231df02e050931c743acab67",
+   "export.py": "c7d1119f7b7f773f44b88d915fa2bb0ccd0dd8dfd287d34ffe41539c24cdb056",
+   "life.py": "79f72d508a2bac26a555077ea26d09c44e2432b35812958f2bad26c2fa4ee78f",
+   "posthoc.py": "2849c93eb67693000486cfe6e4ec7dcb8bf2df413e01031df72acd8dc642abf2",
+   "prereg.py": "734c22bbcb90ce89a9e563b42ccd61c80107bb7e43f54863a843f070976ffeba",
+   "provenance.py": "96a8024a2a3b2421d51b072e525fc90a366b7e4cb84ff5101d24f952449fe1a1",
+   "stats.py": "159e58ef2cdaffea9efb5f07ce86d54902dd4a3e01b483a1e06330d31c9be86e",
+   "tissue.py": "a9801dbbc342d3c6d731a1f45489f35ab3ff470846ec3d548e3739fad4be5fe9",
+   "train.py": "f8f34b83bcba916b649e0bf7886ec2df001bca371d7a6e2c55e3636522e58436"
+  }
+ },
+ "derived": {
+  "chimera_cue_bias_intact": -0.12868418300058693,
+  "chimera_cue_bias_regrown": -0.49208181630820036,
+  "transfer_fraction_A": 0.034801853693102666,
+  "transfer_fraction_B": 0.9950344369300124,
+  "note": "cue bias = mean of R(A) - R(B) over the two conflicting grafts: > 0 favours odour A, < 0 odour B, whichever tissue carried it"
+ },
+ "survival_by_cue": {
+  "intact": {
+   "A": 0.9999151603988139,
+   "B": 0.9910125327296555
+  },
+  "regrown": {
+   "A": 1.0072501571967223,
+   "B": 0.9778072867429728
+  }
+ },
+ "promethean_by_cue": {
+  "cycles": [
+   {
+    "cycle": 1,
+    "A": 0.9882777772781992,
+    "B": 0.9522271753876339
+   },
+   {
+    "cycle": 2,
+    "A": 0.9533575329232917,
+    "B": 0.9701388506837247
+   },
+   {
+    "cycle": 3,
+    "A": 0.9108391719910287,
+    "B": 0.9766170043822058
+   },
+   {
+    "cycle": 4,
+    "A": 0.8595943332984461,
+    "B": 0.9620975132402236
+   }
+  ]
+ }
+}

@@ -1,5 +1,915 @@
 {
  "schema": 1,
- "note": "Filled in from results/ after the confirmatory runs. Failed and unsupported claims stay in the ledger.",
- "claims": []
+ "note": "Built from results/rule_*.json. Failed and unsupported claims stay in the ledger.",
+ "claims": [
+  {
+   "id": "H2-S",
+   "claim": "Selected rules remember through complete decapitation: the regrown head, built from cells that never smelled the odours, knows which one predicted the shock",
+   "status": "replicated",
+   "headline": true,
+   "evidence_text": "memory M in the regrown head (paired minus unpaired twin, 128 worms): S0 {S0_m} (retention {S0_ret} of the intact memory, d_z {S0_dz}, Holm p {S0_p}); S1 {S1_m} (retention {S1_ret}, d_z {S1_dz}, Holm p {S1_p}). Positive control: S rules were selected for one regeneration",
+   "evidence": {
+    "S0_m": {
+     "file": "results/rule_S0.json",
+     "pointer": "/H2/test/mean",
+     "value": 0.968119268940427,
+     "decimals": 2
+    },
+    "S0_ret": {
+     "file": "results/rule_S0.json",
+     "pointer": "/H2/retention",
+     "value": 0.9758152290088858,
+     "decimals": 2
+    },
+    "S0_dz": {
+     "file": "results/rule_S0.json",
+     "pointer": "/H2/test/d_z",
+     "value": 8.40421297710887,
+     "decimals": 2
+    },
+    "S0_p": {
+     "file": "results/rule_S0.json",
+     "pointer": "/verdicts/H2/p_adj",
+     "value": 0.000999900009999,
+     "decimals": 3
+    },
+    "S1_m": {
+     "file": "results/rule_S1.json",
+     "pointer": "/H2/test/mean",
+     "value": 0.9535418354125795,
+     "decimals": 2
+    },
+    "S1_ret": {
+     "file": "results/rule_S1.json",
+     "pointer": "/H2/retention",
+     "value": 1.01693578478276,
+     "decimals": 2
+    },
+    "S1_dz": {
+     "file": "results/rule_S1.json",
+     "pointer": "/H2/test/d_z",
+     "value": 8.14047948263423,
+     "decimals": 2
+    },
+    "S1_p": {
+     "file": "results/rule_S1.json",
+     "pointer": "/verdicts/H2/p_adj",
+     "value": 0.000999900009999,
+     "decimals": 3
+    }
+   }
+  },
+  {
+   "id": "H2-E",
+   "claim": "Emergent rules also remember through decapitation",
+   "status": "not supported",
+   "headline": true,
+   "evidence_text": "as predicted, no: E rules regrow near-perfect heads (IoU E0 {E0_iou}, E1 {E1_iou}) that carry none of an intact memory of {E0_int} / {E1_int}: M after regeneration E0 {E0_m} [95% CI {E0_lo}, {E0_hi}], E1 {E1_m} [{E1_lo}, {E1_hi}], both intervals far inside the smallest effect of interest (0.10)",
+   "evidence": {
+    "E0_m": {
+     "file": "results/rule_E0.json",
+     "pointer": "/H2/test/mean",
+     "value": 0.000609381211688742,
+     "decimals": 3
+    },
+    "E0_lo": {
+     "file": "results/rule_E0.json",
+     "pointer": "/H2/test/ci95/0",
+     "value": -0.0001646502350922674,
+     "decimals": 3
+    },
+    "E0_hi": {
+     "file": "results/rule_E0.json",
+     "pointer": "/H2/test/ci95/1",
+     "value": 0.0013690766361833084,
+     "decimals": 3
+    },
+    "E0_int": {
+     "file": "results/rule_E0.json",
+     "pointer": "/H2/intact_memory",
+     "value": 0.8058321979333414,
+     "decimals": 2
+    },
+    "E0_iou": {
+     "file": "results/rule_E0.json",
+     "pointer": "/H2/regen_iou",
+     "value": 0.9952429533004761,
+     "decimals": 3
+    },
+    "E1_m": {
+     "file": "results/rule_E1.json",
+     "pointer": "/H2/test/mean",
+     "value": -0.004931287840008736,
+     "decimals": 3
+    },
+    "E1_lo": {
+     "file": "results/rule_E1.json",
+     "pointer": "/H2/test/ci95/0",
+     "value": -0.005765140308358241,
+     "decimals": 3
+    },
+    "E1_hi": {
+     "file": "results/rule_E1.json",
+     "pointer": "/H2/test/ci95/1",
+     "value": -0.004103638477681671,
+     "decimals": 3
+    },
+    "E1_int": {
+     "file": "results/rule_E1.json",
+     "pointer": "/H2/intact_memory",
+     "value": 0.7361046246805927,
+     "decimals": 2
+    },
+    "E1_iou": {
+     "file": "results/rule_E1.json",
+     "pointer": "/H2/regen_iou",
+     "value": 0.9987940788269043,
+     "decimals": 3
+    }
+   }
+  },
+  {
+   "id": "H3c",
+   "claim": "The memory in the body is carried by its hidden (non-electrical) channels: writing only those into an untrained twin's headless body makes the twin's new head remember",
+   "status": "replicated",
+   "headline": true,
+   "evidence_text": "M in the implanted twin's regrown head: S0 {S0_m} ({S0_f} of the donor's own), Holm p {S0_p}; S1 {S1_m} ({S1_f}), Holm p {S1_p}. Predicted from pilot S102 ({pilot})",
+   "evidence": {
+    "S0_m": {
+     "file": "results/rule_S0.json",
+     "pointer": "/H3c/test/mean",
+     "value": 0.9888825764704734,
+     "decimals": 2
+    },
+    "S0_f": {
+     "file": "results/rule_S0.json",
+     "pointer": "/H3c/transferred_fraction",
+     "value": 0.9983327853306064,
+     "decimals": 2
+    },
+    "S0_p": {
+     "file": "results/rule_S0.json",
+     "pointer": "/verdicts/H3c/p_adj",
+     "value": 0.000999900009999,
+     "decimals": 3
+    },
+    "S1_m": {
+     "file": "results/rule_S1.json",
+     "pointer": "/H3c/test/mean",
+     "value": 0.9329824322066997,
+     "decimals": 2
+    },
+    "S1_f": {
+     "file": "results/rule_S1.json",
+     "pointer": "/H3c/transferred_fraction",
+     "value": 0.9777220470709805,
+     "decimals": 2
+    },
+    "S1_p": {
+     "file": "results/rule_S1.json",
+     "pointer": "/verdicts/H3c/p_adj",
+     "value": 0.000999900009999,
+     "decimals": 3
+    },
+    "pilot": {
+     "file": "results/pilot/S102_n32.json",
+     "pointer": "/H3c/transferred_fraction",
+     "value": 0.8523698290637735,
+     "decimals": 2
+    }
+   }
+  },
+  {
+   "id": "H6",
+   "claim": "Promethean cycles: the memory survives a third successive decapitation (only one was ever trained)",
+   "status": "replicated",
+   "headline": true,
+   "evidence_text": "M after cycles 1, 2, 3, 4: S0 {S0_c1}, {S0_c2}, {S0_c3}, {S0_c4}; S1 {S1_c1}, {S1_c2}, {S1_c3}, {S1_c4}. Body IoU after cycle 4: S0 {S0_iou}, S1 {S1_iou}",
+   "evidence": {
+    "S0_c1": {
+     "file": "results/rule_S0.json",
+     "pointer": "/H6/cycles/0/mean",
+     "value": 0.9891023802374548,
+     "decimals": 2
+    },
+    "S0_c2": {
+     "file": "results/rule_S0.json",
+     "pointer": "/H6/cycles/1/mean",
+     "value": 0.9894960843161016,
+     "decimals": 2
+    },
+    "S0_c3": {
+     "file": "results/rule_S0.json",
+     "pointer": "/H6/cycles/2/mean",
+     "value": 0.942647938976279,
+     "decimals": 2
+    },
+    "S0_c4": {
+     "file": "results/rule_S0.json",
+     "pointer": "/H6/cycles/3/mean",
+     "value": 0.8976823870207227,
+     "decimals": 2
+    },
+    "S0_iou": {
+     "file": "results/rule_S0.json",
+     "pointer": "/H6/cycles/3/anatomy/iou",
+     "value": 0.99755859375,
+     "decimals": 2
+    },
+    "S1_c1": {
+     "file": "results/rule_S1.json",
+     "pointer": "/H6/cycles/0/mean",
+     "value": 0.9592384211500757,
+     "decimals": 2
+    },
+    "S1_c2": {
+     "file": "results/rule_S1.json",
+     "pointer": "/H6/cycles/1/mean",
+     "value": 0.8895815859941649,
+     "decimals": 2
+    },
+    "S1_c3": {
+     "file": "results/rule_S1.json",
+     "pointer": "/H6/cycles/2/mean",
+     "value": 0.7294952594056667,
+     "decimals": 2
+    },
+    "S1_c4": {
+     "file": "results/rule_S1.json",
+     "pointer": "/H6/cycles/3/mean",
+     "value": 0.6320462220273839,
+     "decimals": 2
+    },
+    "S1_iou": {
+     "file": "results/rule_S1.json",
+     "pointer": "/H6/cycles/3/anatomy/iou",
+     "value": 0.9686525464057922,
+     "decimals": 2
+    }
+   }
+  },
+  {
+   "id": "posthoc-attractor",
+   "claim": "Post hoc: selection made one odour's memory an attractor and the other metastable. Conflicts, transfers and repeated regrowth all resolve toward the rule's favoured odour",
+   "status": "post hoc",
+   "headline": true,
+   "evidence_text": "odour bias of conflicting chimeras (R(A) - R(B) averaged over both grafts; > 0 favours A) intact / regrown: S0 {S0_bi} / {S0_br}, S1 {S1_bi} / {S1_br}; E rules regrown {E0_br}, {E1_br}. Memory for each CS+ after Promethean cycle 1 and 4 (fresh cohort): S1 favoured A {S1_A1} to {S1_A4}, other B {S1_B1} to {S1_B4}; S0 favoured B {S0_B1} to {S0_B4}, other A {S0_A1} to {S0_A4}. Not preregistered; found by reading the H4, H4b and H5 grafts",
+   "evidence": {
+    "S0_bi": {
+     "file": "results/posthoc_S0.json",
+     "pointer": "/derived/chimera_cue_bias_intact",
+     "value": -0.12868418300058693,
+     "decimals": 2
+    },
+    "S0_br": {
+     "file": "results/posthoc_S0.json",
+     "pointer": "/derived/chimera_cue_bias_regrown",
+     "value": -0.49208181630820036,
+     "decimals": 2
+    },
+    "S0_A1": {
+     "file": "results/posthoc_S0.json",
+     "pointer": "/promethean_by_cue/cycles/0/A",
+     "value": 0.9882777772781992,
+     "decimals": 2
+    },
+    "S0_A4": {
+     "file": "results/posthoc_S0.json",
+     "pointer": "/promethean_by_cue/cycles/3/A",
+     "value": 0.8595943332984461,
+     "decimals": 2
+    },
+    "S0_B1": {
+     "file": "results/posthoc_S0.json",
+     "pointer": "/promethean_by_cue/cycles/0/B",
+     "value": 0.9522271753876339,
+     "decimals": 2
+    },
+    "S0_B4": {
+     "file": "results/posthoc_S0.json",
+     "pointer": "/promethean_by_cue/cycles/3/B",
+     "value": 0.9620975132402236,
+     "decimals": 2
+    },
+    "S1_bi": {
+     "file": "results/posthoc_S1.json",
+     "pointer": "/derived/chimera_cue_bias_intact",
+     "value": 0.3605229743407108,
+     "decimals": 2
+    },
+    "S1_br": {
+     "file": "results/posthoc_S1.json",
+     "pointer": "/derived/chimera_cue_bias_regrown",
+     "value": 0.7635302285852958,
+     "decimals": 2
+    },
+    "S1_A1": {
+     "file": "results/posthoc_S1.json",
+     "pointer": "/promethean_by_cue/cycles/0/A",
+     "value": 0.9587890437687747,
+     "decimals": 2
+    },
+    "S1_A4": {
+     "file": "results/posthoc_S1.json",
+     "pointer": "/promethean_by_cue/cycles/3/A",
+     "value": 0.9585889983245579,
+     "decimals": 2
+    },
+    "S1_B1": {
+     "file": "results/posthoc_S1.json",
+     "pointer": "/promethean_by_cue/cycles/0/B",
+     "value": 0.9716528075587121,
+     "decimals": 2
+    },
+    "S1_B4": {
+     "file": "results/posthoc_S1.json",
+     "pointer": "/promethean_by_cue/cycles/3/B",
+     "value": 0.32278066456638044,
+     "decimals": 2
+    },
+    "E0_br": {
+     "file": "results/posthoc_E0.json",
+     "pointer": "/derived/chimera_cue_bias_regrown",
+     "value": 0.014044064031622838,
+     "decimals": 2
+    },
+    "E1_br": {
+     "file": "results/posthoc_E1.json",
+     "pointer": "/derived/chimera_cue_bias_regrown",
+     "value": -0.06503978863474913,
+     "decimals": 2
+    }
+   }
+  },
+  {
+   "id": "H4b",
+   "claim": "Memory chimeras: cut the head off a chimera whose head learned one odour and whose body learned the other, and the regrown head remembers the body's",
+   "status": "mixed",
+   "headline": false,
+   "evidence_text": "predicted from the pilot, and not borne out: dominance after regeneration (+1 = the head's memory, -1 = the body's) S0 {S0_d} (Holm p {S0_p}), S1 {S1_d} (Holm p {S1_p}), far weaker than the pilot's {pilot}. What the regrown head remembers is mostly the rule's favoured odour (see the post-hoc claim)",
+   "evidence": {
+    "S0_d": {
+     "file": "results/rule_S0.json",
+     "pointer": "/H4b/dominance",
+     "value": 0.3610576834216278,
+     "decimals": 2
+    },
+    "S0_p": {
+     "file": "results/rule_S0.json",
+     "pointer": "/verdicts/H4b/p_adj",
+     "value": 1.0,
+     "decimals": 3
+    },
+    "S1_d": {
+     "file": "results/rule_S1.json",
+     "pointer": "/H4b/dominance",
+     "value": -0.12341111586765725,
+     "decimals": 2
+    },
+    "S1_p": {
+     "file": "results/rule_S1.json",
+     "pointer": "/verdicts/H4b/p_adj",
+     "value": 0.000999900009999,
+     "decimals": 3
+    },
+    "pilot": {
+     "file": "results/pilot/S102_n32.json",
+     "pointer": "/H4b/dominance",
+     "value": -0.6559161779134673,
+     "decimals": 2
+    }
+   }
+  },
+  {
+   "id": "H3ab",
+   "claim": "The memory is bioelectric: the body's voltage pattern is necessary and sufficient for it",
+   "status": "not supported",
+   "headline": false,
+   "evidence_text": "as predicted, no. Swapping the trained body's voltage for its twin's kept S0 {S0_kept} / S1 {S1_kept} of the memory (H3a); implanting the voltage alone into the twin transferred S0 {S0_tr} / S1 {S1_tr} (H3b). Gap-junction diffusion is a fixed law here, and the rules did not use it to hold the memory",
+   "evidence": {
+    "S0_kept": {
+     "file": "results/rule_S0.json",
+     "pointer": "/H3a/retained_fraction",
+     "value": 0.9794594797015246,
+     "decimals": 2
+    },
+    "S0_tr": {
+     "file": "results/rule_S0.json",
+     "pointer": "/H3b/transferred_fraction",
+     "value": 0.03826526473676962,
+     "decimals": 2
+    },
+    "S1_kept": {
+     "file": "results/rule_S1.json",
+     "pointer": "/H3a/retained_fraction",
+     "value": 0.9871506711388147,
+     "decimals": 2
+    },
+    "S1_tr": {
+     "file": "results/rule_S1.json",
+     "pointer": "/H3b/transferred_fraction",
+     "value": 0.023588741533617855,
+     "decimals": 2
+    }
+   }
+  },
+  {
+   "id": "H4-E",
+   "claim": "In an intact chimera of an emergent rule, the head's memory wins outright",
+   "status": "replicated",
+   "headline": false,
+   "evidence_text": "dominance of the head's memory after 32 steps of healing: E0 {E0_d}, E1 {E1_d}",
+   "evidence": {
+    "E0_d": {
+     "file": "results/rule_E0.json",
+     "pointer": "/H4/dominance",
+     "value": 0.9948298372496416,
+     "decimals": 2
+    },
+    "E1_d": {
+     "file": "results/rule_E1.json",
+     "pointer": "/H4/dominance",
+     "value": 1.0081945354558153,
+     "decimals": 2
+    }
+   }
+  },
+  {
+   "id": "H4-S",
+   "claim": "In an intact chimera of a selected rule, head and body do not split the memory evenly",
+   "status": "replicated",
+   "headline": false,
+   "evidence_text": "dominance S0 {S0_d}, S1 {S1_d} (predicted from the pilot: an even split). The head leads, but each rule also favours one odour in a conflict: R(A) - R(B) of A-head|B-body and B-head|A-body grafts, S0 {S0_ab} and {S0_ba}, S1 {S1_ab} and {S1_ba}",
+   "evidence": {
+    "S0_d": {
+     "file": "results/rule_S0.json",
+     "pointer": "/H4/dominance",
+     "value": 0.8394754864882878,
+     "decimals": 2
+    },
+    "S1_d": {
+     "file": "results/rule_S1.json",
+     "pointer": "/H4/dominance",
+     "value": 0.5284653086801621,
+     "decimals": 2
+    },
+    "S0_ab": {
+     "file": "results/rule_S0.json",
+     "pointer": "/H4/preference/A|B",
+     "value": 0.7093537414912134,
+     "decimals": 2
+    },
+    "S0_ba": {
+     "file": "results/rule_S0.json",
+     "pointer": "/H4/preference/B|A",
+     "value": -0.9667221074923873,
+     "decimals": 2
+    },
+    "S1_ab": {
+     "file": "results/rule_S1.json",
+     "pointer": "/H4/preference/A|B",
+     "value": 0.8863746225833893,
+     "decimals": 2
+    },
+    "S1_ba": {
+     "file": "results/rule_S1.json",
+     "pointer": "/H4/preference/B|A",
+     "value": -0.1653286739019677,
+     "decimals": 2
+    }
+   }
+  },
+  {
+   "id": "H5",
+   "claim": "A naive head grafted onto a trained body takes on the body's memory, with no amputation or regeneration",
+   "status": "replicated",
+   "headline": false,
+   "evidence_text": "transfer (half the difference between naive heads on A- and B-trained bodies): S0 {S0_m} ({S0_f} of the uncontested memory, Holm p {S0_p}); S1 {S1_m} ({S1_f}, Holm p {S1_p}). Post hoc, it is all or none by odour: S0 passes on B ({S0_tb}) but not A ({S0_ta}); S1 passes on A ({S1_ta}) far more than B ({S1_tb})",
+   "evidence": {
+    "S0_f": {
+     "file": "results/rule_S0.json",
+     "pointer": "/H5/transfer_fraction",
+     "value": 0.5102981105702328,
+     "decimals": 2
+    },
+    "S0_m": {
+     "file": "results/rule_S0.json",
+     "pointer": "/H5/test/mean",
+     "value": 0.5070958994838293,
+     "decimals": 2
+    },
+    "S0_p": {
+     "file": "results/rule_S0.json",
+     "pointer": "/verdicts/H5/p_adj",
+     "value": 0.000999900009999,
+     "decimals": 3
+    },
+    "S0_ta": {
+     "file": "results/posthoc_S0.json",
+     "pointer": "/derived/transfer_fraction_A",
+     "value": 0.034801853693102666,
+     "decimals": 2
+    },
+    "S0_tb": {
+     "file": "results/posthoc_S0.json",
+     "pointer": "/derived/transfer_fraction_B",
+     "value": 0.9950344369300124,
+     "decimals": 2
+    },
+    "S1_f": {
+     "file": "results/rule_S1.json",
+     "pointer": "/H5/transfer_fraction",
+     "value": 0.47586203982259534,
+     "decimals": 2
+    },
+    "S1_m": {
+     "file": "results/rule_S1.json",
+     "pointer": "/H5/test/mean",
+     "value": 0.472003272636357,
+     "decimals": 2
+    },
+    "S1_p": {
+     "file": "results/rule_S1.json",
+     "pointer": "/verdicts/H5/p_adj",
+     "value": 0.000999900009999,
+     "decimals": 3
+    },
+    "S1_ta": {
+     "file": "results/posthoc_S1.json",
+     "pointer": "/derived/transfer_fraction_A",
+     "value": 0.7822451281619416,
+     "decimals": 2
+    },
+    "S1_tb": {
+     "file": "results/posthoc_S1.json",
+     "pointer": "/derived/transfer_fraction_B",
+     "value": 0.1618793404739218,
+     "decimals": 2
+    }
+   }
+  },
+  {
+   "id": "H7",
+   "claim": "A trunk fragment, with head and tail both removed, regrows a head that remembers (never trained)",
+   "status": "replicated",
+   "headline": false,
+   "evidence_text": "M: S0 {S0_m}, S1 {S1_m}; body IoU after regeneration {S0_iou}, {S1_iou}",
+   "evidence": {
+    "S0_m": {
+     "file": "results/rule_S0.json",
+     "pointer": "/H7/test/mean",
+     "value": 0.9649810968344354,
+     "decimals": 2
+    },
+    "S0_iou": {
+     "file": "results/rule_S0.json",
+     "pointer": "/H7/regen_iou",
+     "value": 0.9968631267547607,
+     "decimals": 2
+    },
+    "S1_m": {
+     "file": "results/rule_S1.json",
+     "pointer": "/H7/test/mean",
+     "value": 0.9600676956033567,
+     "decimals": 2
+    },
+    "S1_iou": {
+     "file": "results/rule_S1.json",
+     "pointer": "/H7/regen_iou",
+     "value": 0.9975733757019043,
+     "decimals": 2
+    }
+   }
+  },
+  {
+   "id": "H1",
+   "claim": "Worms learn which odour predicted the shock, in their state alone (the rule is frozen within a life)",
+   "status": "replicated",
+   "headline": false,
+   "evidence_text": "M in intact worms (paired minus unpaired twin, 128 worms): E0 {E0_m} (d_z {E0_dz}), E1 {E1_m} ({E1_dz}), S0 {S0_m} ({S0_dz}), S1 {S1_m} ({S1_dz})",
+   "evidence": {
+    "E0_m": {
+     "file": "results/rule_E0.json",
+     "pointer": "/H1/test/mean",
+     "value": 0.8002092767565046,
+     "decimals": 2
+    },
+    "E0_dz": {
+     "file": "results/rule_E0.json",
+     "pointer": "/H1/test/d_z",
+     "value": 3.81671894279073,
+     "decimals": 1
+    },
+    "E1_m": {
+     "file": "results/rule_E1.json",
+     "pointer": "/H1/test/mean",
+     "value": 0.7277170613233466,
+     "decimals": 2
+    },
+    "E1_dz": {
+     "file": "results/rule_E1.json",
+     "pointer": "/H1/test/d_z",
+     "value": 3.923566278166606,
+     "decimals": 1
+    },
+    "S0_m": {
+     "file": "results/rule_S0.json",
+     "pointer": "/H1/test/mean",
+     "value": 0.9883913331777876,
+     "decimals": 2
+    },
+    "S0_dz": {
+     "file": "results/rule_S0.json",
+     "pointer": "/H1/test/d_z",
+     "value": 12.700710173333347,
+     "decimals": 1
+    },
+    "S1_m": {
+     "file": "results/rule_S1.json",
+     "pointer": "/H1/test/mean",
+     "value": 0.9277549007383641,
+     "decimals": 2
+    },
+    "S1_dz": {
+     "file": "results/rule_S1.json",
+     "pointer": "/H1/test/d_z",
+     "value": 9.721299733135934,
+     "decimals": 1
+    }
+   }
+  },
+  {
+   "id": "SESOI",
+   "claim": "Significant but trivial effects are not claims",
+   "status": "descriptive",
+   "headline": false,
+   "evidence_text": "10 of 40 confirmatory tests passed Holm but moved the response by less than the smallest effect of interest (0.10), so none is claimed: E0 H3a {E0_H3a}, E0 H3b {E0_H3b}, E0 H5 {E0_H5}, E0 H7 {E0_H7}, E1 H4b {E1_H4b}, E1 H5 {E1_H5}, S0 H3b {S0_H3b}, S0 H3a {S0_H3a}, S1 H3a {S1_H3a}, S1 H3b {S1_H3b}",
+   "evidence": {
+    "E0_H3a": {
+     "file": "results/rule_E0.json",
+     "pointer": "/verdicts/H3a/mean",
+     "value": 0.00047522320528514683,
+     "decimals": 3
+    },
+    "E0_H3b": {
+     "file": "results/rule_E0.json",
+     "pointer": "/verdicts/H3b/mean",
+     "value": 0.000731437248759903,
+     "decimals": 3
+    },
+    "E0_H5": {
+     "file": "results/rule_E0.json",
+     "pointer": "/verdicts/H5/mean",
+     "value": 0.0038597992947870807,
+     "decimals": 3
+    },
+    "E0_H7": {
+     "file": "results/rule_E0.json",
+     "pointer": "/verdicts/H7/mean",
+     "value": 0.0009957642178051174,
+     "decimals": 3
+    },
+    "E1_H4b": {
+     "file": "results/rule_E1.json",
+     "pointer": "/verdicts/H4b/mean",
+     "value": -0.006091760762501508,
+     "decimals": 3
+    },
+    "E1_H5": {
+     "file": "results/rule_E1.json",
+     "pointer": "/verdicts/H5/mean",
+     "value": 0.0028506865111239676,
+     "decimals": 3
+    },
+    "S0_H3b": {
+     "file": "results/rule_S0.json",
+     "pointer": "/verdicts/H3b/mean",
+     "value": 0.03703140308516595,
+     "decimals": 3
+    },
+    "S0_H3a": {
+     "file": "results/rule_S0.json",
+     "pointer": "/verdicts/H3a/mean",
+     "value": 0.02022118482273072,
+     "decimals": 3
+    },
+    "S1_H3a": {
+     "file": "results/rule_S1.json",
+     "pointer": "/verdicts/H3a/mean",
+     "value": 0.012344280490651727,
+     "decimals": 3
+    },
+    "S1_H3b": {
+     "file": "results/rule_S1.json",
+     "pointer": "/verdicts/H3b/mean",
+     "value": 0.02263133779524651,
+     "decimals": 3
+    }
+   }
+  },
+  {
+   "id": "locus",
+   "claim": "Exploratory: which channels, implanted alone into the twin's headless body, carry the memory",
+   "status": "exploratory",
+   "headline": false,
+   "evidence_text": "fraction of the donor's memory: S0 voltage {S0_voltage}, hidden {S0_hidden}, identity+response {S0_identity_response}, all but voltage {S0_all_but_voltage}; S1 {S1_voltage}, {S1_hidden}, {S1_identity_response}, {S1_all_but_voltage}",
+   "evidence": {
+    "S0_voltage": {
+     "file": "results/rule_S0.json",
+     "pointer": "/locus/implanted_fraction/voltage",
+     "value": 0.04744715452454257,
+     "decimals": 2
+    },
+    "S0_hidden": {
+     "file": "results/rule_S0.json",
+     "pointer": "/locus/implanted_fraction/hidden",
+     "value": 0.9905807604424737,
+     "decimals": 2
+    },
+    "S0_identity_response": {
+     "file": "results/rule_S0.json",
+     "pointer": "/locus/implanted_fraction/identity+response",
+     "value": 0.0003575695792242662,
+     "decimals": 2
+    },
+    "S0_all_but_voltage": {
+     "file": "results/rule_S0.json",
+     "pointer": "/locus/implanted_fraction/all but voltage",
+     "value": 0.9943063633981412,
+     "decimals": 2
+    },
+    "S1_voltage": {
+     "file": "results/rule_S1.json",
+     "pointer": "/locus/implanted_fraction/voltage",
+     "value": 0.02416223763832645,
+     "decimals": 2
+    },
+    "S1_hidden": {
+     "file": "results/rule_S1.json",
+     "pointer": "/locus/implanted_fraction/hidden",
+     "value": 0.9744990256717238,
+     "decimals": 2
+    },
+    "S1_identity_response": {
+     "file": "results/rule_S1.json",
+     "pointer": "/locus/implanted_fraction/identity+response",
+     "value": -0.0007924679848394511,
+     "decimals": 2
+    },
+    "S1_all_but_voltage": {
+     "file": "results/rule_S1.json",
+     "pointer": "/locus/implanted_fraction/all but voltage",
+     "value": 0.9871361052039334,
+     "decimals": 2
+    }
+   }
+  },
+  {
+   "id": "gj",
+   "claim": "Exploratory: blocking gap junctions for the delay between learning and the cut does not stop the memory reaching the body",
+   "status": "exploratory",
+   "headline": false,
+   "evidence_text": "M in the regrown head, junctions open vs blocked: S0 {S0_o} vs {S0_b}, S1 {S1_o} vs {S1_b}",
+   "evidence": {
+    "S0_o": {
+     "file": "results/rule_S0.json",
+     "pointer": "/gap_junctions/memory/open/cut",
+     "value": 0.9889031517254807,
+     "decimals": 2
+    },
+    "S0_b": {
+     "file": "results/rule_S0.json",
+     "pointer": "/gap_junctions/memory/blocked/cut",
+     "value": 0.9763029479099714,
+     "decimals": 2
+    },
+    "S1_o": {
+     "file": "results/rule_S1.json",
+     "pointer": "/gap_junctions/memory/open/cut",
+     "value": 0.9635824089364178,
+     "decimals": 2
+    },
+    "S1_b": {
+     "file": "results/rule_S1.json",
+     "pointer": "/gap_junctions/memory/blocked/cut",
+     "value": 0.962425995432568,
+     "decimals": 2
+    }
+   }
+  },
+  {
+   "id": "calibration",
+   "claim": "The pipeline is calibrated: A/A comparisons produce false positives at about the nominal rate",
+   "status": "supported",
+   "headline": false,
+   "evidence_text": "false-positive rate at alpha 0.05 over 40 A/A tests of 128 worms each (nominal 0.05, i.e. 2 of 40): E0 {E0}, E1 {E1}, S0 {S0}, S1 {S1}",
+   "evidence": {
+    "E0": {
+     "file": "results/rule_E0.json",
+     "pointer": "/calibration/false_positive_rate",
+     "value": 0.025,
+     "decimals": 3
+    },
+    "E1": {
+     "file": "results/rule_E1.json",
+     "pointer": "/calibration/false_positive_rate",
+     "value": 0.0,
+     "decimals": 3
+    },
+    "S0": {
+     "file": "results/rule_S0.json",
+     "pointer": "/calibration/false_positive_rate",
+     "value": 0.075,
+     "decimals": 3
+    },
+    "S1": {
+     "file": "results/rule_S1.json",
+     "pointer": "/calibration/false_positive_rate",
+     "value": 0.025,
+     "decimals": 3
+    }
+   }
+  },
+  {
+   "id": "anatomy",
+   "claim": "All four rules grow the body from one founder cell and regrow it after decapitation",
+   "status": "descriptive",
+   "headline": false,
+   "evidence_text": "body IoU with the target after 32 steps of growth / after head regeneration / 300 steps later: E0 {E0_g} / {E0_h} / {E0_l}; E1 {E1_g} / {E1_h} / {E1_l}; S0 {S0_g} / {S0_h} / {S0_l}; S1 {S1_g} / {S1_h} / {S1_l}",
+   "evidence": {
+    "E0_g": {
+     "file": "results/rule_E0.json",
+     "pointer": "/anatomy/grown/iou",
+     "value": 0.9001160264015198,
+     "decimals": 2
+    },
+    "E0_h": {
+     "file": "results/rule_E0.json",
+     "pointer": "/anatomy/regen_head/iou",
+     "value": 0.9974097013473511,
+     "decimals": 2
+    },
+    "E0_l": {
+     "file": "results/rule_E0.json",
+     "pointer": "/anatomy/held_300_steps/iou",
+     "value": 1.0,
+     "decimals": 2
+    },
+    "E1_g": {
+     "file": "results/rule_E1.json",
+     "pointer": "/anatomy/grown/iou",
+     "value": 0.9122351408004761,
+     "decimals": 2
+    },
+    "E1_h": {
+     "file": "results/rule_E1.json",
+     "pointer": "/anatomy/regen_head/iou",
+     "value": 0.9995265007019043,
+     "decimals": 2
+    },
+    "E1_l": {
+     "file": "results/rule_E1.json",
+     "pointer": "/anatomy/held_300_steps/iou",
+     "value": 0.996448814868927,
+     "decimals": 2
+    },
+    "S0_g": {
+     "file": "results/rule_S0.json",
+     "pointer": "/anatomy/grown/iou",
+     "value": 0.9088171720504761,
+     "decimals": 2
+    },
+    "S0_h": {
+     "file": "results/rule_S0.json",
+     "pointer": "/anatomy/regen_head/iou",
+     "value": 1.0,
+     "decimals": 2
+    },
+    "S0_l": {
+     "file": "results/rule_S0.json",
+     "pointer": "/anatomy/held_300_steps/iou",
+     "value": 1.0,
+     "decimals": 2
+    },
+    "S1_g": {
+     "file": "results/rule_S1.json",
+     "pointer": "/anatomy/grown/iou",
+     "value": 0.9009159207344055,
+     "decimals": 2
+    },
+    "S1_h": {
+     "file": "results/rule_S1.json",
+     "pointer": "/anatomy/regen_head/iou",
+     "value": 0.9997632503509521,
+     "decimals": 2
+    },
+    "S1_l": {
+     "file": "results/rule_S1.json",
+     "pointer": "/anatomy/held_300_steps/iou",
+     "value": 0.9501782655715942,
+     "decimals": 2
+    }
+   }
+  }
+ ]
 }

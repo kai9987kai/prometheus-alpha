@@ -15,4 +15,8 @@ These changes were made while piloting on pilot rules (seeds 100-102) and are li
 
 ## After the lock
 
-None yet.
+No confirmatory protocol, sample size, seed, test or decision rule was changed after the lock (`prometheus prereg verify` passes in CI). Things done after the lock, for the record:
+
+1. **`cli.py` gained `--init`** (commit a703bd1) so S rules could be trained from the command line. `cli.py` is not a locked source. The E0 and E1 results files record the commit as `-dirty` for this reason; their locked-source hashes verify.
+2. **Post-hoc analyses** (`src/prometheus/posthoc.py`, `results/posthoc_*.json`) were written after the confirmatory results showed that chimera and transfer outcomes depended on which odour was involved. They use fresh cohort seeds (2002, 2006) and the locked experiment code unchanged, and every claim drawn from them is labelled "post hoc" in the ledger.
+3. **Three predictions failed.** H4 in both S rules (predicted an even split, found a head advantage) and H4b in S0 (predicted the body's memory, found the opposite sign). These are reported as misses, not re-described as successes.
