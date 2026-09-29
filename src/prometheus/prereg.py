@@ -13,27 +13,33 @@ import json
 
 from .provenance import ROOT, SRC, sha256_file
 
-PREREG = ROOT / "prereg" / "PREREGISTRATION.json"
-LOCK = ROOT / "prereg" / "PREREGISTRATION.lock.json"
 LOCKED_SOURCES = ["tissue.py", "body.py", "life.py", "experiments.py", "stats.py", "train.py"]
+VERSIONS = {  # version -> (preregistration, lock, extra locked sources)
+    "1": ("PREREGISTRATION.json", "PREREGISTRATION.lock.json", []),
+    "2": ("PREREGISTRATION_v2.json", "PREREGISTRATION_v2.lock.json", ["v2.py"]),
+}
+PREREG = ROOT / "prereg" / VERSIONS["1"][0]
+LOCK = ROOT / "prereg" / VERSIONS["1"][1]
 
 
-def _hashes() -> dict:
-    return {"PREREGISTRATION.json": sha256_file(PREREG),
-            **{f"src/prometheus/{n}": sha256_file(SRC / n) for n in LOCKED_SOURCES}}
+def _hashes(version: str = "1") -> dict:
+    name, _, extra = VERSIONS[version]
+    return {name: sha256_file(ROOT / "prereg" / name),
+            **{f"src/prometheus/{n}": sha256_file(SRC / n) for n in LOCKED_SOURCES + extra}}
 
 
-def lock() -> dict:
+def lock(version: str = "1") -> dict:
     doc = {"locked_at_utc": datetime.datetime.now(datetime.timezone.utc).isoformat(timespec="seconds"),
-           "sha256": _hashes()}
-    LOCK.write_text(json.dumps(doc, indent=1) + "\n", encoding="utf-8")
+           "sha256": _hashes(version)}
+    (ROOT / "prereg" / VERSIONS[version][1]).write_text(json.dumps(doc, indent=1) + "\n", encoding="utf-8")
     return doc
 
 
-def verify() -> tuple[bool, list[str]]:
-    if not LOCK.exists():
+def verify(version: str = "1") -> tuple[bool, list[str]]:
+    lk = ROOT / "prereg" / VERSIONS[version][1]
+    if not lk.exists():
         return False, ["no lock file"]
-    want = json.loads(LOCK.read_text(encoding="utf-8"))["sha256"]
-    have = _hashes()
+    want = json.loads(lk.read_text(encoding="utf-8"))["sha256"]
+    have = _hashes(version)
     bad = [k for k in want if have.get(k) != want[k]]
     return not bad, bad

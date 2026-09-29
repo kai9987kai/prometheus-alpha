@@ -74,6 +74,12 @@ def main(argv=None):
 
     pr = sub.add_parser("prereg", help="lock or verify the preregistration")
     pr.add_argument("action", choices=["lock", "verify"])
+    pr.add_argument("--version", default="1", choices=["1", "2"])
+
+    r2 = sub.add_parser("run2", help="run the v0.2 experiments (extinction, reversal, compiler, engram locus, attractor)")
+    r2.add_argument("--rule", required=True, help="E0, E1, S0 or S1")
+    r2.add_argument("--out", required=True)
+    r2.add_argument("--n", type=int, default=128)
 
     c = sub.add_parser("claims", help="check or render the claims ledger")
     c.add_argument("action", choices=["check", "render"])
@@ -98,14 +104,24 @@ def main(argv=None):
             json.dump(res, f, indent=1, default=float)
         for h, v in res["verdicts"].items():
             print(f"{h}: mean {v['mean']:+.3f}  p_holm {v['p_adj']:.3g}  {'SUPPORTED' if v['supported'] else 'not supported'}")
+    elif a.cmd == "run2":
+        from . import prereg, v2
+        ok, bad = prereg.verify("2")
+        print("v0.2 lock verifies: CONFIRMATORY run" if ok else f"v0.2 lock does NOT verify ({bad}): EXPLORATORY run")
+        res = v2.run_all(a.rule, a.out, n=a.n)
+        res["confirmatory"] = ok
+        with open(a.out, "w") as f:
+            json.dump(res, f, indent=1, default=float)
+        for h, v in res["verdicts"].items():
+            print(f"{h}: mean {v['mean']:+.3f}  p_holm {v['p_adj']:.3g}  {'SUPPORTED' if v['supported'] else 'not supported'}")
     elif a.cmd == "show":
         _show(a)
     elif a.cmd == "prereg":
         from . import prereg
         if a.action == "lock":
-            print(json.dumps(prereg.lock(), indent=1))
+            print(json.dumps(prereg.lock(a.version), indent=1))
         else:
-            ok, bad = prereg.verify()
+            ok, bad = prereg.verify(a.version)
             print("ok: preregistration lock verifies" if ok else f"FAIL: changed since lock: {bad}")
             return 0 if ok else 1
     elif a.cmd == "claims":

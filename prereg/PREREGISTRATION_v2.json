@@ -1,0 +1,81 @@
+{
+ "title": "Prometheus-alpha v0.2: extinction, reversal, a memory compiler and the location of the body's copy",
+ "version": "0.2",
+ "date": "2026-09-29",
+ "status": "Committed and hash-locked before any v0.2 experiment on a confirmatory rule (E0, E1, S0, S1, all trained and frozen for v0.1). v0.1 and its lock are unchanged.",
+ "code": "src/prometheus/v2.py, importing the v0.1 engine and experiment code unchanged; locked with the v0.1 sources",
+ "protocol": {
+  "n": 128,
+  "life": "as v0.1: grow 32, condition 48, delay 12; complete decapitation; regenerate 32; test 24",
+  "extinction": "2 blocks of the conditioning schedule with no shock (96 steps), then 12 steps; the comparison arm waits the same 108 steps with no presentations",
+  "reversal": "after the first lesson, a second paired conditioning with the other odour as CS+ (the unpaired twin gets it unpaired); memory scored against the first lesson",
+  "compiler": "Adam (lr 0.05, 150 iterations, L2 0.01) on a 10 x 40 hidden-channel pattern added to the living cells of 32 decapitated unpaired design worms (seed 3120) to make the regrown head's R(A)-R(B) = +1 (and -1 for B); tested on 128 held-out decapitated unpaired worms (seed 3121); control: the same values permuted across body sites 12-35, per channel",
+  "seeds": {
+   "H8": 3008,
+   "H9_H10": 3009,
+   "H11": 3011,
+   "H12": [
+    3120,
+    3121
+   ],
+   "H13": 3013,
+   "engram_map": 3201,
+   "long_cycles": 3202
+  }
+ },
+ "hypotheses": {
+  "H8": {
+   "claim": "Attractor (replicating the v0.1 post-hoc finding on fresh seeds): after 4 Promethean cycles the memory of the rule's favoured odour exceeds the memory of the other",
+   "favoured": {
+    "S0": "B",
+    "S1": "A"
+   },
+   "measure": "mean M of favoured-odour worms minus mean M of other-odour worms after cycle 4",
+   "test": "one-sided two-sample permutation (10,000)",
+   "rules": "S0, S1 only"
+  },
+  "H9": {
+   "claim": "Extinction: unreinforced presentations weaken the memory of intact worms",
+   "measure": "M(waited) - M(extinguished), per worm",
+   "test": "one-sided sign-flip, > 0"
+  },
+  "H10": {
+   "claim": "Extinction through regrowth: the memory in a head regrown after extinction differs from the memory of the intact extinguished head",
+   "measure": "M(extinguished, regrown) - M(extinguished, intact)",
+   "test": "two-sided sign-flip"
+  },
+  "H11": {
+   "claim": "Reversal through regrowth: after a reversal, the regrown head's memory of the first lesson differs from the intact head's",
+   "measure": "M_first(regrown) - M_first(intact)",
+   "test": "two-sided sign-flip"
+  },
+  "H12": {
+   "claim": "Memory compiler: a designed hidden pattern written into held-out untrained decapitated bodies makes their regrown heads prefer the designed odour, more than the same values at shuffled sites",
+   "measure": "written = (pref with A pattern - pref with B pattern)/2 minus the same for the shuffled patterns, per worm",
+   "test": "one-sided sign-flip, > 0"
+  },
+  "H13": {
+   "claim": "Engram locus: the trained body's hidden channels implanted at only the 4 sites next to the wound (12-15) transfer more memory than the same channels implanted at the rest of the trunk (16-27)",
+   "measure": "M(edge implant) - M(rest implant), per worm",
+   "test": "one-sided sign-flip, > 0"
+  }
+ },
+ "decision_rules": {
+  "family": "H8-H13 per rule (H8 in S rules only); Holm at alpha 0.05",
+  "sesoi": "Holm rejection and |mean| >= 0.10, as in v0.1",
+  "replication": "supported in both rules of a family",
+  "interpretation": "H10, H11 and H13 concern the body's copy and are only interpretable in rules whose memory survives decapitation (S). In E rules they are reported but restate v0.1 H2."
+ },
+ "predictions": {
+  "H8": "S0, S1: supported (pilot S102: favoured 0.83 vs other 0.44 after cycle 4)",
+  "H9": "S rules: supported (pilot S102: 67% extinguished). E rules: not supported (pilot E102: unreinforced presentations strengthened the memory, 0.35 -> 0.58)",
+  "H10": "S rules: supported with a negative sign, the regrown head is more extinguished than the intact one, even inverted (pilot S102: +0.26 intact, -0.39 regrown). E rules: supported, negative, trivially (no memory survives regrowth)",
+  "H11": "S rules: supported with a negative sign, the body keeps the newer lesson (pilot S102: first lesson +0.15 intact, -0.42 regrown). E rules: supported, negative, trivially",
+  "H12": "S rules: supported (pilot S102: written 1.00 vs shuffled 0.07, n = 32). E rules: no prediction",
+  "H13": "S rules: supported (pilot S102: the 4 wound-edge sites carried 74% of the memory; every other 4-site window < 1%). E rules: not supported"
+ },
+ "disclosed_pilots": [
+  "All v0.2 experiments were piloted at n = 32 on pilot rules S102 and E102 (results/pilot/v2_pilot_n32.json) before this lock, using the confirmatory cohort seeds at n = 32 (different worms from n = 128). The pilot fixed EXT_BLOCKS = 2, the compiler settings, and turned H10 and H11 from one-sided (renewal; the older lesson survives) into two-sided tests after the pilot showed the opposite direction. H13 was added after the pilot engram map."
+ ],
+ "deviations": "Any departure after the lock goes in docs/DEVIATIONS.md under v0.2."
+}
