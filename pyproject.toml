@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "prometheus-alpha"
-version = "0.1.0"
+version = "0.7.0"
 description = "Memory that outlives its organ: a preregistered laboratory of regenerating worms that learn"
 readme = "README.md"
 license = {text = "MIT"}

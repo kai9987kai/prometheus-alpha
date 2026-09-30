@@ -25,6 +25,16 @@ def test_js_engine_matches_python():
         assert case["regionMismatch"] == 0, case
 
 
+@pytest.mark.skipif(shutil.which("node") is None, reason="node is not installed")
+def test_js_stress_operators():
+    """The lab's turnover and head-noise stresses match the v0.7 definitions."""
+    out = json.loads(subprocess.run(["node", str(ROOT / "tests" / "stress.js")], capture_output=True, text=True, check=True).stdout)
+    assert out["turnoverAll"] and out["turnoverNone"]
+    assert 0 < out["turnoverKilled"] < 12              # about 10% of 32 cells
+    assert out["noiseOutside"] == 0 and out["noiseVisible"] == 0
+    assert 1.2 < out["noiseSd"] < 1.8                  # sigma 1.5 over 80 draws
+
+
 def test_fixture_is_current_for_random_rule():
     """The fixture's random-rule case can be regenerated bit for bit from the Python engine."""
     torch = pytest.importorskip("torch")

@@ -25,7 +25,7 @@ for n in ("E0", "E1", "S0", "S1", "B0", "B1", "F0", "F1"):
     if pth.exists():
         R[f"v5{n}"] = json.loads(pth.read_text())
         F[f"v5{n}"] = f"results/v5_{n}.json"
-for name in ("v6", "posthoc_v6"):
+for name in ("v6", "posthoc_v6", "v7"):
     if (ROOT / f"results/{name}.json").exists():
         R[name] = json.loads((ROOT / f"results/{name}.json").read_text())
         F[name] = f"results/{name}.json"
@@ -349,6 +349,33 @@ if "posthoc_v6" in R:
     add("posthoc-tradeoff", "Post hoc: a trade-off. Rules whose head memory tolerates noise are the ones whose memory dies with cell turnover",
         "post hoc", "Spearman rho between head-basin area and v0.5 turnover memory, 6 rules: {rho}. Basin area: S0 {S0}, B0 {B0}, F0 {F0} (turnover-robust) vs S1 {S1}, B1 {B1}, F1 {F1}. Not preregistered; a hypothesis for the next round", e)
 
+# ============================================================ v0.7
+if "v7" in R:
+    def v7st(h):
+        s = [R["v7"]["tests"][f"{h}_{k}"]["supported"] for k in (0, 1)]
+        return "replicated" if all(s) else "mixed" if any(s) else "not supported"
+
+    def v7ev(e, h, stress, a, b):
+        for k in (0, 1):
+            e[f"{a}{k}"] = ev("v7", f"/rules/{a}{k}/{stress}_memory")
+            e[f"{b}{k}"] = ev("v7", f"/rules/{b}{k}/{stress}_memory")
+            e[f"d{k}"] = ev("v7", f"/tests/{h}_{k}/mean")
+            e[f"p{k}"] = ev("v7", f"/tests/{h}_{k}/p_adj", fp(R["v7"]["tests"][f"{h}_{k}"]["p_adj"]))
+        return e
+
+    add("v7-H31", "v0.7: training under cell turnover hardens the memory against it",
+        v7st("H31"), "memory after 200 steps of turnover, turnover-trained T vs control-trained C sibling: lineage 0 {T0} vs {C0} (difference {d0}, Holm p {p0}); lineage 1 {T1} vs {C1} ({d1}, Holm p {p1})",
+        v7ev({}, "H31", "turnover", "T", "C"))
+    add("v7-H32", "v0.7: training under hidden-state noise hardens the memory against it",
+        v7st("H32"), "memory after sigma 1.5 noise on the head's hidden channels, noise-trained N vs control C: lineage 0 {N0} vs {C0} (difference {d0}, Holm p {p0}); lineage 1 {N1} vs {C1} ({d1}, Holm p {p1})",
+        v7ev({}, "H32", "noise", "N", "C"))
+    add("v7-H33", "v0.7 trade-off: hardening the memory against cell loss costs noise tolerance",
+        v7st("H33"), "noise memory, control C vs turnover-trained T: lineage 0 {C0} vs {T0} (C - T {d0}, Holm p {p0}); lineage 1 {C1} vs {T1} ({d1}, Holm p {p1})",
+        v7ev({}, "H33", "noise", "C", "T"), headline=True)
+    add("v7-H34", "v0.7 trade-off: hardening the memory against noise costs survival of cell loss",
+        v7st("H34"), "turnover memory, control C vs noise-trained N: lineage 0 {C0} vs {N0} (C - N {d0}, Holm p {p0}); lineage 1 {C1} vs {N1} ({d1}, Holm p {p1})",
+        v7ev({}, "H34", "turnover", "C", "N"), headline=True)
+
 # ---- post hoc: favoured odour
 e = {}
 for r in S:
@@ -412,7 +439,7 @@ add("anatomy", "All four rules grow the body from one founder cell and regrow it
     "body IoU with the target after 32 steps of growth / after head regeneration / 300 steps later: E0 {E0_g} / {E0_h} / {E0_l}; E1 {E1_g} / {E1_h} / {E1_l}; S0 {S0_g} / {S0_h} / {S0_l}; S1 {S1_g} / {S1_h} / {S1_l}",
     e)
 
-ORDER = ["H2-S", "H2-E", "H3c", "v2-H13", "v2-H12", "v4-H24", "v4-H19", "v4-H21", "v4-H23", "v5-H27", "v5-H25", "v5-H28", "v5-H26", "v6-H29", "v6-H30", "posthoc-tradeoff", "v3-H14", "v3-H15", "v3-H16", "v3-H17", "v3-H18", "H6",
+ORDER = ["H2-S", "H2-E", "H3c", "v2-H13", "v2-H12", "v4-H24", "v4-H19", "v4-H21", "v4-H23", "v5-H27", "v5-H25", "v5-H28", "v5-H26", "v6-H29", "v6-H30", "posthoc-tradeoff", "v7-H33", "v7-H34", "v7-H31", "v7-H32", "v3-H14", "v3-H15", "v3-H16", "v3-H17", "v3-H18", "H6",
          "v2-H11", "posthoc-attractor", "v2-H8", "v2-H9", "v2-H10", "H4b", "H3ab", "H4-E", "H4-S", "H5", "H7", "H1",
          "SESOI", "locus", "gj", "calibration", "anatomy"]
 claims.sort(key=lambda c: ORDER.index(c["id"]))

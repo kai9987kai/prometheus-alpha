@@ -84,7 +84,7 @@ Predictions made in the locked preregistration, against the outcomes:
 
 31 of 34 preregistered predictions held (✗ marks a miss; – means no prediction was stated). The number in brackets is the tested mean. "yes" requires Holm-corrected significance and an effect of at least 0.10.
 
-Every number in the results table is checked in CI against the results file it comes from (`prometheus claims check`). The hypotheses, sample sizes, seeds and decision rules were hash-locked before each round's confirmatory experiments ([v0.1](prereg/PREREGISTRATION.json), [v0.2](prereg/PREREGISTRATION_v2.json), [v0.3](prereg/PREREGISTRATION_v3.json), [v0.4](prereg/PREREGISTRATION_v4.json), [v0.5](prereg/PREREGISTRATION_v5.json), [v0.6](prereg/PREREGISTRATION_v6.json); CI verifies all six locks); pilots and pre-lock design changes are disclosed there and in [`docs/DEVIATIONS.md`](docs/DEVIATIONS.md).
+Every number in the results table is checked in CI against the results file it comes from (`prometheus claims check`). The hypotheses, sample sizes, seeds and decision rules were hash-locked before each round's confirmatory experiments ([v0.1](prereg/PREREGISTRATION.json), [v0.2](prereg/PREREGISTRATION_v2.json), [v0.3](prereg/PREREGISTRATION_v3.json), [v0.4](prereg/PREREGISTRATION_v4.json), [v0.5](prereg/PREREGISTRATION_v5.json), [v0.6](prereg/PREREGISTRATION_v6.json), [v0.7](prereg/PREREGISTRATION_v7.json); CI verifies all seven locks); pilots and pre-lock design changes are disclosed there and in [`docs/DEVIATIONS.md`](docs/DEVIATIONS.md).
 
 ## Built from eight earlier projects
 
@@ -223,6 +223,8 @@ python -m prometheus.v4 F0                           # v0.4 experiments (and E0,
 python -m prometheus.v5 B0                           # v0.5 experiments (all eight rules)
 python -m prometheus.v6                              # v0.6 generations and attractor basins
 python -m prometheus.posthoc_v6                      # post hoc (not preregistered)
+python -m prometheus.train_v7 turnover 0 1000        # v0.7 stress siblings T0 (and noise/control, 1)
+python -m prometheus.v7                              # v0.7 causal trade-off test
 python tools/figures.py                              # paper figures
 python tools/build_claims.py && prometheus claims render && prometheus export-web
 ```
@@ -239,14 +241,14 @@ Runs are deterministic for a given PyTorch version: every founder, schedule and 
 | `src/prometheus/train.py` | backpropagation through whole lives; the E and S objectives |
 | `src/prometheus/experiments.py` | H1-H7 (with H3a-c and H4b), calibration, anatomy, the channel-locus and gap-junction explorations |
 | `src/prometheus/posthoc.py` | post-hoc analyses written after the results were seen (per-odour survival, transfer, chimera bias, cycles) |
-| `src/prometheus/v2.py`, `v3.py`, `v4.py`, `v5.py`, `v6.py`, `train_v3.py`, `train_v4.py` | v0.2-v0.6 experiments and the balanced (B) and fission (F) rules; they import the locked v0.1 code unchanged |
+| `src/prometheus/v2.py` ... `v7.py`, `train_v3.py`, `train_v4.py`, `train_v7.py` | v0.2-v0.7 experiments and the balanced (B), fission (F) and stress-trained (T, N, C) rules; they import the locked v0.1 code unchanged |
 | `paper/` | the paper and its figures (`tools/figures.py`) |
 | `tools/build_claims.py` | builds `claims/claims.json` so that every quoted number is a pointer into a results file |
 | `src/prometheus/stats.py` | paired bootstrap, sign-flip tests, Holm |
 | `src/prometheus/claims.py`, `prereg.py` | the claims ledger and the preregistration lock |
 | `prereg/` | hypotheses, seeds and decision rules, and their SHA-256 lock |
 | `results/` | every results file the README quotes, with provenance; `results/pilot/` holds the disclosed pilots |
-| `weights/` | the eight confirmatory rules E0, E1, S0, S1, B0, B1, F0, F1 (`weights/pilot/` the pilot rules) |
+| `weights/` | the fourteen confirmatory rules E, S, B, F, T, N, C (seeds 0 and 1; `weights/pilot/` the pilot rules) |
 | `web/` | the browser lab (`index.html`) and the JavaScript engine (`engine.js`), tested step for step against Python |
 
 ## Limitations

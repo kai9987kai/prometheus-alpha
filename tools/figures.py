@@ -222,7 +222,51 @@ def fig8_generations_tradeoff():
     fig.savefig(OUT / "fig8_generations_tradeoff.png")
 
 
+def fig9_causal_tradeoff():
+    """v0.7: where each sibling sits in the (turnover memory, noise memory) plane. A trade-off would move T
+    right and down from C, and N up and left."""
+    if not (ROOT / "results/v7.json").exists():
+        return
+    v7 = R("v7.json")
+    fig, axes = plt.subplots(1, 2, figsize=(7.8, 3.2), sharex=True, sharey=True)
+    col = {"S": INK2, "C": INK, "T": BLUE, "N": ORANGE}
+    for s, ax in enumerate(axes):
+        pt = {f: (v7["rules"][f"{f}{s}"]["turnover_memory"], v7["rules"][f"{f}{s}"]["noise_memory"]) for f in "SCTN"}
+        for f in "TN":
+            ax.annotate("", xy=pt[f], xytext=pt["C"], arrowprops=dict(arrowstyle="->", color=col[f], lw=1.8))
+        ax.annotate("", xy=pt["C"], xytext=pt["S"], arrowprops=dict(arrowstyle="->", color=GRID, lw=1.2, ls="--"))
+        for f, (x, y) in pt.items():
+            ax.scatter([x], [y], s=46, color=col[f], zorder=3)
+            ax.annotate(f"{f}{s}", (x, y), xytext=(5, 4), textcoords="offset points", fontsize=8, color=col[f])
+        ax.set_xlabel("memory after cell turnover")
+        ax.set_title(f"lineage {s}", fontsize=9, loc="left")
+    axes[0].set_ylabel("memory after head noise (sigma 1.5)")
+    fig.savefig(OUT / "fig9_causal_tradeoff.png")
+
+
+def fig10_engram_shape():
+    """Exploratory: the engram field of intact worms (distance between the hidden states of identical
+    twins trained on A and on B, per site) for each v0.7 sibling."""
+    if not (ROOT / "results/exploratory_v7_engram.json").exists():
+        return
+    ex = R("exploratory_v7_engram.json")["rules"]
+    fig, axes = plt.subplots(1, 2, figsize=(7.8, 2.8), sharey=True)
+    col = {"S": INK2, "C": INK, "T": BLUE, "N": ORANGE}
+    for s, ax in enumerate(axes):
+        for f in "SCTN":
+            e = ex[f"{f}{s}"]
+            ax.plot(range(len(e["profile"])), e["profile"], "-", color=col[f], lw=2 if f != "S" else 1.2,
+                    ls="--" if f == "S" else "-", label=f"{f}{s}  (head cv {e['head_cv']:.2f})")
+        ax.axvspan(4, 11.5, color=REG[0], alpha=0.08, lw=0)
+        ax.set_xlim(2, 30)
+        ax.set_xlabel("site (head on the left)")
+        ax.set_title(f"lineage {s}", fontsize=9, loc="left")
+        ax.legend(frameon=False, fontsize=7)
+    axes[0].set_ylabel("A-trained vs B-trained twin,\nhidden-state distance")
+    fig.savefig(OUT / "fig10_engram_shape.png")
+
+
 if __name__ == "__main__":
-    for f in (fig8_generations_tradeoff, fig2_survival, fig3_engram_map, fig4_cycles, fig5_compiled, fig6_fission, fig7_robustness, fig1_kymograph):
+    for f in (fig10_engram_shape, fig9_causal_tradeoff, fig8_generations_tradeoff, fig2_survival, fig3_engram_map, fig4_cycles, fig5_compiled, fig6_fission, fig7_robustness, fig1_kymograph):
         f()
         print("wrote", f.__name__)

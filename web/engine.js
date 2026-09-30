@@ -158,6 +158,26 @@
     return y;
   }
 
+  /* Cell turnover (v0.5 H25, v0.7): each site dies with probability ``frac``; the tissue regrows it. */
+  function turnover(x, rand, frac = 0.1) {
+    const y = x.slice();
+    for (let i = 0; i < L; i++) if (rand() < frac) for (let c = 0; c < C; c++) y[c * L + i] = 0;
+    return y;
+  }
+
+  /* Gaussian noise on the hidden channels of living cells in sites [a, b) (v0.7 noise measure: head 4-11). */
+  function noiseHidden(x, rand, sigma = 1.5, a = BODY_START, b = HEAD_END) {
+    const y = x.slice();
+    for (let i = a; i < b; i++) {
+      if (!(x[ALPHA * L + i] > 0.1)) continue;
+      for (let c = HIDDEN0; c < C; c++) {
+        const u = Math.max(rand(), 1e-12), v = rand();
+        y[c * L + i] += sigma * Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v);
+      }
+    }
+    return y;
+  }
+
   /* Linear engram decoder (v0.3 H16): which odour each cell's hidden state encodes. */
   function decode(x, dec) {
     const out = new Float32Array(L);
@@ -221,7 +241,7 @@
   const api = {
     L, C, ALPHA, V, HEAD, TRUNK, TAIL, R, HIDDEN0, PERC, FOUNDER, BODY_START, HEAD_END, TRUNK_END, BODY_END,
     PHYS, SLOT, N_SLOTS, GROW, REGEN, DELAY, TEST_T,
-    rule, founder, alive, step, writePattern, fission, decode, headWeight, response, region, amputate, graft, rng, fireMask, program, conditioning, probe,
+    rule, founder, alive, step, writePattern, fission, turnover, noiseHidden, decode, headWeight, response, region, amputate, graft, rng, fireMask, program, conditioning, probe,
   };
   root.Prometheus = api;
   if (typeof module !== "undefined" && module.exports) module.exports = api;

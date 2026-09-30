@@ -148,6 +148,11 @@ footer { font-size: 13px; color: var(--ink-soft); max-width: 80ch; }
         <div class="status" id="compinfo">Writes a gradient-designed hidden-channel pattern into the body (v0.2 H12). Cut the head first, then regenerate and probe.</div>
       </div>
       <div class="group">
+        <h3>3b · Stress (v0.7)</h3>
+        <div class="row"><button id="turnover">Cell turnover (10% die, ×10)</button><button id="noise">Noise the head (σ 1.5)</button></div>
+        <div class="status">Turnover: every 20 steps for 200 steps, a random 10% of cells die and regrow. Noise: the head's hidden channels are scrambled, then 12 steps pass. Compare rules T, N and C.</div>
+      </div>
+      <div class="group">
         <h3>4 · Test</h3>
         <div class="row"><button id="testA">Probe odour A</button><button id="testB">Probe odour B</button></div>
         <div class="row"><button id="cycle" class="primary">Promethean cycle</button></div>
@@ -211,7 +216,7 @@ footer { font-size: 13px; color: var(--ink-soft); max-width: 80ch; }
   const $ = (id) => document.getElementById(id);
   const css = (name) => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
   const HISTORY = 360;
-  const FAMILY = { E: "Emergent", S: "Selected", B: "Balanced", F: "Fission" };
+  const FAMILY = { E: "Emergent", S: "Selected", B: "Balanced", F: "Fission", T: "Turnover-hardened", N: "Noise-hardened", C: "Stress control" };
 
   const S = { rule: null, ruleName: null, x: null, t: 0, rand: P.rng(7), queue: [], hist: [], paused: false,
               csplus: 0, pairing: "paired", gj: true, probe: { 0: null, 1: null }, acc: { 0: [], 1: [] } };
@@ -361,6 +366,16 @@ footer { font-size: 13px; color: var(--ink-soft); max-width: 80ch; }
   $("regen").onclick = () => enqueue(P.program(P.REGEN, "regen"));
   const split = (keep) => () => doNow(() => { S.x = P.fission(S.x, keep); if (S.hist.length) S.hist[S.hist.length - 1].event = "fission"; });
   $("fisA").onclick = split("anterior"); $("fisP").onclick = split("posterior");
+  $("turnover").onclick = () => {
+    for (let k = 0; k < 10; k++) {
+      doNow(() => { S.x = P.turnover(S.x, S.rand); if (S.hist.length) S.hist[S.hist.length - 1].event = "turnover"; });
+      enqueue(P.program(20, "turnover"));
+    }
+  };
+  $("noise").onclick = () => {
+    doNow(() => { S.x = P.noiseHidden(S.x, S.rand, 1.5); if (S.hist.length) S.hist[S.hist.length - 1].event = "noise"; });
+    enqueue(P.program(12, "noise"));
+  };
   $("extinguish").onclick = () => { markEvent("extinguish"); for (let b = 0; b < 2; b++) enqueue(P.conditioning(S.csplus, "naive", S.rand)); enqueue(P.program(P.DELAY)); };
   const write = (k) => () => doNow(() => {
     const c = D.rules[S.ruleName].compiled;
