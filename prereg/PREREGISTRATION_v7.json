@@ -1,0 +1,50 @@
+{
+ "title": "Prometheus-alpha v0.7: is there a causal trade-off between tolerating noise and surviving cell loss?",
+ "version": "0.7",
+ "date": "2026-09-30",
+ "status": "Locked before any v0.7 measurement. T0, T1, N0, N1, C0 and C1 were training when this was locked. No pilots; code smoke tests at n = 2-4 checked shapes and initial losses only (the noise stress was softened from sigma 0.5-2 to 0.25-1 after its initial anatomy loss, 4.1, showed it destroyed the body; disclosed here).",
+ "motivation": "v0.6 post hoc: across six rules, head-memory noise tolerance correlated -0.83 with memory after cell turnover. A correlation over six rules from two lineages could be lineage, not trade-off. v0.7 intervenes.",
+ "rules": {
+  "T0, T1": "S0 / S1 + 1,000 iterations with a 60-step stress segment after the delay: three times, 10% of cells die at random, then 20 steps",
+  "N0, N1": "the same with Gaussian noise (sigma uniform 0.25-1) added to every living cell's hidden channels instead",
+  "C0, C1": "the same with no perturbation (control for the extra training)",
+  "shared": "same seed and the same sampled lives for the three siblings of a lineage; memory scored after the stress and after a wound (S objective)"
+ },
+ "measures": {
+  "turnover_memory": "10% of cells die every 20 steps for 200 steps after learning (kill seed 2, cohort seed 8025, 128 worms)",
+  "noise_memory": "Gaussian noise sigma 1.5 (seed 3) on the hidden channels of head sites 4-11 of intact trained worms, then 12 steps (cohort seed 8030, 128 worms)"
+ },
+ "hypotheses": {
+  "H31": {
+   "claim": "Turnover training works",
+   "measure": "turnover M(T) - M(C), per worm",
+   "test": "one-sided sign-flip, > 0"
+  },
+  "H32": {
+   "claim": "Noise training works",
+   "measure": "noise M(N) - M(C), per worm",
+   "test": "one-sided sign-flip, > 0"
+  },
+  "H33": {
+   "claim": "Trade-off: hardening against cell loss costs noise tolerance",
+   "measure": "noise M(C) - M(T), per worm",
+   "test": "one-sided sign-flip, > 0"
+  },
+  "H34": {
+   "claim": "Trade-off: hardening against noise costs survival of cell loss",
+   "measure": "turnover M(C) - M(N), per worm",
+   "test": "one-sided sign-flip, > 0"
+  }
+ },
+ "decision_rules": {
+  "family": "H31-H34 within each lineage; Holm at alpha 0.05; SESOI 0.10; replicated = supported in both lineages",
+  "interpretation": "The trade-off is supported causally only if H33 or H34 replicates. If H31 and H32 hold but H33 and H34 do not, the v0.6 correlation was not a trade-off: both robustnesses can be had together."
+ },
+ "predictions": {
+  "H31": "lineage 1: supported; lineage 0: not supported (S0 already keeps ~0.9 under turnover, little headroom)",
+  "H32": "both lineages: supported",
+  "H33": "not supported in either lineage (our bet: the v0.6 correlation reflects lineage, not a causal trade-off)",
+  "H34": "not supported in either lineage"
+ },
+ "deviations": "docs/DEVIATIONS.md, v0.7"
+}

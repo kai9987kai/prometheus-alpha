@@ -21,6 +21,6 @@ jobs:
       - name: unit tests (engine invariants, JS/Python parity, statistics)
         run: python -m pytest -q
       - name: the preregistration lock still verifies
-        run: prometheus prereg verify && prometheus prereg verify --version 2 && prometheus prereg verify --version 3 && prometheus prereg verify --version 4 && prometheus prereg verify --version 5 && prometheus prereg verify --version 6
+        run: prometheus prereg verify && prometheus prereg verify --version 2 && prometheus prereg verify --version 3 && prometheus prereg verify --version 4 && prometheus prereg verify --version 5 && prometheus prereg verify --version 6 && prometheus prereg verify --version 7
       - name: every number in the README is checked against the results files
         run: prometheus claims check

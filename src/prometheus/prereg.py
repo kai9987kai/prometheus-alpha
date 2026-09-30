@@ -21,6 +21,7 @@ VERSIONS = {  # version -> (preregistration, lock, extra locked sources)
     "4": ("PREREGISTRATION_v4.json", "PREREGISTRATION_v4.lock.json", ["v2.py", "v3.py", "v4.py", "train_v4.py"]),
     "5": ("PREREGISTRATION_v5.json", "PREREGISTRATION_v5.lock.json", ["v5.py"]),
     "6": ("PREREGISTRATION_v6.json", "PREREGISTRATION_v6.lock.json", ["v2.py", "v6.py"]),
+    "7": ("PREREGISTRATION_v7.json", "PREREGISTRATION_v7.lock.json", ["v2.py", "v5.py", "v7.py", "train_v7.py"]),
 }
 PREREG = ROOT / "prereg" / VERSIONS["1"][0]
 LOCK = ROOT / "prereg" / VERSIONS["1"][1]
