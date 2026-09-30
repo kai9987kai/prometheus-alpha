@@ -25,7 +25,7 @@ for n in ("E0", "E1", "S0", "S1", "B0", "B1", "F0", "F1"):
     if pth.exists():
         R[f"v5{n}"] = json.loads(pth.read_text())
         F[f"v5{n}"] = f"results/v5_{n}.json"
-for name in ("v6", "posthoc_v6", "v7"):
+for name in ("v6", "posthoc_v6", "v7", "exploratory_v7_engram"):
     if (ROOT / f"results/{name}.json").exists():
         R[name] = json.loads((ROOT / f"results/{name}.json").read_text())
         F[name] = f"results/{name}.json"
@@ -347,7 +347,7 @@ if "posthoc_v6" in R:
     for r in ("S0", "S1", "B0", "B1", "F0", "F1"):
         e[r] = ev("posthoc_v6", f"/basins/{r}/area")
     add("posthoc-tradeoff", "Post hoc: a trade-off. Rules whose head memory tolerates noise are the ones whose memory dies with cell turnover",
-        "post hoc", "Spearman rho between head-basin area and v0.5 turnover memory, 6 rules: {rho}. Basin area: S0 {S0}, B0 {B0}, F0 {F0} (turnover-robust) vs S1 {S1}, B1 {B1}, F1 {F1}. Not preregistered; a hypothesis for the next round", e)
+        "post hoc", "Spearman rho between head-basin area and v0.5 turnover memory, 6 rules: {rho}. Basin area: S0 {S0}, B0 {B0}, F0 {F0} (turnover-robust) vs S1 {S1}, B1 {B1}, F1 {F1}. Not preregistered. Tested causally in v0.7 (v7-H33, v7-H34): not a trade-off", e)
 
 # ============================================================ v0.7
 if "v7" in R:
@@ -364,17 +364,28 @@ if "v7" in R:
         return e
 
     add("v7-H31", "v0.7: training under cell turnover hardens the memory against it",
-        v7st("H31"), "memory after 200 steps of turnover, turnover-trained T vs control-trained C sibling: lineage 0 {T0} vs {C0} (difference {d0}, Holm p {p0}); lineage 1 {T1} vs {C1} ({d1}, Holm p {p1})",
+        v7st("H31"), "memory after 200 steps of turnover, turnover-trained T vs control-trained C sibling: lineage 0 {T0} vs {C0} (difference {d0}, Holm p {p0}: significant but below the smallest effect of interest; lineage 0 was already near ceiling, as predicted); lineage 1 {T1} vs {C1} ({d1}, Holm p {p1})",
         v7ev({}, "H31", "turnover", "T", "C"))
     add("v7-H32", "v0.7: training under hidden-state noise hardens the memory against it",
         v7st("H32"), "memory after sigma 1.5 noise on the head's hidden channels, noise-trained N vs control C: lineage 0 {N0} vs {C0} (difference {d0}, Holm p {p0}); lineage 1 {N1} vs {C1} ({d1}, Holm p {p1})",
         v7ev({}, "H32", "noise", "N", "C"))
     add("v7-H33", "v0.7 trade-off: hardening the memory against cell loss costs noise tolerance",
-        v7st("H33"), "noise memory, control C vs turnover-trained T: lineage 0 {C0} vs {T0} (C - T {d0}, Holm p {p0}); lineage 1 {C1} vs {T1} ({d1}, Holm p {p1})",
+        v7st("H33"), "as predicted, no, and the difference points the other way: noise memory of the control C vs the turnover-trained T, lineage 0 {C0} vs {T0} (C - T {d0}, Holm p {p0}); lineage 1 {C1} vs {T1} ({d1}, Holm p {p1}). Hardening against cell loss did not cost noise tolerance; if anything it bought some",
         v7ev({}, "H33", "noise", "C", "T"), headline=True)
     add("v7-H34", "v0.7 trade-off: hardening the memory against noise costs survival of cell loss",
-        v7st("H34"), "turnover memory, control C vs noise-trained N: lineage 0 {C0} vs {N0} (C - N {d0}, Holm p {p0}); lineage 1 {C1} vs {N1} ({d1}, Holm p {p1})",
-        v7ev({}, "H34", "turnover", "C", "N"), headline=True)
+        v7st("H34"), "as predicted, no, and the difference points the other way: turnover memory of the control C vs the noise-trained N, lineage 0 {C0} vs {N0} (C - N {d0}, Holm p {p0}); lineage 1 {C1} vs {N1} ({d1}, Holm p {p1}). Noise training made lineage 1's memory survive cell loss almost as well as turnover training did (T1 {T1}); the v0.6 correlation was lineage, not a trade-off",
+        v7ev({"T1": ev("v7", "/rules/T1/turnover_memory")}, "H34", "turnover", "C", "N"), headline=True)
+
+if "exploratory_v7_engram" in R:
+    X7 = "exploratory_v7_engram"
+    e = {"rho": ev(X7, "/post_hoc/amplitude_vs_noise_memory/rho"), "p": ev(X7, "/post_hoc/amplitude_vs_noise_memory/p_one_sided", 3)}
+    for r in ("C0", "T0", "N0", "C1", "T1", "N1"):
+        e[f"{r}_a"] = ev(X7, f"/rules/{r}/amplitude")
+        e[f"{r}_s"] = ev(X7, f"/rules/{r}/spread", 1)
+    for r in ("S0", "B0", "F0", "S1", "B1", "F1"):
+        e[f"{r}_cv"] = ev(X7, f"/rules/{r}/head_cv")
+    add("explore-v7-engram", "Exploratory: noise training makes the engram louder, not wider; turnover training barely changes it",
+        "exploratory", "distance between the hidden states of identical twins trained on A and on B, mean over living sites (amplitude) and participation ratio (spread, cells): C0 {C0_a} / {C0_s}, T0 {T0_a} / {T0_s}, N0 {N0_a} / {N0_s}; C1 {C1_a} / {C1_s}, T1 {T1_a} / {T1_s}, N1 {N1_a} / {N1_s}. So T1's new resistance to cell loss is not visible in the stored pattern. Post hoc, over the eight S, C, T, N rules, amplitude tracks noise memory (Spearman rho {rho}, one-sided exact p {p}). The lineages differ in shape: lineage 0 codes are flat across the head (coefficient of variation S0 {S0_cv}, B0 {B0_cv}, F0 {F0_cv}), lineage 1 codes graded (S1 {S1_cv}, B1 {B1_cv}, F1 {F1_cv})", e)
 
 # ---- post hoc: favoured odour
 e = {}
@@ -439,7 +450,7 @@ add("anatomy", "All four rules grow the body from one founder cell and regrow it
     "body IoU with the target after 32 steps of growth / after head regeneration / 300 steps later: E0 {E0_g} / {E0_h} / {E0_l}; E1 {E1_g} / {E1_h} / {E1_l}; S0 {S0_g} / {S0_h} / {S0_l}; S1 {S1_g} / {S1_h} / {S1_l}",
     e)
 
-ORDER = ["H2-S", "H2-E", "H3c", "v2-H13", "v2-H12", "v4-H24", "v4-H19", "v4-H21", "v4-H23", "v5-H27", "v5-H25", "v5-H28", "v5-H26", "v6-H29", "v6-H30", "posthoc-tradeoff", "v7-H33", "v7-H34", "v7-H31", "v7-H32", "v3-H14", "v3-H15", "v3-H16", "v3-H17", "v3-H18", "H6",
+ORDER = ["H2-S", "H2-E", "H3c", "v2-H13", "v2-H12", "v4-H24", "v4-H19", "v4-H21", "v4-H23", "v5-H27", "v5-H25", "v5-H28", "v5-H26", "v6-H29", "v6-H30", "posthoc-tradeoff", "v7-H33", "v7-H34", "v7-H31", "v7-H32", "explore-v7-engram", "v3-H14", "v3-H15", "v3-H16", "v3-H17", "v3-H18", "H6",
          "v2-H11", "posthoc-attractor", "v2-H8", "v2-H9", "v2-H10", "H4b", "H3ab", "H4-E", "H4-S", "H5", "H7", "H1",
          "SESOI", "locus", "gj", "calibration", "anatomy"]
 claims.sort(key=lambda c: ORDER.index(c["id"]))

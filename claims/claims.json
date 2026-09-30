@@ -796,7 +796,7 @@
    "claim": "Post hoc: a trade-off. Rules whose head memory tolerates noise are the ones whose memory dies with cell turnover",
    "status": "post hoc",
    "headline": false,
-   "evidence_text": "Spearman rho between head-basin area and v0.5 turnover memory, 6 rules: {rho}. Basin area: S0 {S0}, B0 {B0}, F0 {F0} (turnover-robust) vs S1 {S1}, B1 {B1}, F1 {F1}. Not preregistered; a hypothesis for the next round",
+   "evidence_text": "Spearman rho between head-basin area and v0.5 turnover memory, 6 rules: {rho}. Basin area: S0 {S0}, B0 {B0}, F0 {F0} (turnover-robust) vs S1 {S1}, B1 {B1}, F1 {F1}. Not preregistered. Tested causally in v0.7 (v7-H33, v7-H34): not a trade-off",
    "evidence": {
     "rho": {
      "file": "results/posthoc_v6.json",
@@ -838,6 +838,369 @@
      "file": "results/posthoc_v6.json",
      "pointer": "/basins/F1/area",
      "value": 1.5939473556305561,
+     "decimals": 2
+    }
+   }
+  },
+  {
+   "id": "v7-H33",
+   "claim": "v0.7 trade-off: hardening the memory against cell loss costs noise tolerance",
+   "status": "not supported",
+   "headline": true,
+   "evidence_text": "as predicted, no, and the difference points the other way: noise memory of the control C vs the turnover-trained T, lineage 0 {C0} vs {T0} (C - T {d0}, Holm p {p0}); lineage 1 {C1} vs {T1} ({d1}, Holm p {p1}). Hardening against cell loss did not cost noise tolerance; if anything it bought some",
+   "evidence": {
+    "C0": {
+     "file": "results/v7.json",
+     "pointer": "/rules/C0/noise_memory",
+     "value": 0.13330662719818065,
+     "decimals": 2
+    },
+    "T0": {
+     "file": "results/v7.json",
+     "pointer": "/rules/T0/noise_memory",
+     "value": 0.2661222155843461,
+     "decimals": 2
+    },
+    "d0": {
+     "file": "results/v7.json",
+     "pointer": "/tests/H33_0/mean",
+     "value": -0.13281558838616547,
+     "decimals": 2
+    },
+    "p0": {
+     "file": "results/v7.json",
+     "pointer": "/tests/H33_0/p_adj",
+     "value": 1.0,
+     "decimals": 3
+    },
+    "C1": {
+     "file": "results/v7.json",
+     "pointer": "/rules/C1/noise_memory",
+     "value": 0.5136453328377684,
+     "decimals": 2
+    },
+    "T1": {
+     "file": "results/v7.json",
+     "pointer": "/rules/T1/noise_memory",
+     "value": 0.5605307824807824,
+     "decimals": 2
+    },
+    "d1": {
+     "file": "results/v7.json",
+     "pointer": "/tests/H33_1/mean",
+     "value": -0.046885449643014,
+     "decimals": 2
+    },
+    "p1": {
+     "file": "results/v7.json",
+     "pointer": "/tests/H33_1/p_adj",
+     "value": 1.0,
+     "decimals": 3
+    }
+   }
+  },
+  {
+   "id": "v7-H34",
+   "claim": "v0.7 trade-off: hardening the memory against noise costs survival of cell loss",
+   "status": "not supported",
+   "headline": true,
+   "evidence_text": "as predicted, no, and the difference points the other way: turnover memory of the control C vs the noise-trained N, lineage 0 {C0} vs {N0} (C - N {d0}, Holm p {p0}); lineage 1 {C1} vs {N1} ({d1}, Holm p {p1}). Noise training made lineage 1's memory survive cell loss almost as well as turnover training did (T1 {T1}); the v0.6 correlation was lineage, not a trade-off",
+   "evidence": {
+    "T1": {
+     "file": "results/v7.json",
+     "pointer": "/rules/T1/turnover_memory",
+     "value": 0.9722184835934513,
+     "decimals": 2
+    },
+    "C0": {
+     "file": "results/v7.json",
+     "pointer": "/rules/C0/turnover_memory",
+     "value": 0.9441573181679814,
+     "decimals": 2
+    },
+    "N0": {
+     "file": "results/v7.json",
+     "pointer": "/rules/N0/turnover_memory",
+     "value": 0.9850205964853558,
+     "decimals": 2
+    },
+    "d0": {
+     "file": "results/v7.json",
+     "pointer": "/tests/H34_0/mean",
+     "value": -0.04086327831737435,
+     "decimals": 2
+    },
+    "p0": {
+     "file": "results/v7.json",
+     "pointer": "/tests/H34_0/p_adj",
+     "value": 1.0,
+     "decimals": 3
+    },
+    "C1": {
+     "file": "results/v7.json",
+     "pointer": "/rules/C1/turnover_memory",
+     "value": 0.4097993760369718,
+     "decimals": 2
+    },
+    "N1": {
+     "file": "results/v7.json",
+     "pointer": "/rules/N1/turnover_memory",
+     "value": 0.916659569254989,
+     "decimals": 2
+    },
+    "d1": {
+     "file": "results/v7.json",
+     "pointer": "/tests/H34_1/mean",
+     "value": -0.5068601932180172,
+     "decimals": 2
+    },
+    "p1": {
+     "file": "results/v7.json",
+     "pointer": "/tests/H34_1/p_adj",
+     "value": 1.0,
+     "decimals": 3
+    }
+   }
+  },
+  {
+   "id": "v7-H31",
+   "claim": "v0.7: training under cell turnover hardens the memory against it",
+   "status": "mixed",
+   "headline": false,
+   "evidence_text": "memory after 200 steps of turnover, turnover-trained T vs control-trained C sibling: lineage 0 {T0} vs {C0} (difference {d0}, Holm p {p0}: significant but below the smallest effect of interest; lineage 0 was already near ceiling, as predicted); lineage 1 {T1} vs {C1} ({d1}, Holm p {p1})",
+   "evidence": {
+    "T0": {
+     "file": "results/v7.json",
+     "pointer": "/rules/T0/turnover_memory",
+     "value": 0.9880949992571004,
+     "decimals": 2
+    },
+    "C0": {
+     "file": "results/v7.json",
+     "pointer": "/rules/C0/turnover_memory",
+     "value": 0.9441573181679814,
+     "decimals": 2
+    },
+    "d0": {
+     "file": "results/v7.json",
+     "pointer": "/tests/H31_0/mean",
+     "value": 0.043937681089118996,
+     "decimals": 2
+    },
+    "p0": {
+     "file": "results/v7.json",
+     "pointer": "/tests/H31_0/p_adj",
+     "value": 0.0275972402759724,
+     "decimals": 3
+    },
+    "T1": {
+     "file": "results/v7.json",
+     "pointer": "/rules/T1/turnover_memory",
+     "value": 0.9722184835934513,
+     "decimals": 2
+    },
+    "C1": {
+     "file": "results/v7.json",
+     "pointer": "/rules/C1/turnover_memory",
+     "value": 0.4097993760369718,
+     "decimals": 2
+    },
+    "d1": {
+     "file": "results/v7.json",
+     "pointer": "/tests/H31_1/mean",
+     "value": 0.5624191075564795,
+     "decimals": 2
+    },
+    "p1": {
+     "file": "results/v7.json",
+     "pointer": "/tests/H31_1/p_adj",
+     "value": 0.00039996000399960006,
+     "decimals": "sci"
+    }
+   }
+  },
+  {
+   "id": "v7-H32",
+   "claim": "v0.7: training under hidden-state noise hardens the memory against it",
+   "status": "replicated",
+   "headline": false,
+   "evidence_text": "memory after sigma 1.5 noise on the head's hidden channels, noise-trained N vs control C: lineage 0 {N0} vs {C0} (difference {d0}, Holm p {p0}); lineage 1 {N1} vs {C1} ({d1}, Holm p {p1})",
+   "evidence": {
+    "N0": {
+     "file": "results/v7.json",
+     "pointer": "/rules/N0/noise_memory",
+     "value": 0.9234081321665144,
+     "decimals": 2
+    },
+    "C0": {
+     "file": "results/v7.json",
+     "pointer": "/rules/C0/noise_memory",
+     "value": 0.13330662719818065,
+     "decimals": 2
+    },
+    "d0": {
+     "file": "results/v7.json",
+     "pointer": "/tests/H32_0/mean",
+     "value": 0.7901015049683338,
+     "decimals": 2
+    },
+    "p0": {
+     "file": "results/v7.json",
+     "pointer": "/tests/H32_0/p_adj",
+     "value": 0.00039996000399960006,
+     "decimals": "sci"
+    },
+    "N1": {
+     "file": "results/v7.json",
+     "pointer": "/rules/N1/noise_memory",
+     "value": 0.934409175853034,
+     "decimals": 2
+    },
+    "C1": {
+     "file": "results/v7.json",
+     "pointer": "/rules/C1/noise_memory",
+     "value": 0.5136453328377684,
+     "decimals": 2
+    },
+    "d1": {
+     "file": "results/v7.json",
+     "pointer": "/tests/H32_1/mean",
+     "value": 0.4207638430152656,
+     "decimals": 2
+    },
+    "p1": {
+     "file": "results/v7.json",
+     "pointer": "/tests/H32_1/p_adj",
+     "value": 0.00039996000399960006,
+     "decimals": "sci"
+    }
+   }
+  },
+  {
+   "id": "explore-v7-engram",
+   "claim": "Exploratory: noise training makes the engram louder, not wider; turnover training barely changes it",
+   "status": "exploratory",
+   "headline": false,
+   "evidence_text": "distance between the hidden states of identical twins trained on A and on B, mean over living sites (amplitude) and participation ratio (spread, cells): C0 {C0_a} / {C0_s}, T0 {T0_a} / {T0_s}, N0 {N0_a} / {N0_s}; C1 {C1_a} / {C1_s}, T1 {T1_a} / {T1_s}, N1 {N1_a} / {N1_s}. So T1's new resistance to cell loss is not visible in the stored pattern. Post hoc, over the eight S, C, T, N rules, amplitude tracks noise memory (Spearman rho {rho}, one-sided exact p {p}). The lineages differ in shape: lineage 0 codes are flat across the head (coefficient of variation S0 {S0_cv}, B0 {B0_cv}, F0 {F0_cv}), lineage 1 codes graded (S1 {S1_cv}, B1 {B1_cv}, F1 {F1_cv})",
+   "evidence": {
+    "rho": {
+     "file": "results/exploratory_v7_engram.json",
+     "pointer": "/post_hoc/amplitude_vs_noise_memory/rho",
+     "value": 0.8333333333333335,
+     "decimals": 2
+    },
+    "p": {
+     "file": "results/exploratory_v7_engram.json",
+     "pointer": "/post_hoc/amplitude_vs_noise_memory/p_one_sided",
+     "value": 0.007688492063492063,
+     "decimals": 3
+    },
+    "C0_a": {
+     "file": "results/exploratory_v7_engram.json",
+     "pointer": "/rules/C0/amplitude",
+     "value": 0.8641630411148071,
+     "decimals": 2
+    },
+    "C0_s": {
+     "file": "results/exploratory_v7_engram.json",
+     "pointer": "/rules/C0/spread",
+     "value": 13.002421379089355,
+     "decimals": 1
+    },
+    "T0_a": {
+     "file": "results/exploratory_v7_engram.json",
+     "pointer": "/rules/T0/amplitude",
+     "value": 0.8038979768753052,
+     "decimals": 2
+    },
+    "T0_s": {
+     "file": "results/exploratory_v7_engram.json",
+     "pointer": "/rules/T0/spread",
+     "value": 11.377178192138672,
+     "decimals": 1
+    },
+    "N0_a": {
+     "file": "results/exploratory_v7_engram.json",
+     "pointer": "/rules/N0/amplitude",
+     "value": 1.9419790506362915,
+     "decimals": 2
+    },
+    "N0_s": {
+     "file": "results/exploratory_v7_engram.json",
+     "pointer": "/rules/N0/spread",
+     "value": 11.17833137512207,
+     "decimals": 1
+    },
+    "C1_a": {
+     "file": "results/exploratory_v7_engram.json",
+     "pointer": "/rules/C1/amplitude",
+     "value": 1.0686895847320557,
+     "decimals": 2
+    },
+    "C1_s": {
+     "file": "results/exploratory_v7_engram.json",
+     "pointer": "/rules/C1/spread",
+     "value": 10.7122163772583,
+     "decimals": 1
+    },
+    "T1_a": {
+     "file": "results/exploratory_v7_engram.json",
+     "pointer": "/rules/T1/amplitude",
+     "value": 1.0622515678405762,
+     "decimals": 2
+    },
+    "T1_s": {
+     "file": "results/exploratory_v7_engram.json",
+     "pointer": "/rules/T1/spread",
+     "value": 10.910608291625977,
+     "decimals": 1
+    },
+    "N1_a": {
+     "file": "results/exploratory_v7_engram.json",
+     "pointer": "/rules/N1/amplitude",
+     "value": 3.1326208114624023,
+     "decimals": 2
+    },
+    "N1_s": {
+     "file": "results/exploratory_v7_engram.json",
+     "pointer": "/rules/N1/spread",
+     "value": 11.868814468383789,
+     "decimals": 1
+    },
+    "S0_cv": {
+     "file": "results/exploratory_v7_engram.json",
+     "pointer": "/rules/S0/head_cv",
+     "value": 0.08706559240818024,
+     "decimals": 2
+    },
+    "B0_cv": {
+     "file": "results/exploratory_v7_engram.json",
+     "pointer": "/rules/B0/head_cv",
+     "value": 0.059576649218797684,
+     "decimals": 2
+    },
+    "F0_cv": {
+     "file": "results/exploratory_v7_engram.json",
+     "pointer": "/rules/F0/head_cv",
+     "value": 0.1536925733089447,
+     "decimals": 2
+    },
+    "S1_cv": {
+     "file": "results/exploratory_v7_engram.json",
+     "pointer": "/rules/S1/head_cv",
+     "value": 0.2706519067287445,
+     "decimals": 2
+    },
+    "B1_cv": {
+     "file": "results/exploratory_v7_engram.json",
+     "pointer": "/rules/B1/head_cv",
+     "value": 0.256538450717926,
+     "decimals": 2
+    },
+    "F1_cv": {
+     "file": "results/exploratory_v7_engram.json",
+     "pointer": "/rules/F1/head_cv",
+     "value": 0.31853392720222473,
      "decimals": 2
     }
    }

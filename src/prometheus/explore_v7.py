@@ -25,7 +25,7 @@ import pathlib
 import numpy as np
 import torch
 
-from . import provenance, v2
+from . import provenance, v2, v6
 from . import experiments as X
 from .train import load
 
@@ -63,5 +63,28 @@ def run() -> dict:
     return res
 
 
+def relate(res: dict, v7: dict) -> dict:
+    """Added AFTER the v0.7 results were seen (post hoc): rank correlations, over the eight S, C, T and N
+    rules, between the engram measures and the v0.7 memories (exact one-sided Spearman tests)."""
+    rules = [f"{f}{s}" for s in (0, 1) for f in "SCTN"]
+    ex, mem = res["rules"], v7["rules"]
+    out = {"note": "post hoc: computed after the v0.7 results were seen", "rules": rules}
+    for name, a, b in (("amplitude_vs_noise_memory", "amplitude", "noise_memory"),
+                       ("snr_vs_noise_memory", "snr", "noise_memory"),
+                       ("flatness_vs_turnover_memory", "head_cv", "turnover_memory"),
+                       ("amplitude_vs_turnover_memory", "amplitude", "turnover_memory")):
+        x = np.array([-ex[r][a] if a == "head_cv" else ex[r][a] for r in rules])
+        rho, pv = v6.spearman_exact(x, np.array([mem[r][b] for r in rules]))
+        out[name] = {"rho": rho, "p_one_sided": pv}
+    return out
+
+
 if __name__ == "__main__":
-    pathlib.Path("results/exploratory_v7_engram.json").write_text(json.dumps(run(), indent=1))
+    res = run()
+    v7 = pathlib.Path("results/v7.json")
+    if v7.exists():
+        res["post_hoc"] = relate(res, json.loads(v7.read_text()))
+        for k, v in res["post_hoc"].items():
+            if isinstance(v, dict):
+                print(f"{k}: rho {v['rho']:+.2f} (one-sided p {v['p_one_sided']:.3g})")
+    pathlib.Path("results/exploratory_v7_engram.json").write_text(json.dumps(res, indent=1))

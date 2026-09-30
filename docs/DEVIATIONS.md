@@ -29,3 +29,12 @@ No confirmatory protocol, sample size, seed, test or decision rule was changed a
 
 1. **The lock was committed but not pushed before the run.** The v0.6 lock commit (458217d) was made before the confirmatory run, but its push was rejected: the owner had meanwhile added CODE_OF_CONDUCT.md and SECURITY.md to the branch on GitHub. The run went ahead in the same command before the rejection was noticed. The lock commit precedes the results in the history, and it was pushed immediately after, merged with the owner's commits (f19916f). No protocol was changed.
 2. **A post-hoc analysis after H30 failed.** `src/prometheus/posthoc_v6.py` measures the basin in the heads of intact worms instead of at the neck of decapitated ones, and is labelled post hoc everywhere it is quoted.
+
+## v0.7
+
+No confirmatory protocol, seed, sample size, test or decision rule changed after the lock (`prometheus prereg verify --version 7` passes in CI). For the record:
+
+1. **Noise stress softened before the lock.** The first smoke test of N training used sigma 0.5-2; its initial anatomy loss (4.1) showed the noise destroyed the body, and it was softened to 0.25-1 before the lock. Disclosed in the preregistration itself.
+2. **Weights committed before measurement.** Each of the six rules was committed and pushed as its training finished, before `python -m prometheus.v7` read any of them.
+3. **Exploratory mechanism analysis.** `src/prometheus/explore_v7.py` (engram amplitude, spread, head shape) was written after the lock and before any v0.7 result, but was not preregistered. Its rank correlations with the v0.7 memories (`relate`) were added after the results were seen, and every claim drawn from it is labelled exploratory or post hoc.
+4. **Opposite-direction effects.** H33 and H34 were one-sided tests of a trade-off. Both differences came out in the opposite direction, some with confidence intervals excluding zero. Those opposite effects were not tested hypotheses; the paper reports them as estimates with intervals, not as confirmed findings.

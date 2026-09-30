@@ -255,7 +255,7 @@ def fig10_engram_shape():
     for s, ax in enumerate(axes):
         for f in "SCTN":
             e = ex[f"{f}{s}"]
-            ax.plot(range(len(e["profile"])), e["profile"], "-", color=col[f], lw=2 if f != "S" else 1.2,
+            ax.plot(range(len(e["profile"])), e["profile"], color=col[f], lw=2 if f != "S" else 1.2,
                     ls="--" if f == "S" else "-", label=f"{f}{s}  (head cv {e['head_cv']:.2f})")
         ax.axvspan(4, 11.5, color=REG[0], alpha=0.08, lw=0)
         ax.set_xlim(2, 30)

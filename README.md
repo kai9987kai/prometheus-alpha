@@ -2,7 +2,7 @@
 
 **Does a regenerating body remember what its lost head learned? Synthetic worms grow from one cell, learn which odour predicts a shock, lose their heads, regrow them, and are asked again.**
 
-Author/project lead: **Kai Piper** · Version **0.6.0** · 29 September 2026 · **Paper: [paper/Prometheus_alpha_paper.md](paper/Prometheus_alpha_paper.md)**
+Author/project lead: **Kai Piper** · Version **0.7.0** · 30 September 2026 · **Paper: [paper/Prometheus_alpha_paper.md](paper/Prometheus_alpha_paper.md)**
 
 > **Scientific status.** Everything here is a synthetic computational experiment on a neural cellular automaton. "Memory", "head", "odour" and "shock" name parts of a simulation. Nothing here is a model of a particular animal, and nothing here bears on any person or clinical condition.
 
@@ -17,13 +17,22 @@ Prometheus-α asks it of a synthetic body in which every cell's state can be rea
 3. **Pavlovian conditioning with the proper control.** One odour is paired with a shock. Every paired worm has an *explicitly unpaired twin*: the same odours, the same number of shocks at the same moments of its life, the same random update noise, the same founder; only the contingency differs. The memory measure is taken within the worm, so baseline shifts cancel.
 4. **Emergent versus selected.** *E* rules are trained to learn and to regenerate, but never asked to remember through a regeneration. *S* rules are selected from their E sibling by also asking for memory after one amputation. Chimeras, voltage transplants, trunk fragments and repeated amputation are never trained in either.
 
+### New in v0.7: the trade-off that wasn't
+
+v0.6 left a post-hoc correlation: memories that shrug off noise seemed to die with their cells. v0.7 tested it causally. Each selected rule got three siblings, trained on identical lives with one extra stress: cell turnover (**T**), noise in the cells' hidden state (**N**), or nothing (**C**, the control for extra training). All were then measured on the same worms with held-out stresses. [Preregistered](prereg/PREREGISTRATION_v7.json) and hash-locked before any measurement; **all eight predictions held.**
+
+* **Both trainings work.** Noise training raises noise memory by +0.79 and +0.42. Turnover training raises turnover memory by +0.56 in lineage 1; lineage 0 was already at 0.94 and had no room.
+* **No trade-off.** Hardening against one stress never cost the other. It helped instead. Noise-trained N1 survives cell turnover at 0.92 (control 0.41), nearly as well as T1 (0.97), without ever seeing a cell die. The v0.6 correlation was lineage, not constraint.
+* **How (exploratory).** Noise training makes the stored code *louder, not wider*: the distance between A- and B-trained twins' hidden states roughly doubles or triples, while the number of cells carrying it stays the same. Across eight rules, code size tracks noise tolerance (ρ = 0.83, post hoc). Turnover training leaves the stored pattern unchanged, so what it changed is how the tissue rebuilds the pattern after cells die.
+* **Try it.** The browser lab has new *Cell turnover* and *Noise the head* buttons and all fourteen rules.
+
+Across seven preregistered rounds, **116 of 135 stated predictions held**.
+
 ### New in v0.6: memory across generations, and a mechanism that failed
 
 * **Memory passes down generations.** Split a fission-rule worm, let the back half regrow, and split that worm again, three times. Only one split was ever trained. The memory reaches the third generation, fading as it goes: F0 0.95 → 0.77 → 0.25, F1 0.97 → 0.49 → 0.47.
 * **My mechanism for robustness failed.** I predicted that a wider attractor basin would make a memory survive cell turnover. The correlation came out negative (ρ = -0.43).
 * **A possible trade-off (post hoc, not a finding).** Measured where turnover acts, in the heads of intact worms, the correlation is strongly negative (ρ = -0.83). Memories that shrug off noise die with their cells, and memories that survive cell death are easily scrambled. This is the next hypothesis to test.
-
-Across six preregistered rounds, **108 of 127 stated predictions held**.
 
 ### New in v0.5: turnover, time and eight-cell animals
 
@@ -152,7 +161,12 @@ flowchart LR
 | v0.5: the memory lasts 300 steps without any reminder (training delays were 4-16) | **supported in 7 of 8 rules** | M: E0 0.92, E1 -0.01 (forgets), S0 0.96, S1 0.80, B0 0.99, B1 1.00, F0 0.88, F1 0.87 |
 | **v0.6: memory passes down three generations of fission (only one split was ever trained), fading each time** | **replicated** | M after generations 1, 2, 3: F0 0.95, 0.77, 0.25; F1 0.97, 0.49, 0.47; S0 0.00, 0.00, 0.00 and S1 -0.00, -0.00, -0.01 never pass it on |
 | v0.6: a wider attractor basin at the neck predicts survival of cell turnover | **not supported** | Spearman rho -0.43 (one-sided exact p 0.822, 6 rules). Critical noise sigma*: S0 1.00, S1 1.50, B0 1.00, B1 1.50, F0 3.00, F1 1.00 |
-| Post hoc: a trade-off. Rules whose head memory tolerates noise are the ones whose memory dies with cell turnover | **post hoc** | Spearman rho between head-basin area and v0.5 turnover memory, 6 rules: -0.83. Basin area: S0 1.16, B0 1.13, F0 1.33 (turnover-robust) vs S1 2.26, B1 2.55, F1 1.59. Not preregistered; a hypothesis for the next round |
+| Post hoc: a trade-off. Rules whose head memory tolerates noise are the ones whose memory dies with cell turnover | **post hoc** | Spearman rho between head-basin area and v0.5 turnover memory, 6 rules: -0.83. Basin area: S0 1.16, B0 1.13, F0 1.33 (turnover-robust) vs S1 2.26, B1 2.55, F1 1.59. Not preregistered. Tested causally in v0.7 (v7-H33, v7-H34): not a trade-off |
+| **v0.7 trade-off: hardening the memory against cell loss costs noise tolerance** | **not supported** | as predicted, no, and the difference points the other way: noise memory of the control C vs the turnover-trained T, lineage 0 0.13 vs 0.27 (C - T -0.13, Holm p 1.000); lineage 1 0.51 vs 0.56 (-0.05, Holm p 1.000). Hardening against cell loss did not cost noise tolerance; if anything it bought some |
+| **v0.7 trade-off: hardening the memory against noise costs survival of cell loss** | **not supported** | as predicted, no, and the difference points the other way: turnover memory of the control C vs the noise-trained N, lineage 0 0.94 vs 0.99 (C - N -0.04, Holm p 1.000); lineage 1 0.41 vs 0.92 (-0.51, Holm p 1.000). Noise training made lineage 1's memory survive cell loss almost as well as turnover training did (T1 0.97); the v0.6 correlation was lineage, not a trade-off |
+| v0.7: training under cell turnover hardens the memory against it | **mixed** | memory after 200 steps of turnover, turnover-trained T vs control-trained C sibling: lineage 0 0.99 vs 0.94 (difference 0.04, Holm p 0.028: significant but below the smallest effect of interest; lineage 0 was already near ceiling, as predicted); lineage 1 0.97 vs 0.41 (0.56, Holm p 4.0e-04) |
+| v0.7: training under hidden-state noise hardens the memory against it | **replicated** | memory after sigma 1.5 noise on the head's hidden channels, noise-trained N vs control C: lineage 0 0.92 vs 0.13 (difference 0.79, Holm p 4.0e-04); lineage 1 0.93 vs 0.51 (0.42, Holm p 4.0e-04) |
+| Exploratory: noise training makes the engram louder, not wider; turnover training barely changes it | **exploratory** | distance between the hidden states of identical twins trained on A and on B, mean over living sites (amplitude) and participation ratio (spread, cells): C0 0.86 / 13.0, T0 0.80 / 11.4, N0 1.94 / 11.2; C1 1.07 / 10.7, T1 1.06 / 10.9, N1 3.13 / 11.9. So T1's new resistance to cell loss is not visible in the stored pattern. Post hoc, over the eight S, C, T, N rules, amplitude tracks noise memory (Spearman rho 0.83, one-sided exact p 0.008). The lineages differ in shape: lineage 0 codes are flat across the head (coefficient of variation S0 0.09, B0 0.06, F0 0.15), lineage 1 codes graded (S1 0.27, B1 0.26, F1 0.32) |
 | **v0.3: memory surgery. Writing the compiled pattern for the other odour into a trained worm's headless body overwrites its real memory** | **replicated** | R(A) - R(B) of the regrown head: A-trained worms given pattern B S0 -0.89, S1 -0.88; B-trained given pattern A S0 0.96, S1 0.76; fraction of worms whose memory switched 0.996, 1.000 |
 | v0.3: four cells are enough. A compiled memory confined to the wound-edge sites 12-15 writes a full memory | **replicated** | R(A) - R(B) of held-out regrown heads with the sparse A / B pattern: S0 0.98 / -0.99, S1 0.98 / -0.99; emergent rules E0 0.04 / -0.04, E1 0.74 / -0.20 |
 | **v0.3: decodable is not used. A linear decoder reads the odour from the wound-edge cells, in emergent rules too, whose regrown heads never use it** | **replicated** | held-out decoding accuracy, edge vs rest of trunk: S0 1.00 vs 0.69, S1 1.00 vs 0.48; E0 0.97 vs 0.52, E1 0.91 vs 0.52 (predicted: no in E rules, which keep 0% of the memory) |
@@ -226,6 +240,8 @@ python -m prometheus.posthoc_v6                      # post hoc (not preregister
 python -m prometheus.train_v7 turnover 0 1000        # v0.7 stress siblings T0 (and noise/control, 1)
 python -m prometheus.v7                              # v0.7 causal trade-off test
 python tools/figures.py                              # paper figures
+python tools/build_paper.py                          # paper HTML (print it to PDF with a headless browser)
+python -m prometheus.explore_v7                      # v0.7 exploratory engram shape (not preregistered)
 python tools/build_claims.py && prometheus claims render && prometheus export-web
 ```
 
