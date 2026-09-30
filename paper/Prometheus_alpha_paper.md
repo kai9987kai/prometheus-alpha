@@ -1,6 +1,6 @@
 # Memory that outlives its organ: preregistered experiments on learning, decapitation and regeneration in synthetic worms
 
-**Kai Piper** · Prometheus-α v0.6 · 29 September 2026 · code, data and preregistrations: [github.com/kai9987kai/prometheus-alpha](https://github.com/kai9987kai/prometheus-alpha)
+**Kai Piper** · Prometheus-α v0.7 · 30 September 2026 · code, data and preregistrations: [github.com/kai9987kai/prometheus-alpha](https://github.com/kai9987kai/prometheus-alpha)
 
 > **Scientific status.** This is a synthetic computational study of a neural cellular automaton. "Worm", "head", "odour", "shock" and "memory" name parts of a simulation. It models no particular animal and makes no claim about any person or clinical condition.
 
@@ -22,7 +22,7 @@ The study inherits its methods from a series of earlier projects: preregistratio
 
 **Lives.** Grow 32 steps from one founder cell; condition 48 steps (six 8-step slots in random order: two CS+, two CS−, two empty; the paired worm is shocked on steps 3–5 of each CS+ slot, its unpaired twin on the same steps of each empty slot); wait 12 steps; manipulate; regenerate 32 steps; test each odour alone for 6 steps. The memory measure is `M = [R(CS+) − R(CS−)]_paired − [R(CS+) − R(CS−)]_unpaired twin` for a worm and a twin that share founder, schedule and every asynchronous update mask.
 
-**Training.** Exact backpropagation through lives of 180–240 steps (PyTorch, CPU, batch 32, Adam), scoring anatomy at checkpoints, the unconditioned response, a silent baseline and the memory test. *E (emergent)* rules (seeds 0, 1; 3,000 iterations) score memory only when no wound followed conditioning. *S (selected)* rules start from their E sibling and train 2,000 further iterations scoring memory also after a head or tail cut. *B (balanced)* rules (v0.3) start from their S sibling and train 1,500 iterations on lives with two successive amputations.
+**Training.** Exact backpropagation through lives of 180–240 steps (PyTorch, CPU, batch 32, Adam), scoring anatomy at checkpoints, the unconditioned response, a silent baseline and the memory test. *E (emergent)* rules (seeds 0, 1; 3,000 iterations) score memory only when no wound followed conditioning. *S (selected)* rules start from their E sibling and train 2,000 further iterations scoring memory also after a head or tail cut. *B (balanced)* rules (v0.3) start from their S sibling and train 1,500 iterations on lives with two successive amputations. *F (fission)* rules (v0.4) start from their S sibling and train 2,000 iterations on lives in which the conditioned worm is split at site 20 and the posterior half (70% of lives) or the anterior half (15%) must regrow into a whole worm that remembers, or the head is cut off (15%). *T, N and C* rules (v0.7) start from their S sibling and train 1,000 iterations on identical lives with a 60-step stress segment: cell turnover (T), hidden-state noise (N) or nothing (C, the control for extra training).
 
 **Decapitation** in experiments is complete: every site up to the worm's own last head-labelled cell, plus a two-site margin. The residual gated head weight after decapitation is exactly zero in every experiment: no surviving cell can sense an odour.
 
@@ -138,7 +138,7 @@ Four held-out challenges, no new rules, all eight rules (Fig. 7). **Minimal frag
 
 ## 5 Reproducibility
 
-`prometheus train` / `run` / `run2`, `python -m prometheus.v3`, `python tools/figures.py`, `python tools/build_claims.py && prometheus claims check`. Three preregistrations and locks in `prereg/`, verified in CI; every deviation in `docs/DEVIATIONS.md`, including an exploratory crash in v0.2 whose rerun reproduced every confirmatory number exactly. The browser lab (`web/index.html`) runs a JavaScript engine tested step for step against Python (maximum state error 2 × 10⁻⁶ on trained rules).
+`prometheus train` / `run` / `run2`, `python -m prometheus.v3` ... `v7` (and `train_v3`, `train_v4`, `train_v7` for the B, F, T, N and C rules), `python tools/figures.py`, `python tools/build_claims.py && prometheus claims check`. Seven preregistrations and locks in `prereg/`, all verified in CI; every deviation in `docs/DEVIATIONS.md`, including an exploratory crash in v0.2 whose rerun reproduced every confirmatory number exactly. The browser lab (`web/index.html`) runs a JavaScript engine tested step for step against Python (maximum state error 2 × 10⁻⁶ on trained rules).
 
 ## Appendix A. Every preregistered prediction
 
